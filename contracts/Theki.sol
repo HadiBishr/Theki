@@ -100,13 +100,20 @@ contract Theki {
         string[] memory _techSkills, 
         uint[] memory _techExpYears, 
         string[] memory _softSkills, 
-        uint[] memory _softExpYears
+        uint[] memory _softExpYears,
 
-        // Experience
+        // Experiences
+        string[] memory _industryName, 
+        string[] memory _jobTitle, 
+        uint[] memory _experienceMonth
     ) public {
+
+    // Grabbing single profile to make working with it easier
 
         Profile storage profile = profiles[NextProfileId];
         profile.name = _name;
+
+    // Creating Skills
 
         // Adding multiple techincal skills
         for (uint256 i = 0; i < _techSkills.length; i++) {
@@ -120,9 +127,25 @@ contract Theki {
 
         NextProfileId++;
 
+
+    // Creating Experiences
+
+        for (uint256 i = 0; i < _techSkills.length; i++) {
+
+        ExperienceIndustry memory newIndustry;
+        newIndustry.industryName = _industryName;
+
+
+        for (uint256 i = 0; i < _techSkills.length; i++) {
+            profile.experiences.industries.push(SkillDetails(_techSkills[i], _techExpYears[i], false));
+        }
+
+
     }
 
 }
 
 
 
+
+// Edit Profile
