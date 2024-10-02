@@ -43,20 +43,20 @@ contract Theki {
 
 
   
-
-    struct JobTitle {
-        string jobTitle;
+    // Details of single job in single industry
+    struct JobDetails {
+        string jobTitle; 
         uint256 experienceMonths;
         bool verified;
     }
 
     struct ExperienceIndustry {
-        string industryName;
-        JobTitle[] jobTitles;
+        string industryName; // Industry name
+        JobDetails[] jobTitles; // Job Titles in that particular industry
     }
 
     struct Experiences {
-        ExperienceIndustry[] industries;
+        ExperienceIndustry[] industries; // This would hold multiple industries
     }
 
 
@@ -103,9 +103,9 @@ contract Theki {
         uint[] memory _softExpYears,
 
         // Experiences
-        string[] memory _industryName, 
-        string[] memory _jobTitle, 
-        uint[] memory _experienceMonth
+        string[] memory _industryNames, // A string array to store several industries a person might have been in
+        string[][] memory _jobDetails, // A nested array for each job title under a industry
+        uint[][] memory _experienceMonth // A nested array of experience for each job title
     ) public {
 
     // Grabbing single profile to make working with it easier
@@ -130,18 +130,30 @@ contract Theki {
 
     // Creating Experiences
 
-        for (uint256 i = 0; i < _techSkills.length; i++) {
+        for (uint256 i = 0; i < _industryNames.length; i++) {
+            // Create a temporary memory array to store job titles for the current industry
+            JobDetails[] memory jobDetails = new JobDetails[](_jobDetails[i].length); // After an array is completed for jobDetails, that would be an array of all job titles for that single industry i
 
-        ExperienceIndustry memory newIndustry;
-        newIndustry.industryName = _industryName;
+
+            // Loop through job titles for the current industry
+            for (uint256 j = 0; j < _jobDetails[i].length; j++) { // _jobDetails[i] returns an array of job titles for the industry i. 
+                jobDetails[j] = JobDetails(_jobDetails[i][j], _experienceMonths[i][j], false);
+            }
 
 
-        for (uint256 i = 0; i < _techSkills.length; i++) {
-            profile.experiences.industries.push(SkillDetails(_techSkills[i], _techExpYears[i], false));
+            // Now push the entire industry with its job titles into storage
+            profile.experiences.industries.push(ExperienceIndustry({
+                industryName: _industryNames[i],
+                jobTitles: jobDetails
+            }));
+
+
+        
         }
 
 
     }
+
 
 }
 
