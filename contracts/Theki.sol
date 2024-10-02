@@ -56,7 +56,8 @@ contract Theki {
     }
 
     struct Experiences {
-        ExperienceIndustry[] industries; // This would hold multiple industries
+        // This would hold multiple industries, and nested into that are the multiple job titles the user has had and other specific details. 
+        ExperienceIndustry[] industries;
     }
 
 
@@ -105,7 +106,7 @@ contract Theki {
         // Experiences
         string[] memory _industryNames, // A string array to store several industries a person might have been in
         string[][] memory _jobDetails, // A nested array for each job title under a industry
-        uint[][] memory _experienceMonth // A nested array of experience for each job title
+        uint[][] memory _experienceMonths // A nested array of experience for each job title
     ) public {
 
     // Grabbing single profile to make working with it easier
@@ -130,14 +131,16 @@ contract Theki {
 
     // Creating Experiences
 
-        for (uint256 i = 0; i < _industryNames.length; i++) {
-            // Create a temporary memory array to store job titles for the current industry
-            JobDetails[] memory jobDetails = new JobDetails[](_jobDetails[i].length); // After an array is completed for jobDetails, that would be an array of all job titles for that single industry i
+        for (uint256 i = 0; i < _industryNames.length; i++) { // Loops through however many industries user has been in
+            // Create a temporary memory array to store all job titles for the current industry
+            JobDetails[] memory jobDetails = new JobDetails[](_jobDetails[i].length); // After an array is completed for jobDetails, that would be an array of all job titles for that single industry i. The last part "(_jobDetails[i].length)" is specifying how large the array is.
 
 
             // Loop through job titles for the current industry
             for (uint256 j = 0; j < _jobDetails[i].length; j++) { // _jobDetails[i] returns an array of job titles for the industry i. 
-                jobDetails[j] = JobDetails(_jobDetails[i][j], _experienceMonths[i][j], false);
+            
+                // This will fill in that temporary memory array we creating previously with all the job titles the user has inputted for that industry. 
+                jobDetails[j] = JobDetails(_jobDetails[i][j], _experienceMonths[i][j], false); 
             }
 
 
