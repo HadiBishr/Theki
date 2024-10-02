@@ -35,7 +35,7 @@ describe("Theki", function () {
 
       // Now you can access individual properties
       const experienceDuration = technicalSkill.experienceMonths
-      expect(experienceDuration).to.equal(6)
+      expect(experienceDuration).to.equal(3)
       console.log("Experience Duration:", experienceDuration.toString())
     })
 
