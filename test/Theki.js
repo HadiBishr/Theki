@@ -48,8 +48,23 @@ describe("Theki", function () {
 
       // Now you can access individual properties
       const skillname = technicalSkill.skillName
-      console.log("Experience Duration:", skillname)
+      console.log("Skill Name:", skillname)
     })
+
+    it("Check If Validation is Correct", async () => {
+      // Fetch profile with ID 1
+      const result = await theki.profiles(1)
+
+      // Accessing the first technical skill from the result
+      const technicalSkill = result.skills.technicalSkills[0]
+
+      // Now you can access individual properties
+      const verification = technicalSkill.verified
+      expect(verification).to.equal(false)
+      console.log("Verification Status:", verification)
+    })
+
+    
 
   })
 
