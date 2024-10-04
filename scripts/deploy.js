@@ -14,7 +14,7 @@ async function main() {
     const [deployer] = await ethers.getSigners()
 
     // Deploy ThekiToken contract
-    const ThekiToken = await hre.ethers.getContractFactory("ThekiToken")
+    const ThekiToken = await hre.ethers.getContractFactory("ThekiToken", deployer)
     thekitoken = await ThekiToken.deploy()
     await thekitoken.deployed()
 
