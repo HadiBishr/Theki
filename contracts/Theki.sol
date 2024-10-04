@@ -100,12 +100,12 @@ contract Theki {
         string[] memory _techSkills, 
         uint[] memory _techExpYears, 
         string[] memory _softSkills, 
-        uint[] memory _softExpYears,
+        uint[] memory _softExpYears
 
         // Experiences
-        string[] memory _industryName, 
-        string[] memory _jobTitle, 
-        uint[] memory _experienceMonth
+        // string[] memory _industryName, 
+        // string[] memory _jobTitle, 
+        // uint[] memory _experienceMonth
     ) public {
 
     // Grabbing single profile to make working with it easier
@@ -128,17 +128,17 @@ contract Theki {
         NextProfileId++;
 
 
-    // Creating Experiences
+    // // Creating Experiences
 
-        for (uint256 i = 0; i < _techSkills.length; i++) {
+    //     for (uint256 i = 0; i < _techSkills.length; i++) {
 
-        ExperienceIndustry memory newIndustry;
-        newIndustry.industryName = _industryName;
+    //     ExperienceIndustry memory newIndustry;
+    //     newIndustry.industryName = _industryName;
 
 
-        for (uint256 i = 0; i < _techSkills.length; i++) {
-            profile.experiences.industries.push(SkillDetails(_techSkills[i], _techExpYears[i], false));
-        }
+    //     for (uint256 i = 0; i < _techSkills.length; i++) {
+    //         profile.experiences.industries.push(SkillDetails(_techSkills[i], _techExpYears[i], false));
+    //     }
 
 
     }
