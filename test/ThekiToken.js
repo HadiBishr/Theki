@@ -12,8 +12,6 @@ describe("ThekiToken", function () {
         thekitoken = await ThekiToken.deploy()
         await thekitoken.deployed()
 
-        console.log(`Contract ThekiToken deployed at ${thekitoken.address}/n`)
-
         // Create a claim
         transaction = await thekitoken.connect(professional).createClaim("Finished Project For Theki")
         await transaction
@@ -24,6 +22,40 @@ describe("ThekiToken", function () {
             const result = await thekitoken.claimCounter()
             expect(result).to.equal(1)
         })
+
+        describe("Check each detail in single Claim", function () {
+            it("Check Claim ID", async () => {
+                const result = await thekitoken.claims(1)
+                expect(result.id).to.equal(1)
+            })
+
+            it("Check address of professional who made claim", async () => {
+                const result = await thekitoken.claims(1)
+                expect(result.professional).to.equal(professional.address)
+            })
+
+            it("Check verification of claim", async () => {
+                const result = await thekitoken.claims(1)
+                expect(result.verified).to.equal(false)
+            })
+
+        })
+
+    
+    describe("Verify Claim", function () {
+
+        beforeEach(async () => {
+            transaction = await thekitoken.connect(deployer).verifyClaim(1)
+            await transaction
+        })
+
+
+        it("Check verification of claim after veritication", async () => {
+            const result = await thekitoken.claims(1)
+            expect(result.verified).to.equal(true)
+        })
+    })
+
     })
 
 })

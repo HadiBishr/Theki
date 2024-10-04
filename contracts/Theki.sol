@@ -104,15 +104,9 @@ contract Theki {
         uint[] memory _softExpYears
 
         // Experiences
-<<<<<<< HEAD
         // string[] memory _industryName, 
         // string[] memory _jobTitle, 
         // uint[] memory _experienceMonth
-=======
-        string[] memory _industryNames, // A string array to store several industries a person might have been in
-        string[][] memory _jobDetails, // A nested array for each job title under a industry
-        uint[][] memory _experienceMonths // A nested array of experience for each job title
->>>>>>> f783ee06bb702b67f50e64eaac9e3f5a073889f3
     ) public {
 
     // Grabbing single profile to make working with it easier
@@ -137,7 +131,6 @@ contract Theki {
 
     // // Creating Experiences
 
-<<<<<<< HEAD
     //     for (uint256 i = 0; i < _techSkills.length; i++) {
 
     //     ExperienceIndustry memory newIndustry;
@@ -147,30 +140,6 @@ contract Theki {
     //     for (uint256 i = 0; i < _techSkills.length; i++) {
     //         profile.experiences.industries.push(SkillDetails(_techSkills[i], _techExpYears[i], false));
     //     }
-=======
-        for (uint256 i = 0; i < _industryNames.length; i++) { // Loops through however many industries user has been in
-            // Create a temporary memory array to store all job titles for the current industry
-            JobDetails[] memory jobDetails = new JobDetails[](_jobDetails[i].length); // After an array is completed for jobDetails, that would be an array of all job titles for that single industry i. The last part "(_jobDetails[i].length)" is specifying how large the array is.
-
-
-            // Loop through job titles for the current industry
-            for (uint256 j = 0; j < _jobDetails[i].length; j++) { // _jobDetails[i] returns an array of job titles for the industry i. 
-            
-                // This will fill in that temporary memory array we creating previously with all the job titles the user has inputted for that industry. 
-                jobDetails[j] = JobDetails(_jobDetails[i][j], _experienceMonths[i][j], false); 
-            }
-
-
-            // Now push the entire industry with its job titles into storage
-            profile.experiences.industries.push(ExperienceIndustry({
-                industryName: _industryNames[i],
-                jobTitles: jobDetails
-            }));
-
-
-        
-        }
->>>>>>> f783ee06bb702b67f50e64eaac9e3f5a073889f3
 
 
     }
