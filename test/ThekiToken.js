@@ -39,6 +39,11 @@ describe("ThekiToken", function () {
                 expect(result.verified).to.equal(false)
             })
 
+            it("Check if content is there", async () => {
+                const result = await thekitoken.claims(1)
+                expect(bytes(result.content)).to.greaterThan(1)
+            })
+
         })
 
     
