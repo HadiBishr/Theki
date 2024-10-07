@@ -1,38 +1,134 @@
-.App {
-  text-align: center;
+/* App.css */
+
+/* General Styles */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4; /* Light gray background */
+  color: #333; /* Dark gray text color */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+
+
+
+
+/* Main Content */
+
+/* Styles the main container that holds the content */
+.container {
+  max-width: 1000px; /* Maximum width of the container */
+  margin: 2rem auto; /* Center the container horizontally, with 2rem top and bottom margin */
+  padding: 1rem; /* Horizontal padding inside the container */
+  background-color: #fff; /* White background */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 0 10px #ccc; /* Subtitle shadow around the container */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Styles for headings */
+.container h1, .container h2, .container h3 {
+  color: #2c3e50;
+  margin-top: 2rem; /* Add space above headings */
+  margin-bottom: 1rem; /* Add space below headings */
+}
+
+
+/* Add space below each section */
+section {
+  margin-top: 5rem;
+}
+
+/* Styles for input fields */
+input[type="text"] {
+  width: calc(100% - 2rem); /* Full width minus total horizontal padding */
+  padding: 0.8rem; /* Padding inside the input */
+  margin-bottom: 1rem; /* Space below the input */
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 4px; /* Rounded */
+}
+
+
+/* Styles for buttons */ 
+button {
+  background-color: #2980b9; /* Blue background */
+  color: #fff; /* White text */
+  border: none; /* Remove default border */
+  padding: 0.7rem 1.5rem; /* Padding inside the button */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  font-weight: bold; /* Bold text */
+}
+
+/* Change background color on hover */
+button:hover {
+  background-color: #1f6391; /* Darker blue on hover */
+}
+
+
+/* Remove defauly list styling */
+ul {
+  list-style-type: none; /* Remove bullet points */
+  padding: 0; /* Remove default padding */
+}
+
+/* Styles for list items */
+li {
+  background-color: #ecf0f1; /* Light gray background */
+  margin-bottom: 1rem; /* Space below each list item */
+  padding: 1rem; /* Padding inside the list item */
+  border-radius: 4px; /* Rounded corners */
+}
+
+
+/* Styles for strong elements inside list items */
+li strong {
+  display: inline-block; /* Allows setting a fixed width */
+  width: 100px; /* Fixed width for alingment */
+}
+
+
+/* Styles for the actions section inside a claim */
+.claim__actions {
+  margin-top: 1rem; /* Space above the action */
+}
+
+/* Styles for buttons inside the actions section */
+.claim__actions button {
+  margin-right: 0.5rem; /* Space between buttons */
+}
+
+
+
+
+
+
+/* Responsive Design */
+
+
+/* Media query for screens with a maximum width of 600px */
+@media (max-width: 600px) {
+  /* Adjust the font size of the brand name */
+  .nav__brand h1 {
+    font-size: 1.5rem; /* Smaller font size */
   }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  /* Hide the search input on small screens */
+  .nav__search {
+    display: none; /* Do not display the search input */
   }
-  to {
-    transform: rotate(360deg);
+
+  /* Adjust the container padding */
+  .container {
+    padding: 0.5rem; /* Reduce padding */
   }
+
+  /* Adjust the width of input fields */
+  input[type="text"] {
+    width: calc(100% - 1rem); /* Adjust width for smaller screens */
+  }
+
+
+
+
 }
+

@@ -168,11 +168,10 @@ function App() {
       setClaimIds(claimIds)
       console.log('Claim IDs:', claimIds)
 
+
       // Fetch details of claim by using each claim id
-      
       const claimPromises = claimIds.map(async (id)  => { // Iterates over each id in the claimIds array
         const claim = await thekiToken.claims(id)
-        console.log(`Fetched claim ${id}:`, claim);
         return claim
       })
       // claimPromises is now an array of promises where each promise corresponds to the asynchronous operation of fetching a claim by its ID. This means that every promise will run the above, which gets the claim Struct.
@@ -215,11 +214,13 @@ function App() {
     <div>
 
 
-      <section>
+      <div className='container'>
         {/*  Navigation  bar  */}
         <Navigation account={account} connectWallet={connectWallet}/>
 
-        {/* Main Content */}
+
+
+        {/* Main Content. This has to do with creating a claim and listing their current claims.  */}
         <h1>Theki Token System</h1>
 
         {account ? (
@@ -256,65 +257,71 @@ function App() {
           // Prompt user to connect wallet if not connected
           <p>Please connect your wallet to use the Application</p>
         )}
-      </section>
+      
     
 
 
-      <section>
+
+         { /* Everything below has to do with searching a user and verifying claims. */ }  
         
-          
-        {account ? (
-          <>
+        <section>
+          {account ? (
+            <>
 
-          <h2>Get the claims of a professional</h2>
-          <input 
-            type="text" 
-            value={searchAddress} 
-            onChange={(e) => setSearchAddress(e.target.value)} 
-            placeholder="Enter professional's address"
-          />
-          <button onClick={searchProfessionalClaims}>
-            Grab Claims
-          </button>
-
-          {searchedClaims.length > 0 && (
-            <div>
-              <h3>Claims by {shortenAddress(searchAddress)}</h3>
-              <ul>
-                {searchedClaims.map((claim, index) => (
-                  <li key={index}>
-                    <strong>ID:</strong> {claim.id.toString()} <br />
-                    <strong>Content:</strong> {claim.content} <br />
-                    <strong>Verified:</strong> {claim.verified.toString()} <br />
-
-                    {!claim.verfieid && 
-                      claim.professional.toLowerCase() !== account.toLowerCase() && (
-                        <>
-                          <br />
-                          <button onClick={() => verifyClaims(claim.id)}>Verify</button>
-                        
-                        </>
-                      )
-                    
-                    }
-                  </li>
-                ))}
-              </ul>
+            <h2>Get the claims of a professional</h2>
+            <input 
+              type="text" 
+              value={searchAddress} 
+              onChange={(e) => setSearchAddress(e.target.value)} 
+              placeholder="Enter professional's address"
+            />
+            <button onClick={searchProfessionalClaims}>
+              Grab Claims
+            </button>
 
 
-            </div>
+            { /* This checks if the searchedClaims array is filled. If it is it will show the claims that the user searched. If the array does not exist it will do nothing.  */ }
+            {searchedClaims.length > 0 && (
+              <div>
+                <h3>Claims by {shortenAddress(searchAddress)}</h3>
+                <ul>
+                  {searchedClaims.map((claim, index) => (
+                    <li key={index}>
+                      <strong>ID:</strong> {claim.id.toString()} <br />
+                      <strong>Content:</strong> {claim.content} <br />
+                      <strong>Verified:</strong> {claim.verified.toString()} <br />
+
+                      {/* This checks if the claim is verified or not. Also checks if the account that is verifying the claim is not the same account that created it. If both pass, then the verify button will show up.  */}
+
+                      {!claim.verified && 
+                        claim.professional.toLowerCase() !== account.toLowerCase() && (
+                          <>
+                            <br />
+                            <button onClick={() => verifyClaims(claim.id)}>Verify</button>
+                          
+                          </>
+                        )
+                      
+                      }
+                    </li>
+                  ))}
+                </ul>
+
+
+              </div>
+            )}
+
+
+            </>
+
+          ) : (
+            null
+
           )}
 
-
-          </>
-
-        ) : (
-          null
-
-        )}
-
-
-      </section>
+        </section>  
+        
+      </div>
 
     </div>
 

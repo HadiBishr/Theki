@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import './Navigation.css'
 
 const Navigation = ({ account, connectWallet }) => {
     // FUntion to shorten the account address for display purposes
@@ -17,6 +18,7 @@ const Navigation = ({ account, connectWallet }) => {
                 <h1>Theki</h1>
             </div>
 
+        
 
             { account ? (
                 // Show address if account is connected
