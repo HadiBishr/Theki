@@ -56,6 +56,10 @@ function App() {
         // Get the address of user currently connected to webpage
         const account = await signer.getAddress()
         setAccount(account)
+        // Sets account to storage meaning when I reload it wont lose its state. 
+        localStorage.setItem('account', account)
+
+
 
       } catch (error) {
         console.error('Error connecting wallet:', error);
@@ -67,6 +71,13 @@ function App() {
       alert('MetaMask not detected. Please install MetaMask to use this DApp.');
 
     }
+  }
+
+
+
+  const disconnectWallet = async () => {
+    setAccount(null)
+    localStorage.removeItem('account') //
   }
 
   // Function to handle the creation of a new claim
@@ -209,6 +220,11 @@ function App() {
       loadBlockchainData()
     }
   }, [account, signer])
+
+
+
+
+
 
   const shortenAddress = (address) => {
     if (address) {

@@ -37,6 +37,7 @@ const VerifyClaim = ({ thekiToken, account }) => {
     }
 
     fetchClaim()
+    
   }, [thekiToken, claimId])
 
   return (
@@ -51,7 +52,8 @@ const VerifyClaim = ({ thekiToken, account }) => {
           <p>
             Click the button below to verify the claim. This will create a blockchain transaction to mark the claim as verified.
           </p>
-          <button onClick={handleVerification}>Verify Claim</button>
+        
+         
         </div>
       ) : (
         <p>Loading claim details...</p>
@@ -59,7 +61,14 @@ const VerifyClaim = ({ thekiToken, account }) => {
 
       
       
-      <button onClick={() => navigate('/')} style={{ marginLeft: '1rem' }} >Cancel</button>
+      <div className='button__group'>
+        {claim && (
+          <button onClick={handleVerification}>Verify Claim</button>
+        )}
+      
+        <button onClick={() => navigate('/')} style={{ marginLeft: '1rem' }} >Cancel</button>
+      </div>
+      
 
 
     </div>

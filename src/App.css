@@ -57,6 +57,7 @@ button {
   border-radius: 4px; /* Rounded corners */
   cursor: pointer; /* Change cursor to pointer on hover */
   font-weight: bold; /* Bold text */
+  margin-right: 0.5rem; /* Space between buttons in general */
 }
 
 /* Change background color on hover */
@@ -97,6 +98,12 @@ li strong {
   margin-right: 0.5rem; /* Space between buttons */
 }
 
+/* Styles for VerifyClaim button */ 
+.button__group {
+  display:flex;
+  gap: 1rem;
+  margin-left: 1rem;
+}
 
 
 
