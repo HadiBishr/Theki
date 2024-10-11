@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import './Navigation.css'
+import './css/Navigation.css'
 
 const Navigation = ({ account, connectWallet }) => {
     // FUntion to shorten the account address for display purposes

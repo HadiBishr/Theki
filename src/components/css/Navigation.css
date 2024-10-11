@@ -10,7 +10,7 @@ nav {
 /* Style the brand/logo in the navigation bar */
 .nav__brand h1 {
   color: #ecf0f1; /* Light gray text color */
-  margin: 0; /* Remove default margin */
+  margin: 0; /* Remove default margin  */
 }
 
 
