@@ -53,9 +53,17 @@ function App() {
         const signer = provider.getSigner()
         setSigner(signer)
 
+        if (signer) {
+          console.log("Signer has been set")
+        }  
+
         // Get the address of user currently connected to webpage
         const account = await signer.getAddress()
         setAccount(account)
+
+        if (account) {
+          console.log("Account has been set")
+        }  
         // Sets account to storage meaning when I reload it wont lose its state. 
         localStorage.setItem('account', account)
 
@@ -77,7 +85,9 @@ function App() {
 
   const disconnectWallet = async () => {
     setAccount(null)
-    localStorage.removeItem('account') //
+    localStorage.removeItem('account') // Remove the account from localStorage
+    setProvider(null)
+    setSigner(null)
   }
 
   // Function to handle the creation of a new claim
@@ -192,12 +202,13 @@ function App() {
         const claim = await thekiToken.claims(id)
         return claim
       })
+
       // claimPromises is now an array of promises where each promise corresponds to the asynchronous operation of fetching a claim by its ID. This means that every promise will run the above, which gets the claim Struct.
 
 
       // Fulfills all promises and creates an array of the claim data for each promise in claimPromises
       const claims = await Promise.all(claimPromises) 
-      console.log('Claims Data:', claims);
+      console.log('Claims Data:', claims); 
 
       setClaims(claims) 
 
@@ -246,7 +257,7 @@ function App() {
     <Router>
 
 
-      <Navigation account={account} connectWallet={connectWallet}/>
+      <Navigation account={account} connectWallet={connectWallet} disconnectWallet={disconnectWallet}/>
 
       <Routes>
 
