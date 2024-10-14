@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 
-const VerifyClaim = ({ thekiToken, account }) => {
+const VerifyClaim = ({ thekiToken, account , signer}) => {
   const { claimId } = useParams() // Used to grab id for URL
   const [claim, setClaim] = useState(null)
   const navigate = useNavigate()
@@ -12,7 +12,8 @@ const VerifyClaim = ({ thekiToken, account }) => {
   const handleVerification = async () => {
     if (thekiToken && claimId) {
       try {
-        const tx = await thekiToken.verifyClaim(claimId)
+        const tx = await thekiToken.connect(signer).verifyClaim(claimId)
+        console.log("Verify Claim Transaction")
         await tx.wait()
         alert('Claim verified successfully')
         navigate('/')
@@ -37,7 +38,7 @@ const VerifyClaim = ({ thekiToken, account }) => {
     }
 
     fetchClaim()
-    
+
   }, [thekiToken, claimId])
 
   return (

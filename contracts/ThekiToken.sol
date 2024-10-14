@@ -11,27 +11,29 @@ contract ThekiToken {
         uint256 id;
         address professional;
         string content;
-        bool verified;
+        bool verified; // Make this a string 
     }
 
-
-    struct Job {
-        uint256 id;                     // Job ID
+    // Basic Job Information
+    struct BasicInfo {
         string jobTitle;                // Title of the job (e.g., NLP Engineer)
         string companyName;             // Name of the company posting the job
         string seniority;               // Seniority level (e.g., Senior, Mid-level, Junior)
         string department;              // Department (e.g., Engineering, Sales)
         string location;                // Location (e.g., Remote, New York, etc.)
         string workSchedule;            // Work schedule (e.g., Full-time, Part-time)
+    }
 
-        /*
-        * ==========================================
-        *               Qualifications
-        * ==========================================
-        * Declare structs, mappings, and enums here.
-        */
 
-        // Skills
+    /*
+    * ==========================================
+    *               Qualifications
+    * ==========================================
+    * Declare structs, mappings, and enums here.
+    */
+
+    struct Qualifications {
+         // Skills
         string[] technicalSkills;       // List of required technical skills
         uint256[] techSkillExp;         // Years of experience required for each technical skill
         string[] softSkills;            // List of required soft skills
@@ -60,58 +62,70 @@ contract ThekiToken {
         // Endorsements
         uint256 endorsements;           // Total number of endorsements for required skills
 
+    }
 
-        /*
-        * ==========================================
-        *                   Duties
-        * ==========================================
-        * Declare structs, mappings, and enums here.
-        */
+    /*
+    * ==========================================
+    *                   Duties
+    * ==========================================
+    * Declare structs, mappings, and enums here.
+    */
 
-        string primaryDuties;       // Primary job duties
-        string secondaryDuties;     // Secondary job duties
-        string deliverables;        // Key deliverables
-        string toolsTech;           // Tools or technologies required for duties
-
-
-        /*
-        * ==========================================
-        *               Compensation
-        * ==========================================
-        * Declare structs, mappings, and enums here.
-        */
-
-        string salary;              // Salary range (e.g., "$100k-$120k")
-        string bonus;               // Bonus details
-        string benefits;            // Benefits offered (e.g., healthcare, vacation)
+    struct Duties {
+        string primaryDuties;           // Primary job duties
+        string secondaryDuties;         // Secondary job duties
+        string deliverables;            // Key deliverables
+        string toolsTech;               // Tools or technologies required for duties
+    }
 
 
-        /*
-        * ==========================================
-        *               Company Culture
-        * ==========================================
-        * Declare structs, mappings, and enums here.
-        */
-
-        string jobIntroHook;        // Introduction to the job role
-        string companyProfile;      // Description of the company profile
+    /*
+    * ==========================================
+    *               Compensation
+    * ==========================================
+    * Declare structs, mappings, and enums here.
+    */
 
 
+    struct Compensation {
+        string salary;                  // Salary range (e.g., "$100k-$120k")
+        string bonus;                   // Bonus details
+        string benefits;                // Benefits offered (e.g., healthcare, vacation)
+    }
 
 
+     /*
+    * ==========================================
+    *               Company Culture
+    * ==========================================
+    * Declare structs, mappings, and enums here.
+    */
+
+    struct CompanyCulture {
+        string jobIntroHook;            // Introduction to the job role
+        string companyProfile;          // Description of the company profile
+    }
+
+    struct Job {
+        uint256 id;                     // Job ID      
+        BasicInfo basicInfo;            // Basic Information about the job
+        Qualifications qualifications;  // Qualifications for the job
+        Duties duties;                  // Duties and responsibilities
+        Compensation compensation;      // Compensation details
+        CompanyCulture companyCulture;  // Company culture and overview
         uint256 thekiScore;             // Theki score for the job (left as 0 initially)
     }
 
     
     mapping(uint256 => Claim) public claims;                        // Stores the details of the claim. User has to input their ID of the claim they have made. 
     mapping(address => uint256[]) public professionalClaims;        // Stores the ID of the claim each address has made
-    mapping(uint256 => Job) public jobs;                            // Mapping from job Id to Job struct. 
+    mapping(uint256 => Job) public jobs;                         // Mapping from job Id to Job struct. 
 
     event ClaimCreated(uint256 id, address professional, string content);
-    event ClaimVerified(uint256 id);
+    event ClaimVerified(uint256 id); 
 
     function createClaim(string memory _content) public {
-        claimCounter++;
+        claimCounter++; 
         claims[claimCounter] = Claim(claimCounter, msg.sender, _content, false);
         professionalClaims[msg.sender].push(claimCounter);
         emit ClaimCreated(claimCounter, msg.sender, _content);
@@ -125,19 +139,30 @@ contract ThekiToken {
     }
 
     function getClaimsByProfessional(address _professional) public view returns (uint256[] memory) {
-        return professionalClaims[_professional];
+        return professionalClaims[_professional]; 
     }
+
 
     function createJob(
-        string memory _companyName, 
-        string memory _jobTitle, 
-        string memory _jobAmount
+        BasicInfo memory _basicInfo,
+        Qualifications memory _qualifications,
+        Duties memory _duties, 
+        Compensation memory _compensation, 
+        CompanyCulture memory _companyCulture
     ) public {
-        jobCounter++;   // Starts job counter at 1
-        
-        // Create a new Job struct and store it in the mapping
+        jobCounter++;
 
-        
+        // Create a new Job struct and store it in the mapping
+        jobs[jobCounter] = Job({
+            id: jobCounter,
+            basicInfo: _basicInfo,
+            qualifications: _qualifications,
+            duties: _duties,
+            compensation: _compensation,
+            companyCulture: _companyCulture,
+            thekiScore: 0 // Intial score set to 0
+        });
     }
 
+  
 }

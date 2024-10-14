@@ -44,6 +44,7 @@ function App() {
         // Create a new provider and signer using MetaMask's provider
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         setProvider(provider)
+        console.log(`Provider: ${provider}`)
 
         const network = await provider.getNetwork()
         console.log('Connected network:', network);
@@ -52,20 +53,13 @@ function App() {
 
         const signer = provider.getSigner()
         setSigner(signer)
+        console.log(`Signer: ${signer}`)
 
-        if (signer) {
-          console.log("Signer has been set")
-        }  
 
         // Get the address of user currently connected to webpage
         const account = await signer.getAddress()
-        setAccount(account)
-
-        if (account) {
-          console.log("Account has been set")
-        }  
-        // Sets account to storage meaning when I reload it wont lose its state. 
-        localStorage.setItem('account', account)
+        setAccount(account) 
+        console.log(`Account: ${account}`)
 
 
 
@@ -85,7 +79,6 @@ function App() {
 
   const disconnectWallet = async () => {
     setAccount(null)
-    localStorage.removeItem('account') // Remove the account from localStorage
     setProvider(null)
     setSigner(null)
   }
@@ -153,7 +146,7 @@ function App() {
 
     try {
       // Fetch claim Ids for the entered address
-      const claimIds = await thekiToken.getClaimsByProfessional(searchAddress)
+      const claimIds = await thekiToken.getClaimsByProfessional(searchAddress) 
       if (claimIds.length === 0) {
         alert('No claims found for this address.')
         setSearchedClaims([])
@@ -191,8 +184,10 @@ function App() {
       );
       setThekiToken(thekiToken)
 
-      // Fetch Claim Ids associated with the professional. This would be an array []
-      const claimIds = await thekiToken.getClaimsByProfessional(account) // Note that this is not the claims themselves, but the claim Ids. So each thing is an an Id for a claim they made. Ie. [1, 63, 22]
+      console.log("The Signer and Contract have been set.")
+
+      // Fetch Claim Ids associated with the professional. This would be an array 
+      const claimIds = await thekiToken.getClaimsByProfessional(account) // Note that this is not the claims themselves, but the claim Ids. So each thing is an an Id for a claim they made.
       setClaimIds(claimIds)
       console.log('Claim IDs:', claimIds)
 
@@ -286,7 +281,7 @@ function App() {
         <Route 
           path="verify/:claimId"
           element={
-            <VerifyClaim thekiToken={thekiToken} account={account}/>
+            <VerifyClaim thekiToken={thekiToken} account={account} signer={signer}/>
           }
         
         />
