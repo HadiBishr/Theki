@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 contract ThekiToken {
 
     uint256 public jobCounter; 
+    uint256 public userCounter;
     uint256 public claimCounter = 0;
     uint256[] public jobIds;
 
@@ -117,10 +118,71 @@ contract ThekiToken {
         uint256 thekiScore;             // Theki score for the job (left as 0 initially)
     }
 
+
+
+
+
+
+    struct Skill {
+        string skillName;               // Name of the skill (e.g., Python, Leadership)
+        uint256 experience;             // Experience in years of this particular skill
+        bool verified;                  // Verification status for the skill
+    }
+
+    struct Experience { 
+        string industry;                // Industry of experience (e.g., AI Research)
+        string jobTitle;                // Job Title in the industry
+        uint256 experience;             // Years of experience in the industry
+        bool verified;                  // Verification status
+    }
+
+    struct Project {
+        string name;                    // Name of the project
+        string link;                    // Like to the project
+        string[] skillsApplied;         // Skills applied to project
+        string[] toolsUsed;             // Technology/tools used
+        string role;                    // Role in the project
+        string description;             // Description of the process
+        bool verified;                  // Verification status
+    }
+
+    struct Achievment {
+        string content;                 // Content of the award, certification, patent, publication, or clearence
+        string industry;                // Industry of achievment
+        string skill;                   // Skill used in achievment
+        bool verified;                  // Verification status of achievment
+    }
+
+    struct Endorsement {
+        string content;
+        string endorser;
+        string[] skillsRelated;
+        bool verified;
+    }   
+
+
+
+    struct UserProfile {
+        uint256 id;
+        Skill[] technicalSkills;
+        Skill[] softSkills;
+        Experience[] experiences;
+        Project[] projects;
+        Achievment[] achievments;
+        Endorsement[] endorsements;
+        Claim[] claims;
+    }   
+
+
+
+
+
     
     mapping(uint256 => Claim) public claims;                        // Stores the details of the claim. User has to input their ID of the claim they have made. 
     mapping(address => uint256[]) public professionalClaims;        // Stores the ID of the claim each address has made
-    mapping(uint256 => Job) public jobs;                         // Mapping from job Id to Job struct. 
+    mapping(uint256 => Job) public jobs;                            // Mapping from job Id to Job struct. 
+    mapping(uint256 => UserProfile) public userProfiles;
+    mapping(address => uint256) public userId;
 
     event ClaimCreated(uint256 id, address professional, string content);
     event ClaimVerified(uint256 id); 
@@ -165,6 +227,34 @@ contract ThekiToken {
         });
 
         jobIds.push(jobCounter); // Add the job ID to the array
+
+
+    }
+
+
+    function createUserProfile(
+        Skill[] memory _technicalSkills,
+        Skill[] memory _softSkills,
+        Experience[] memory _experiences,
+        Project[] memory _projects,
+        Achievment[] memory _achievments,
+        Endorsement[] memory _endorsements,
+        Claim[] memory _claims
+    ) public {
+        userCounter++;
+
+        userProfiles[userCounter] = UserProfile({
+            id: userCounter,
+            technicalSkills: _technicalSkills,
+            softSkills: _softSkills,
+            experiences: _experiences,
+            projects: _projects,
+            achievments: _achievments,
+            endorsements: _endorsements,
+            claims: _claims
+        });
+
+        userId[msg.sender] = userCounter;
 
 
     }
