@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 
-const VerifyClaim = ({ thekiToken, account , signer}) => {
+const VerifyClaim = ({ thekiToken, account , signer, searchProfessionalClaims}) => {
   const { claimId } = useParams() // Used to grab id for URL
   const [claim, setClaim] = useState(null)
   const navigate = useNavigate()
@@ -17,6 +17,7 @@ const VerifyClaim = ({ thekiToken, account , signer}) => {
         await tx.wait()
         alert('Claim verified successfully')
         navigate('/')
+        searchProfessionalClaims()
       } catch (error) {
         console.error('Error verifying claim:', error)
         alert('An error occured during the verification process')

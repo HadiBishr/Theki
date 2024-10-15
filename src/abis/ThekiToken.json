@@ -291,6 +291,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getAllJobIds",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -310,8 +323,243 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "jobId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getJob",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "components": [
+              {
+                "internalType": "string",
+                "name": "jobTitle",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "companyName",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "seniority",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "department",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "location",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "workSchedule",
+                "type": "string"
+              }
+            ],
+            "internalType": "struct ThekiToken.BasicInfo",
+            "name": "basicInfo",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "string[]",
+                "name": "technicalSkills",
+                "type": "string[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "techSkillExp",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "string[]",
+                "name": "softSkills",
+                "type": "string[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "softSkillExp",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "string[]",
+                "name": "industryExp",
+                "type": "string[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "industryExpDur",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "string[]",
+                "name": "jobExp",
+                "type": "string[]"
+              },
+              {
+                "internalType": "uint256[]",
+                "name": "jobExpDur",
+                "type": "uint256[]"
+              },
+              {
+                "internalType": "string[]",
+                "name": "projects",
+                "type": "string[]"
+              },
+              {
+                "internalType": "string[]",
+                "name": "awards",
+                "type": "string[]"
+              },
+              {
+                "internalType": "string[]",
+                "name": "certifications",
+                "type": "string[]"
+              },
+              {
+                "internalType": "string[]",
+                "name": "patents",
+                "type": "string[]"
+              },
+              {
+                "internalType": "string[]",
+                "name": "publications",
+                "type": "string[]"
+              },
+              {
+                "internalType": "string[]",
+                "name": "securityClearances",
+                "type": "string[]"
+              },
+              {
+                "internalType": "uint256",
+                "name": "endorsements",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct ThekiToken.Qualifications",
+            "name": "qualifications",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "string",
+                "name": "primaryDuties",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "secondaryDuties",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "deliverables",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "toolsTech",
+                "type": "string"
+              }
+            ],
+            "internalType": "struct ThekiToken.Duties",
+            "name": "duties",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "string",
+                "name": "salary",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "bonus",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "benefits",
+                "type": "string"
+              }
+            ],
+            "internalType": "struct ThekiToken.Compensation",
+            "name": "compensation",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "string",
+                "name": "jobIntroHook",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "companyProfile",
+                "type": "string"
+              }
+            ],
+            "internalType": "struct ThekiToken.CompanyCulture",
+            "name": "companyCulture",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "thekiScore",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ThekiToken.Job",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "jobCounter",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "jobIds",
     "outputs": [
       {
         "internalType": "uint256",

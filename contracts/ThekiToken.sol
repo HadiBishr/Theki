@@ -5,6 +5,7 @@ contract ThekiToken {
 
     uint256 public jobCounter; 
     uint256 public claimCounter = 0;
+    uint256[] public jobIds;
 
     // Structure of Claim
     struct Claim {
@@ -162,6 +163,20 @@ contract ThekiToken {
             companyCulture: _companyCulture,
             thekiScore: 0 // Intial score set to 0
         });
+
+        jobIds.push(jobCounter); // Add the job ID to the array
+
+
+    }
+
+    // Getter function to get all Job IDs
+    function getAllJobIds() public view returns (uint256[] memory) {
+        return jobIds;
+    }
+
+    // Getter function go get a specific job
+    function getJob(uint256 jobId) public view returns (Job memory) {
+        return jobs[jobId];
     }
 
   

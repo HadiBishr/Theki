@@ -7,7 +7,8 @@ import { ethers } from 'ethers'
 // Components
 import Navigation from './components/Navigation'
 import Dashboard from './components/Dashboard'
-import VerifyClaim from './components/VerifyClaim';
+import VerifyClaim from './components/VerifyClaim'
+import Job from './components/Job'
 
 // ABIS
 import ThekiTokenABI from './abis/ThekiToken.json'
@@ -31,6 +32,9 @@ function App() {
   const [claimIds, setClaimIds] = useState([]) // An array of claim ids of the professional. 
   const [searchAddress, setSearchAddress] = useState('')
   const [searchedClaims, setSearchedClaims] = useState([])
+
+  const [jobIds, setJobIds] = useState([])
+  const [jobs, setJobs] = useState([])
 
 
 
@@ -208,6 +212,35 @@ function App() {
       setClaims(claims) 
 
 
+
+
+
+
+      // Get all Jobs
+      const jobIds = await thekiToken.getAllJobIds()
+      setJobIds(jobIds)
+
+      console.log("Got All Job Ids")
+
+      const jobPromises = jobIds.map(async (id) => {
+        const job = await thekiToken.getJob(id)
+        return job
+      })
+
+      const jobs = await Promise.all(jobPromises)
+      setJobs(jobs)
+
+      console.log("Jobs array:", jobs)
+
+      console.log("Got All Jobs")
+
+      if (jobs.length > 0) {
+        console.log("Jobs exist")
+      }
+
+
+
+
     } catch (error) {
       console.error('Error loading blockchain data:', error)
     }
@@ -225,6 +258,8 @@ function App() {
     if (account && signer) {
       loadBlockchainData()
     }
+
+   
   }, [account, signer])
 
 
@@ -259,30 +294,39 @@ function App() {
         <Route 
           path="/" 
           element={
-            <Dashboard 
-              claims={claims}
-              setClaims={setClaims}
-              account={account}
-              shortenAddress={shortenAddress}
-              claimContent={claimContent}
-              setClaimContent={setClaimContent}
-              thekiToken={thekiToken}
-              searchAddress={searchAddress}
-              setSearchAddress={setSearchAddress}
-              searchProfessionalClaims={searchProfessionalClaims}
-              createClaims={createClaims}
-              searchedClaims={searchedClaims}
-              verifyClaims={verifyClaims}
+            <>
+              <Dashboard 
+                claims={claims}
+                setClaims={setClaims}
+                account={account}
+                shortenAddress={shortenAddress}
+                claimContent={claimContent}
+                setClaimContent={setClaimContent}
+                thekiToken={thekiToken}
+                searchAddress={searchAddress}
+                setSearchAddress={setSearchAddress}
+                searchProfessionalClaims={searchProfessionalClaims}
+                createClaims={createClaims}
+                searchedClaims={searchedClaims}
+                verifyClaims={verifyClaims}
 
-            />
+              />
+
+              {/* Add loop here to loop over jobs */}
+              <Job jobs={jobs}/>
+
+              
+            </>
           }
         />
 
         <Route 
           path="verify/:claimId"
           element={
-            <VerifyClaim thekiToken={thekiToken} account={account} signer={signer}/>
+            <VerifyClaim thekiToken={thekiToken} account={account} signer={signer} searchProfessionalClaims={searchProfessionalClaims}/>
           }
+
+          
         
         />
 
