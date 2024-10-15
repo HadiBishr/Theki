@@ -76,6 +76,49 @@ async function main() {
     console.log("Job sucessfully created for testing purposes")
 
 
+
+
+    const profile = {
+        technicalSkills: [
+            { skillName: 'Natural Language Processing', experience: 3, verified: true },
+            { skillName: 'Machine Learning', experience: 2, verified: false }
+        ],
+        softSkills: [
+            { skillName: 'Leadership', experience: 5, verified: true },
+            { skillName: 'Communication', experience: 3, verified: false }
+        ],
+        experiences: [
+            { industry: 'AI Research', jobTitle: 'Research Scientist', experience: 4, verified: true },
+            { industry: 'Software Development', jobTitle: 'Software Engineer', experience: 3, verified: false }
+        ],
+        projects: [
+            {
+                name: 'AI Chatbot',
+                link: 'http://project-link.com',
+                skillsApplied: ['Python', 'NLP'],
+                toolsUsed: ['TensorFlow', 'Jupyter Notebook'],
+                role: 'Lead Developer',
+                description: 'Developed an AI-powered chatbot for customer support.',
+                verified: true
+            }
+        ],
+        achievements: [
+            { content: 'Best AI Research Award', industry: 'AI', skill: 'Research', verified: true }
+        ],
+        endorsements: [
+            {
+                content: 'Expert in Deep Learning',
+                endorser: 'John Doe',
+                skillsRelated: ['Deep Learning', 'Python'],
+                verified: true
+            }
+        ],
+        claims: [
+            { content: 'Contributed to a high-profile AI project', verified: true }
+        ]
+    };
+
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

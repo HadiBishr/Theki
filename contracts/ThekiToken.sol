@@ -181,8 +181,9 @@ contract ThekiToken {
     mapping(uint256 => Claim) public claims;                        // Stores the details of the claim. User has to input their ID of the claim they have made. 
     mapping(address => uint256[]) public professionalClaims;        // Stores the ID of the claim each address has made
     mapping(uint256 => Job) public jobs;                            // Mapping from job Id to Job struct. 
-    mapping(uint256 => UserProfile) public userProfiles;
-    mapping(address => uint256) public userId;
+    mapping(address => UserProfile) public userProfiles;
+    mapping(address => bool) public profileExists;
+    // mapping(address => uint256) public userId;
 
     event ClaimCreated(uint256 id, address professional, string content);
     event ClaimVerified(uint256 id); 
@@ -241,21 +242,50 @@ contract ThekiToken {
         Endorsement[] memory _endorsements,
         Claim[] memory _claims
     ) public {
+        require(!profileExists[msg.sender], "Profile already exists");
         userCounter++;
 
-        userProfiles[userCounter] = UserProfile({
-            id: userCounter,
-            technicalSkills: _technicalSkills,
-            softSkills: _softSkills,
-            experiences: _experiences,
-            projects: _projects,
-            achievments: _achievments,
-            endorsements: _endorsements,
-            claims: _claims
-        });
+        UserProfile storage profile = userProfiles[msg.sender];
+        profileExists[msg.sender] = true;
 
-        userId[msg.sender] = userCounter;
 
+        // Loop over each technical skill and push onto profile
+        for (uint256 i = 0; i < _technicalSkills.length; i++) {
+            profile.technicalSkills.push(_technicalSkills[i]);
+        }
+
+        // Loop over each soft skill and push onto profile
+        for (uint256 i = 0; i < _softSkills.length; i++) {
+            profile.softSkills.push(_softSkills[i]);
+        }
+
+        // Loop over each experience and push onto profile
+        for (uint256 i = 0; i < _experiences.length; i++) {
+            profile.experiences.push(_experiences[i]);
+        }
+
+
+        // Loop over each project and push onto profile
+        for (uint256 i = 0; i < _projects.length; i++) {
+            profile.projects.push(_projects[i]);
+        }
+
+
+        // Loop over each achievment and push onto profile
+        for (uint256 i = 0; i < _achievments.length; i++) {
+            profile.achievments.push(_achievments[i]);
+        }
+
+        // Loop over each endorsement and push onto profile
+        for (uint256 i = 0; i < _endorsements.length; i++) {
+            profile.endorsements.push(_endorsements[i]);
+        }
+
+
+        // Loop over each claim and push onto profile
+        for (uint256 i = 0; i < _claims.length; i++) {
+            profile.claims.push(_claims[i]);
+        }
 
     }
 
@@ -267,6 +297,10 @@ contract ThekiToken {
     // Getter function go get a specific job
     function getJob(uint256 jobId) public view returns (Job memory) {
         return jobs[jobId];
+    }
+
+    function getUserId() public view returns (UserProfile memory) {
+        return userProfiles[msg.sender];
     }
 
   
