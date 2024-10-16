@@ -1,6 +1,5 @@
-// Import Necessary Libraries
-const tf = require('@tensorflow/tfjs-node');
-const { BertTokenizer, BertModel } = require('@huggingface/tokenizers');
+import * as tf from './node_modules/@tensorflow/tfjs';
+import { BertTokenizer, BertModel } from './node_modules/@huggingface/hub';
 
 
 

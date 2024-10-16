@@ -1,9 +1,9 @@
 import React from 'react';
 import { ethers } from 'ethers';
+import axios from 'axios'
 
 
 import { jobs, profile1 } from '../ProfilesAndJobs.js'
-// import {calculateThekiScore} from '../ThekiTokenAlgorithm.js'
 import './css/Job.css'
 
 
