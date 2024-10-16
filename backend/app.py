@@ -2,6 +2,10 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
 
+warnings.filterwarnings("ignore", message=".*beta.*")
+warnings.filterwarnings("ignore", message=".*gamma.*")
+
+
 
 # Import Necessary Libraries
 import torch
