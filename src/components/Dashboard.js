@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 
 
 // CSS
-import '/Users/hadibishr/Theki/src/App.css';
+import '../App.css';
 
 
 
