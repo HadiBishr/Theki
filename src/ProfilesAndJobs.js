@@ -219,7 +219,7 @@ export const jobs = [jobData1, jobData2]
 
 
 
-const profile1 = {
+export const profile1 = {
     technicalSkills: [
         { skillName: 'Natural Language Processing', experience: 3, verified: true },
         { skillName: 'Machine Learning', experience: 2, verified: false }
@@ -314,9 +314,6 @@ const profile2 = {
     ],
 };
 
-
-
-export const profiles = [profile1, profile2]
 
 
 
