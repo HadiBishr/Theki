@@ -6,7 +6,7 @@ import axios from 'axios'
 import { jobs, profile1 } from '../ProfilesAndJobs.js'
 import './css/Job.css'
 
-const weights = {
+const category_weights = {
     skills: 0.3,
     experiences: 0.3,
     projects: 0.2,
@@ -36,7 +36,6 @@ const Job = ({account}) => {
                     jobs.map((job, index) => {
                         const profileText = JSON.stringify(profile1)
                         const jobText = JSON.stringify(job)
-
                         
     
                         return (

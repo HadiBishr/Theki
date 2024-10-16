@@ -11,6 +11,9 @@ warnings.filterwarnings("ignore", message=".*gamma.*")
 import torch
 from transformers import BertTokenizer, BertModel
 import numpy as np
+from flask import Flask, request, jsonify
+
+
 
 # Load Pre-trained BERT Model and Tokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -18,6 +21,10 @@ bert_model = BertModel.from_pretrained('bert-base-uncased')
 
 # Caching Mechanism for Embeddings
 embedding_cache = {}
+
+# Initialize Flask app
+app = Flask(__name__)
+
 
 def get_bert_embedding(text):
     if text in embedding_cache:
@@ -185,3 +192,24 @@ def calculate_theki_score(profile, job, category_weights):
     # Final Theki Score
     final_score = (total_score / max_score) * 100  # Scale to 0-100
     return final_score
+
+
+# Flask API endpoint for calculating the score
+@app.route('/calculate_score', methods=['POST'])
+def calculate_score():
+    data = request.get_json()
+    
+    # Extracting profile, job and weights from the request
+    profile = data.get('profile')
+    job = data.get('job')
+    category_weights = data.get('category_weights')
+
+    # Calculate Theki Score
+    score = calculate_theki_score(profile, job, category_weights)
+    
+    # Return the score in JSON format
+    return jsonify({'theki_score': score})
+
+# Main entry point
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
