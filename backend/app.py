@@ -1,3 +1,8 @@
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+
+
+
 # Import Necessary Libraries
 import torch
 from transformers import BertTokenizer, BertModel

@@ -6,6 +6,16 @@ import axios from 'axios'
 import { jobs, profile1 } from '../ProfilesAndJobs.js'
 import './css/Job.css'
 
+const weights = {
+    skills: 0.3,
+    experiences: 0.3,
+    projects: 0.2,
+    achievements: 0.1,
+    endorsements: 0.1, 
+}
+
+                            
+
 
 const Job = ({account}) => {
 
@@ -24,14 +34,10 @@ const Job = ({account}) => {
 
                 {account ? (
                     jobs.map((job, index) => {
+                        const profileText = JSON.stringify(profile1)
+                        const jobText = JSON.stringify(job)
 
-                        // const thekiScore = calculateThekiScore(profile1, job, {
-                        //     skills: 0.3,
-                        //     experiences: 0.3,
-                        //     projects: 0.2,
-                        //     achievements: 0.1,
-                        //     endorsements: 0.1,
-                        // })
+                        
     
                         return (
                             
