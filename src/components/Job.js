@@ -2,10 +2,12 @@ import React from 'react';
 import { ethers } from 'ethers';
 
 
+import { jobs, profile } from '/Users/hadibishr/Theki/src/ProfilesAndJobs.js'
+import calculateThekiScore from '/Users/hadibishr/Theki/src/The Kitoken deploy.py'
 import './css/Job.css'
 
 
-const Job = ({ jobs }) => {
+const Job = () => {
 
     if (!jobs || jobs.length === 0) {
         return <h2>No jobs available</h2>;

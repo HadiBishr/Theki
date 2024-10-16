@@ -34,7 +34,7 @@ function App() {
   const [searchedClaims, setSearchedClaims] = useState([])
 
   const [jobIds, setJobIds] = useState([])
-  const [jobs, setJobs] = useState([])
+  // const [jobs, setJobs] = useState([])
 
 
 
@@ -217,26 +217,29 @@ function App() {
 
 
       // Get all Jobs
-      const jobIds = await thekiToken.getAllJobIds()
-      setJobIds(jobIds)
+      // const jobIds = await thekiToken.getAllJobIds()
+      // setJobIds(jobIds)
 
-      console.log("Got All Job Ids")
+      // console.log("Got All Job Ids")
 
-      const jobPromises = jobIds.map(async (id) => {
-        const job = await thekiToken.getJob(id)
-        return job
-      })
+      // const jobPromises = jobIds.map(async (id) => {
+      //   const job = await thekiToken.getJob(id)
+      //   return job
+      // })
 
-      const jobs = await Promise.all(jobPromises)
-      setJobs(jobs)
+      // const jobs = await Promise.all(jobPromises)
+      // setJobs(jobs)
 
-      console.log("Jobs array:", jobs)
+      // console.log("Jobs array:", jobs)
 
-      console.log("Got All Jobs")
+      // console.log("Got All Jobs")
 
-      if (jobs.length > 0) {
-        console.log("Jobs exist")
-      }
+      // if (jobs.length > 0) {
+      //   console.log("Jobs exist")
+      // }
+
+
+      // The above code ignore until we put jobs and profiles onto the blockchain
 
 
 
@@ -313,7 +316,7 @@ function App() {
               />
 
               {/* Add loop here to loop over jobs */}
-              <Job jobs={jobs}/>
+              <Job/>
 
               
             </>
