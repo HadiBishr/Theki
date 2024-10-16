@@ -316,7 +316,7 @@ function App() {
               />
 
               {/* Add loop here to loop over jobs */}
-              <Job/>
+              <Job account={account}/>
 
               
             </>

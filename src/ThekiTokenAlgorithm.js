@@ -2,6 +2,8 @@
 const tf = require('@tensorflow/tfjs-node');
 const { BertTokenizer, BertModel } = require('@huggingface/tokenizers');
 
+
+
 // Load Pre-trained BERT Model and Tokenizer
 const tokenizer = BertTokenizer.fromPretrained('bert-base-uncased');
 const bertModel = BertModel.fromPretrained('bert-base-uncased');
@@ -40,7 +42,7 @@ function applyVerificationWeight(score, verified, verificationBoost = 0.2) {
     return verified ? score * (1 + verificationBoost) : score;
 }
 
-async function calculateThekiScore(profile, job, categoryWeights) {
+export async function calculateThekiScore(profile, job, categoryWeights) {
     // Normalize category weights
     const totalWeight = Object.values(categoryWeights).reduce((acc, val) => acc + val, 0);
     categoryWeights = Object.fromEntries(Object.entries(categoryWeights).map(([k, v]) => [k, v / totalWeight]));
