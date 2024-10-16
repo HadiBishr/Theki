@@ -2,8 +2,8 @@ import React from 'react';
 import { ethers } from 'ethers';
 
 
-import { jobs, profile1 } from '/Users/hadibishr/Theki/src/ProfilesAndJobs.js'
-import calculateThekiScore from '/Users/hadibishr/Theki/src/The Kitoken deploy.py'
+import { jobs, profile1 } from '../ProfilesAndJobs.js'
+import calculateThekiScore from '../ThekiTokenAlgorithm.js'
 import './css/Job.css'
 
 
@@ -41,7 +41,7 @@ const Job = () => {
                                 <h2 className="job-title"><strong>{job.basicInfo.jobTitle}</strong></h2>
                             </div>
                             <div className="job-info">
-                                <p className="theki-score">Theki Score: <span className='score-value'> {job.thekiScore.toString()} </span></p>
+                                <p className="theki-score">Theki Score: <span className='score-value'> {thekiScore.toFixed(2)} </span></p>
                                 <p className="job-salary">{job.basicInfo.workSchedule}: {job.compensation.salary}</p>
                         </div>
 
