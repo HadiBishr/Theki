@@ -11,6 +11,7 @@ warnings.filterwarnings("ignore", message=".*gamma.*")
 import torch
 from transformers import BertTokenizer, BertModel
 import numpy as np
+from flask_cors import CORS, cross_origin
 from flask import Flask, request, jsonify
 
 
@@ -24,7 +25,7 @@ embedding_cache = {}
 
 # Initialize Flask app
 app = Flask(__name__)
-
+CORS(app)
 
 def get_bert_embedding(text):
     if text in embedding_cache:
@@ -197,6 +198,10 @@ def calculate_theki_score(profile, job, category_weights):
 # Flask API endpoint for calculating the score
 @app.route('/calculate_score', methods=['POST'])
 def calculate_score():
+
+
+
+
     data = request.get_json()
     
     # Extracting profile, job and weights from the request
@@ -208,6 +213,7 @@ def calculate_score():
     score = calculate_theki_score(profile, job, category_weights)
     
     # Return the score in JSON format
+
     return jsonify({'theki_score': score})
 
 # Main entry point
