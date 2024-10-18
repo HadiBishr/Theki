@@ -24,7 +24,8 @@ const Job = ({account}) => {
 
     const calculateThekiScore = async (profile, job, weights) => {
         try {
-            
+            const profileText = JSON.stringify(profile)
+            console.log("Profile Text Below:", profile)
 
             // Make a request to the Flask API for each job
             const response = await axios.post('http://localhost:5000/calculate_score', {
