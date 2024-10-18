@@ -1,33 +1,33 @@
 // Create a job after deployment for testing purposes
 // Define the job information
-const basicInfo = {
-    jobTitle: "NLP Engineer",
-    companyName: "Theki Corp",
+const basic_info = {
+    job_title: "NLP Engineer",
+    company_name: "Theki Corp",
     seniority: "Mid-Level",
     department: "Engineering",
     location: "Remote",
-    workSchedule: "Full-time",
+    work_schedule: "Full-time",
 };
 
 const qualifications = {
     technical_skills: [  // Updated
-        { skillName: "Python", experience: 3 },
-        { skillName: "TensorFlow", experience: 2 },
-        { skillName: "NLP", experience: 2 },
+        { skill: "Python", experience: 3 },
+        { skill: "TensorFlow", experience: 2 },
+        { skill: "NLP", experience: 2 },
     ],
     soft_skills: [  // Updated
-        { skillName: "Teamwork", experience: 2 },
-        { skillName: "Communication", experience: 1 },
+        { skill: "Teamwork", experience: 2 },
+        { skill: "Communication", experience: 1 },
     ],
     experiences: [
         {
             industry: "AI",
-            jobTitle: "Machine Learning Engineer",
+            job_title: "Machine Learning Engineer",
             experience: 3,
         },
         {
             industry: "Software Development",
-            jobTitle: "Data Scientist",
+            job_title: "Data Scientist",
             experience: 4,
         },
     ],
@@ -74,10 +74,10 @@ const qualifications = {
 };
 
 const duties = {
-    primaryDuties: "Develop NLP models and algorithms to enhance chatbot capabilities.",
-    secondaryDuties: "Collaborate with data scientists and software engineers.",
+    primary_duties: "Develop NLP models and algorithms to enhance chatbot capabilities.",
+    secondary_duties: "Collaborate with data scientists and software engineers.",
     deliverables: "Monthly performance reports, NLP-based chatbot improvements.",
-    toolsTech: "Python, TensorFlow, PyTorch, Jupyter Notebook",
+    tools_tech: "Python, TensorFlow, PyTorch, Jupyter Notebook",
 };
 
 const compensation = {
@@ -86,9 +86,9 @@ const compensation = {
     benefits: "Health insurance, Paid time off, Remote work options",
 };
 
-const companyCulture = {
-    jobIntroHook: "Join our innovative team to create state-of-the-art NLP solutions.",
-    companyProfile: "Theki Corp is a leader in AI development, specializing in NLP technologies for the next generation of applications.",
+const company_culture = {
+    job_intro_hook: "Join our innovative team to create state-of-the-art NLP solutions.",
+    company_profile: "Theki Corp is a leader in AI development, specializing in NLP technologies for the next generation of applications.",
 };
 
 
@@ -97,13 +97,13 @@ const companyCulture = {
 
 
 
-const jobData1 = {
-    basicInfo,
+const job_data1 = {
+    basic_info,
     qualifications,
     duties,
     compensation,
-    companyCulture,
-    thekiScore: 0, // Theki score for testing purposes initially set to 0
+    company_culture,
+    theki_score: 0, // Theki score for testing purposes initially set to 0
 }
 
 
@@ -114,47 +114,47 @@ const jobData1 = {
 
 // jobData2.js
 
-const basicInfo2 = {
-    jobTitle: "Backend Developer",
-    companyName: "TechWorks",
+const basic_info2 = {
+    job_title: "Backend Developer",
+    company_name: "TechWorks",
     seniority: "Senior",
     department: "Development",
     location: "New York, NY",
-    workSchedule: "Full-time",
+    work_schedule: "Full-time",
 };
 
 const qualifications2 = {
     technicalSkills: [
-        { skillName: "Node.js", experience: 4 },
-        { skillName: "SQL", experience: 5 },
-        { skillName: "RESTful APIs", experience: 3 },
+        { skill: "Node.js", experience: 4 },
+        { skill: "SQL", experience: 5 },
+        { skill: "RESTful APIs", experience: 3 },
     ],
     softSkills: [
-        { skillName: "Problem Solving", experience: 4 },
-        { skillName: "Team Collaboration", experience: 3 },
+        { skill: "Problem Solving", experience: 4 },
+        { skill: "Team Collaboration", experience: 3 },
     ],
     experiences: [
         {
             industry: "Software Development",
-            jobTitle: "Backend Engineer",
+            job_title: "Backend Engineer",
             experience: 5,
         },
         {
             industry: "Fintech",
-            jobTitle: "Database Administrator",
+            job_title: "Database Administrator",
             experience: 3,
         },
     ],
     projects: [
         {
             name: "Payment Gateway Integration",
-            skillsApplied: ["Node.js", "RESTful APIs"],
-            toolsUsed: ["Postman", "Express.js"],
+            skills_applied: ["Node.js", "RESTful APIs"],
+            tools_used: ["Postman", "Express.js"],
         },
         {
             name: "Data Migration Project",
-            skillsApplied: ["SQL", "Database Management"],
-            toolsUsed: ["PostgreSQL", "MySQL"],
+            skills_applied: ["SQL", "Database Management"],
+            tools_used: ["PostgreSQL", "MySQL"],
         },
     ],
     achievements: [
@@ -178,10 +178,10 @@ const qualifications2 = {
 };
 
 const duties2 = {
-    primaryDuties: "Develop and maintain backend services for the company's core products.",
-    secondaryDuties: "Collaborate with frontend developers to integrate user-facing elements.",
+    primary_duties: "Develop and maintain backend services for the company's core products.",
+    secondary_duties: "Collaborate with frontend developers to integrate user-facing elements.",
     deliverables: "Weekly code commits, API documentation, performance improvement updates.",
-    toolsTech: "Node.js, Express.js, PostgreSQL, MySQL",
+    tools_tech: "Node.js, Express.js, PostgreSQL, MySQL",
 };
 
 const compensation2 = {
@@ -190,23 +190,23 @@ const compensation2 = {
     benefits: "Health insurance, 401(k), Paid time off, Commuter benefits",
 };
 
-const companyCulture2 = {
-    jobIntroHook: "Join our growing team to build scalable, resilient backend services for world-class products.",
-    companyProfile: "TechWorks is a leading provider of tech solutions, focusing on innovative and high-quality software development.",
+const company_culture2 = {
+    job_intro_hook: "Join our growing team to build scalable, resilient backend services for world-class products.",
+    company_profile: "TechWorks is a leading provider of tech solutions, focusing on innovative and high-quality software development.",
 };
 
 // Hardcoded job data for testing
-const jobData2 = {
-    basicInfo: basicInfo2,
-    qualifications: qualifications2,
-    duties: duties2,
-    compensation: compensation2,
-    companyCulture: companyCulture2,
-    thekiScore: 0, // Theki score for testing purposes initially set to 0
+const job_data2 = {
+    basic_info2,
+    qualifications2,
+    duties2,
+    compensation2,
+    company_culture2,
+    theki_score: 0, // Theki score for testing purposes initially set to 0
 };
 
 
-export const jobs = [jobData1, jobData2]
+export const jobs = [job_data1, job_data2]
 
 
 
@@ -219,23 +219,23 @@ export const jobs = [jobData1, jobData2]
 
 export const profile1 = {
     technicalSkills: [
-        { skillName: 'Natural Language Processing', experience: 3, verified: true },
-        { skillName: 'Machine Learning', experience: 2, verified: false }
+        { skill: 'Natural Language Processing', experience: 3, verified: true },
+        { skill: 'Machine Learning', experience: 2, verified: false }
     ],
     softSkills: [
-        { skillName: 'Leadership', experience: 5, verified: true },
-        { skillName: 'Communication', experience: 3, verified: false }
+        { skill: 'Leadership', experience: 5, verified: true },
+        { skill: 'Communication', experience: 3, verified: false }
     ],
     experiences: [
-        { industry: 'AI Research', jobTitle: 'Research Scientist', experience: 4, verified: true },
-        { industry: 'Software Development', jobTitle: 'Software Engineer', experience: 3, verified: false }
+        { industry: 'AI Research', job_title: 'Research Scientist', experience: 4, verified: true },
+        { industry: 'Software Development', job_title: 'Software Engineer', experience: 3, verified: false }
     ],
     projects: [
         {
             name: 'AI Chatbot',
             link: 'http://project-link.com',
-            skillsApplied: ['Python', 'NLP'],
-            toolsUsed: ['TensorFlow', 'Jupyter Notebook'],
+            skills_applied: ['Python', 'NLP'],
+            tools_used: ['TensorFlow', 'Jupyter Notebook'],
             role: 'Lead Developer',
             description: 'Developed an AI-powered chatbot for customer support.',
             verified: true
@@ -248,7 +248,7 @@ export const profile1 = {
         {
             content: 'Expert in Deep Learning',
             endorser: 'John Doe',
-            skillsRelated: ['Deep Learning', 'Python'],
+            skills_related: ['Deep Learning', 'Python'],
             verified: false
         }
     ],
@@ -263,24 +263,24 @@ export const profile1 = {
 
 const profile2 = {
     technicalSkills: [
-        { skillName: "Backend Development", experience: 4, verified: true },
-        { skillName: "SQL Databases", experience: 5, verified: true },
-        { skillName: "API Development", experience: 3, verified: false },
+        { skill: "Backend Development", experience: 4, verified: true },
+        { skill: "SQL Databases", experience: 5, verified: true },
+        { skill: "API Development", experience: 3, verified: false },
     ],
     softSkills: [
-        { skillName: "Team Collaboration", experience: 4, verified: true },
-        { skillName: "Time Management", experience: 3, verified: true },
+        { skill: "Team Collaboration", experience: 4, verified: true },
+        { skill: "Time Management", experience: 3, verified: true },
     ],
     experiences: [
-        { industry: "Fintech", jobTitle: "Backend Engineer", experience: 4, verified: true },
-        { industry: "Banking", jobTitle: "Database Administrator", experience: 5, verified: false },
+        { industry: "Fintech", job_title: "Backend Engineer", experience: 4, verified: true },
+        { industry: "Banking", job_title: "Database Administrator", experience: 5, verified: false },
     ],
     projects: [
         {
             name: "Fintech Platform Backend",
             link: "http://fintech-backend-project.com",
-            skillsApplied: ["SQL", "Node.js"],
-            toolsUsed: ["MySQL", "Express.js"],
+            skills_applied: ["SQL", "Node.js"],
+            tools_used: ["MySQL", "Express.js"],
             role: "Lead Backend Developer",
             description: "Built and optimized backend architecture for a fintech platform.",
             verified: true,
@@ -288,8 +288,8 @@ const profile2 = {
         {
             name: "Customer Data Migration",
             link: "http://datamigration-project.com",
-            skillsApplied: ["SQL", "Data Analysis"],
-            toolsUsed: ["PostgreSQL", "Python"],
+            skills_applied: ["SQL", "Data Analysis"],
+            tools_used: ["PostgreSQL", "Python"],
             role: "Database Specialist",
             description: "Led a successful data migration project to a new database system.",
             verified: false,
@@ -303,7 +303,7 @@ const profile2 = {
         {
             content: "Excellent SQL Skills",
             endorser: "Jane Doe",
-            skillsRelated: ["SQL", "Data Analysis"],
+            skills_related: ["SQL", "Data Analysis"],
             verified: true,
         },
     ],

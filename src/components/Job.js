@@ -81,12 +81,12 @@ const Job = ({account}) => {
     
                             <div key={index} className="job-card">
                                 <div className="job-header">
-                                    <h3 className="company-name"><strong>{job.basicInfo.companyName}</strong></h3>
-                                    <h2 className="job-title"><strong>{job.basicInfo.jobTitle}</strong></h2>
+                                    <h3 className="company-name"><strong>{job.basic_info.company_name}</strong></h3>
+                                    <h2 className="job-title"><strong>{job.basic_info.job_title}</strong></h2>
                                 </div>
                                 <div className="job-info">
                                     <p className="theki-score">Theki Score: <span className='score-value'> {thekiScore.toFixed(2)} </span></p>
-                                    <p className="job-salary">{job.basicInfo.workSchedule}: {job.compensation.salary}</p>
+                                    <p className="job-salary">{job.basic_info.work_schedule}: {job.compensation.salary}</p>
                             </div>
     
     
