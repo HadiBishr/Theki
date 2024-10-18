@@ -203,6 +203,7 @@ def calculate_theki_score(profile, job, category_weights):
 
 # Flask API endpoint for calculating the score
 @app.route('/calculate_score', methods=['POST'])
+@cross_origin()  # Allow all origins for this specific route
 def calculate_score():
 
     try:
