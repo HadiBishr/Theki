@@ -18,21 +18,19 @@ const category_weight = {
 
 
 const Job = ({account}) => {
+    const [jobsWithScores, setJobesWithScores] = useState([])
+
 
 
     const calculateThekiScore = async (profile, job, weights) => {
         try {
             
-                
-            const profileText = JSON.stringify(profile)
-            const jobText = JSON.stringify(job)
-            const weightsText = JSON.stringify(weights)
 
             // Make a request to the Flask API for each job
-            const response = await axios.post('http://127.0.0.1:5000/calculate_similarity', {
-                profile: profileText,
-                job: jobText,
-                category_weights: weightsText
+            const response = await axios.post('http://localhost:5000/calculate_score', {
+                profile: profile,
+                job: job,
+                category_weights: weights
             }, {
                 headers: {
                     'Content-Type': 'application/json',

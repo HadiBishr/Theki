@@ -10,13 +10,12 @@ const basicInfo = {
 };
 
 const qualifications = {
-
-    technicalSkills: [
-        {skillName:"Python", experience: 3}, 
-        {skillName:"TensorFlow", experience: 2}, 
-        {skillName:"NLP", experience: 2},
+    technical_skills: [  // Updated
+        { skillName: "Python", experience: 3 },
+        { skillName: "TensorFlow", experience: 2 },
+        { skillName: "NLP", experience: 2 },
     ],
-    softSkills: [
+    soft_skills: [  // Updated
         { skillName: "Teamwork", experience: 2 },
         { skillName: "Communication", experience: 1 },
     ],
@@ -35,13 +34,13 @@ const qualifications = {
     projects: [
         {
             name: "Chatbot Project",
-            skillsApplied: ["NLP", "Machine Learning"],
-            toolsUsed: ["TensorFlow", "Python"],
+            skills_applied: ["NLP", "Machine Learning"],  // Updated
+            tools_used: ["TensorFlow", "Python"],  // Updated
         },
         {
             name: "Sentiment Analysis",
-            skillsApplied: ["Text Mining", "NLP"],
-            toolsUsed: ["PyTorch", "Jupyter Notebook"],
+            skills_applied: ["Text Mining", "NLP"],  // Updated
+            tools_used: ["PyTorch", "Jupyter Notebook"],  // Updated
         },
     ],
     achievements: [
@@ -72,7 +71,6 @@ const qualifications = {
         },
     ],
     endorsements: 5,
-
 };
 
 const duties = {

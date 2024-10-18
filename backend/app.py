@@ -9,6 +9,7 @@ warnings.filterwarnings("ignore", message=".*gamma.*")
 
 # Import Necessary Libraries
 import torch
+import logging
 from transformers import BertTokenizer, BertModel
 import numpy as np
 from flask_cors import CORS, cross_origin
@@ -25,7 +26,12 @@ embedding_cache = {}
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+
 
 def get_bert_embedding(text):
     if text in embedding_cache:
@@ -199,22 +205,27 @@ def calculate_theki_score(profile, job, category_weights):
 @app.route('/calculate_score', methods=['POST'])
 def calculate_score():
 
+    try:
 
+        data = request.get_json()
+        
+        # Extracting profile, job and weights from the request
+        profile = data.get('profile')
+        job = data.get('job')
+        category_weights = data.get('category_weights')
 
+        # Calculate Theki Score
+        score = calculate_theki_score(profile, job, category_weights)
+        
+        # Return the score in JSON format
 
-    data = request.get_json()
-    
-    # Extracting profile, job and weights from the request
-    profile = data.get('profile')
-    job = data.get('job')
-    category_weights = data.get('category_weights')
+        return jsonify({'theki_score': score})
 
-    # Calculate Theki Score
-    score = calculate_theki_score(profile, job, category_weights)
-    
-    # Return the score in JSON format
-
-    return jsonify({'theki_score': score})
+    except Exception as e:
+        # Log the error
+        app.logger.error(f"An error occurred: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+        
 
 # Main entry point
 if __name__ == '__main__':
