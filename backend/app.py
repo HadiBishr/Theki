@@ -68,12 +68,12 @@ def calculate_theki_score(profile, job, category_weights):
 
     # Skills Matching
     skill_score = 0
-    max_skill_score = len(job['qualifications']['skills']['technical_skills']) + len(job['qualifications']['skills']['soft_skills'])
+    max_skill_score = len(job['qualifications']['technical_skills']) + len(job['qualifications']['soft_skills'])
     
     # Technical Skills
-    for job_skill in job['qualifications']['skills']['technical_skills']:
+    for job_skill in job['qualifications']['technical_skills']:
         best_match = 0
-        for prof_skill in profile['skills']['technical_skills']:
+        for prof_skill in profile['technical_skills']:
             similarity = calculate_similarity(prof_skill['skill'], job_skill['skill'])
             similarity = apply_verification_weight(similarity, prof_skill['verified'])
             exp_similarity = experience_similarity(prof_skill['experience'], job_skill['experience'])
@@ -83,9 +83,9 @@ def calculate_theki_score(profile, job, category_weights):
         skill_score += best_match
 
     # Soft Skills
-    for job_skill in job['qualifications']['skills']['soft_skills']:
+    for job_skill in job['qualifications']['soft_skills']:
         best_match = 0
-        for prof_skill in profile['skills']['soft_skills']:
+        for prof_skill in profile['soft_skills']:
             similarity = calculate_similarity(prof_skill['skill'], job_skill['skill'])
             similarity = apply_verification_weight(similarity, prof_skill['verified'])
             exp_similarity = experience_similarity(prof_skill['experience'], job_skill['experience'])
@@ -106,7 +106,7 @@ def calculate_theki_score(profile, job, category_weights):
         for prof_exp in profile['experiences']:
             industry_similarity = calculate_similarity(prof_exp['industry'], job_exp['industry'])
             industry_similarity = apply_verification_weight(industry_similarity, prof_exp['verified'])
-            duration_similarity = experience_similarity(prof_exp['duration'], job_exp['duration'])
+            duration_similarity = experience_similarity(prof_exp['experience'], job_exp['experience'])
             total_similarity = industry_similarity * duration_similarity
             if total_similarity > best_match:
                 best_match = total_similarity
@@ -145,7 +145,7 @@ def calculate_theki_score(profile, job, category_weights):
     for job_ach in job['qualifications']['achievements']:
         best_match = 0
         for prof_ach in profile['achievements']:
-            type_match = 1.0 if prof_ach['type'] == job_ach['type'] else 0.0
+            type_match = 1.0 if prof_ach['content'] == job_ach['content'] else 0.0
             industry_similarity = calculate_similarity(prof_ach['industry'], job_ach['industry'])
             skill_similarity = calculate_similarity(prof_ach['skill'], job_ach['skill'])
             total_similarity = (type_match + industry_similarity + skill_similarity) / 3
@@ -173,6 +173,7 @@ def calculate_theki_score(profile, job, category_weights):
             if total_similarity > best_match:
                 best_match = total_similarity
         endorsement_score += best_match
+
 
     # Normalize and weight endorsement score
     if max_endorsement_score > 0:
@@ -209,6 +210,7 @@ def calculate_score():
     try:
 
         data = request.get_json()
+        print(data)
         
         # Extracting profile, job and weights from the request
         profile = data.get('profile')
@@ -217,6 +219,8 @@ def calculate_score():
 
         # Calculate Theki Score
         score = calculate_theki_score(profile, job, category_weights)
+
+        print(score)
         
         # Return the score in JSON format
 

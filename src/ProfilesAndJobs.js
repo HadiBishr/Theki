@@ -70,7 +70,20 @@ const qualifications = {
             skill: "Security Clearance",
         },
     ],
-    endorsements: 5,
+    endorsements: [
+        {
+            content: "Excellent SQL Skills",
+            endorser: "Jane Doe",
+            skills_related: ["SQL", "Data Analysis"],
+            verified: true,
+        },
+        {
+            content: 'Expert in Deep Learning',
+            endorser: 'John Doe',
+            skills_related: ['Deep Learning', 'Python'],
+            verified: false
+        }
+    ],
 };
 
 const duties = {
@@ -124,12 +137,12 @@ const basic_info2 = {
 };
 
 const qualifications2 = {
-    technicalSkills: [
+    technical_skills: [
         { skill: "Node.js", experience: 4 },
         { skill: "SQL", experience: 5 },
         { skill: "RESTful APIs", experience: 3 },
     ],
-    softSkills: [
+    soft_skills: [
         { skill: "Problem Solving", experience: 4 },
         { skill: "Team Collaboration", experience: 3 },
     ],
@@ -174,7 +187,20 @@ const qualifications2 = {
             skill: "Optimization Techniques",
         },
     ],
-    endorsements: 8,
+    endorsements: [
+        {
+            content: "Excellent SQL Skills",
+            endorser: "Jane Doe",
+            skills_related: ["SQL", "Data Analysis"],
+            verified: true,
+        },
+        {
+            content: 'Expert in Deep Learning',
+            endorser: 'John Doe',
+            skills_related: ['Deep Learning', 'Python'],
+            verified: false
+        }
+    ],
 };
 
 const duties2 = {
@@ -206,7 +232,7 @@ const job_data2 = {
 };
 
 
-export const jobs = [job_data1, job_data2]
+export const jobs = [job_data1]
 
 
 
@@ -218,11 +244,11 @@ export const jobs = [job_data1, job_data2]
 
 
 export const profile1 = {
-    technicalSkills: [
+    technical_skills: [
         { skill: 'Natural Language Processing', experience: 3, verified: true },
         { skill: 'Machine Learning', experience: 2, verified: false }
     ],
-    softSkills: [
+    soft_skills: [
         { skill: 'Leadership', experience: 5, verified: true },
         { skill: 'Communication', experience: 3, verified: false }
     ],
@@ -262,12 +288,12 @@ export const profile1 = {
 // profile2.js
 
 const profile2 = {
-    technicalSkills: [
+    technical_skills: [
         { skill: "Backend Development", experience: 4, verified: true },
         { skill: "SQL Databases", experience: 5, verified: true },
         { skill: "API Development", experience: 3, verified: false },
     ],
-    softSkills: [
+    soft_kills: [
         { skill: "Team Collaboration", experience: 4, verified: true },
         { skill: "Time Management", experience: 3, verified: true },
     ],

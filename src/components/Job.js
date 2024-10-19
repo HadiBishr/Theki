@@ -18,34 +18,57 @@ const category_weight = {
 
 
 const Job = ({account}) => {
-    const [jobsWithScores, setJobesWithScores] = useState([])
+    const [thekiScores, setThekiScores] = useState([])
 
 
+    useEffect(() => {
 
-    const calculateThekiScore = async (profile, job, weights) => {
-        try {
-            const profileText = JSON.stringify(profile)
-            console.log("Profile Text Below:", profile)
+        const calculateThekiScore = async (profile, job, weights) => {
+            const scores = await Promise.all(
+                jobs.map(async (job) => {
 
-            // Make a request to the Flask API for each job
-            const response = await axios.post('http://localhost:5000/calculate_score', {
-                profile: profile,
-                job: job,
-                category_weights: weights
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
+                    try {
+    
+                        // Make a request to the Flask API for each job
+                        const response = await axios.post('http://localhost:5000/calculate_score', {
+                            profile: profile1,
+                            job: job,
+                            category_weights: category_weight
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+            
+                        console.log("Here is the score:", response.data.theki_score)
+            
+                        return response.data.theki_score 
+                          
+            
+                    } catch (error) {
+                        console.error("Error calculating Theki Score:", error)
+                        return 0
+                    }
 
-            return response.data.similarity * 100
-              
+                })
 
-        } catch (error) {
-            console.error("Error calculating Theki Score:", error)
-            return 0
+                
+
+            )
+
+            setThekiScores(scores)
+            
         }
-    }
+
+        if (account) {
+            calculateThekiScore()
+        }
+
+    }, [account])
+
+
+
+    
 
 
 
@@ -62,36 +85,28 @@ const Job = ({account}) => {
             <h3>Total Jobs: {jobs.length}</h3>
             <div className='jobs-container'>
 
+
                 {account ? (
                     jobs.map((job, index) => {
-                        
-                        let thekiScore = 0
 
-                        // Calculate the Theki score for each job
-                        calculateThekiScore(profile1, job, category_weight)
-                            .then((score) => {
-                                thekiScore = score
-                            })
-                            .catch((error) => {
-                                console.error('Error calculating score', error)
-                            })
-    
                         return (
-                            
-    
+
                             <div key={index} className="job-card">
                                 <div className="job-header">
                                     <h3 className="company-name"><strong>{job.basic_info.company_name}</strong></h3>
                                     <h2 className="job-title"><strong>{job.basic_info.job_title}</strong></h2>
                                 </div>
                                 <div className="job-info">
-                                    <p className="theki-score">Theki Score: <span className='score-value'> {thekiScore.toFixed(2)} </span></p>
+                                    <p className="theki-score">Theki Score: <span className='score-value'> {thekiScores[index]?.toFixed(2)} </span></p>
                                     <p className="job-salary">{job.basic_info.work_schedule}: {job.compensation.salary}</p>
+                                </div>
                             </div>
-    
-    
-                        </div>
+
                         )
+                        
+                       
+                       
+             
                     
                     })
                 ) : (
