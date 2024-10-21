@@ -239,49 +239,88 @@ export const jobs = [job_data1]
 
 
 
-
-
-
-
 export const profile1 = {
+    name: 'Hadi',
     technical_skills: [
-        { skill: 'Natural Language Processing', experience: 3, verified: true },
-        { skill: 'Machine Learning', experience: 2, verified: false }
+        { skill: 'JavaScript', experience: 2, verified: false }, // Changed from NLP to JavaScript
+        { skill: 'React', experience: 1, verified: true } // Changed from Machine Learning to React
     ],
     soft_skills: [
         { skill: 'Leadership', experience: 5, verified: true },
         { skill: 'Communication', experience: 3, verified: false }
     ],
     experiences: [
-        { industry: 'AI Research', job_title: 'Research Scientist', experience: 4, verified: true },
-        { industry: 'Software Development', job_title: 'Software Engineer', experience: 3, verified: false }
+        { industry: 'Web Development', job_title: 'Frontend Developer', experience: 2, verified: true }, // Changed from AI Research to Web Development
+        { industry: 'Software Development', job_title: 'Junior Developer', experience: 1, verified: false } // Changed job title and experience
     ],
     projects: [
         {
-            name: 'AI Chatbot',
+            name: 'E-commerce Website',
             link: 'http://project-link.com',
-            skills_applied: ['Python', 'NLP'],
-            tools_used: ['TensorFlow', 'Jupyter Notebook'],
-            role: 'Lead Developer',
-            description: 'Developed an AI-powered chatbot for customer support.',
+            skills_applied: ['JavaScript', 'React'], // Changed skills to JavaScript and React
+            tools_used: ['Node.js', 'Express'], // Changed tools to Node.js and Express
+            role: 'Frontend Developer',
+            description: 'Developed the frontend for an e-commerce platform.',
             verified: true
         }
     ],
     achievements: [
-        { content: 'Best AI Research Award', industry: 'AI', skill: 'Research', verified: true }
+        { content: 'Top Frontend Developer Award', industry: 'Web Development', skill: 'React', verified: true } // Changed award and skill to Frontend development
     ],
     endorsements: [
         {
-            content: 'Expert in Deep Learning',
-            endorser: 'John Doe',
-            skills_related: ['Deep Learning', 'Python'],
-            verified: false
+            content: 'Expert in JavaScript',
+            endorser: 'Jane Doe',
+            skills_related: ['JavaScript', 'React'],
+            verified: true
         }
     ],
     claims: [
-        { content: 'Contributed to a high-profile AI project', verified: true }
+        { content: 'Contributed to a major e-commerce project', verified: true } // Changed to reflect the new project experience
     ]
 };
+
+
+
+// export const profile1 = {
+//     technical_skills: [
+//         { skill: 'Natural Language Processing', experience: 3, verified: true },
+//         { skill: 'Machine Learning', experience: 2, verified: false }
+//     ],
+//     soft_skills: [
+//         { skill: 'Leadership', experience: 5, verified: true },
+//         { skill: 'Communication', experience: 3, verified: false }
+//     ],
+//     experiences: [
+//         { industry: 'AI Research', job_title: 'Research Scientist', experience: 4, verified: true },
+//         { industry: 'Software Development', job_title: 'Software Engineer', experience: 3, verified: false }
+//     ],
+//     projects: [
+//         {
+//             name: 'AI Chatbot',
+//             link: 'http://project-link.com',
+//             skills_applied: ['Python', 'NLP'],
+//             tools_used: ['TensorFlow', 'Jupyter Notebook'],
+//             role: 'Lead Developer',
+//             description: 'Developed an AI-powered chatbot for customer support.',
+//             verified: true
+//         }
+//     ],
+//     achievements: [
+//         { content: 'Best AI Research Award', industry: 'AI', skill: 'Research', verified: true }
+//     ],
+//     endorsements: [
+//         {
+//             content: 'Expert in Deep Learning',
+//             endorser: 'John Doe',
+//             skills_related: ['Deep Learning', 'Python'],
+//             verified: false
+//         }
+//     ],
+//     claims: [
+//         { content: 'Contributed to a high-profile AI project', verified: true }
+//     ]
+// };
 
 
 

@@ -54,6 +54,7 @@ contract UserProfileManager {
 
     struct UserProfile {
         uint256 id;                     // A unique id for a user
+        string name;                    // Name of user
         Skill[] technicalSkills;        // A list of all technical skills a user has
         Skill[] softSkills;             // A list of all soft skills a user has
         Experience[] experiences;       // A list of all experiences a user has
@@ -67,20 +68,36 @@ contract UserProfileManager {
     mapping(address => bool) public profileExists;
 
 
-    function createUserProfile(
-        Skill[] memory _technicalSkills,
-        Skill[] memory _softSkills,
-        Experience[] memory _experiences,
-        Project[] memory _projects,
-        Achievement[] memory _achievements,
-        Endorsement[] memory _endorsements,
-        Claim[] memory _claims
-    ) public {
+    function createUserProfile(bytes memory data) public {
         require(!profileExists[msg.sender], "Profile already exists");
         userCounter++;
 
         UserProfile storage profile = userProfiles[msg.sender];
         profileExists[msg.sender] = true;
+
+        // Decode the bytes back into the appropiate struct
+        (
+            string memory _name,
+            Skill[] memory _technicalSkills,
+            Skill[] memory _softSkills,
+            Experience[] memory _experiences,
+            Project[] memory _projects,
+            Achievement[] memory _achievements,
+            Endorsement[] memory _endorsements,
+            Claim[] memory _claims
+        ) = abi.decode(data, (
+            string,
+            Skill[],
+            Skill[],
+            Experience[],
+            Project[],
+            Achievement[],
+            Endorsement[],
+            Claim[]
+        ));
+
+        // Assign the decoded values to the profile
+        profile.name = _name;
 
 
         // Loop over each technical skill and push onto profile
@@ -122,6 +139,9 @@ contract UserProfileManager {
         }
 
     }
+
+
+
 
     
 

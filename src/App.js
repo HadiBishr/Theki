@@ -12,6 +12,8 @@ import Job from './components/Job'
 
 // ABIS
 import ThekiTokenABI from './abis/ThekiToken.json'
+import JobManagerABI from './abis/JobManager.json'
+import UserProfileManagerABI from './abis/UserProfileManager.json'
 
 // CSS
 import './App.css';
@@ -34,7 +36,8 @@ function App() {
   const [searchedClaims, setSearchedClaims] = useState([])
 
   const [jobIds, setJobIds] = useState([])
-  // const [jobs, setJobs] = useState([])
+  const [jobs, setJobs] = useState([])
+  const [profileData, setProfileData] = useState(null)
 
 
 
@@ -212,36 +215,60 @@ function App() {
       setClaims(claims) 
 
 
+      const userProfileManagerAddress = '0xe7f1725e7734ce288f8367e1bb143e90bb3f0512'
+      const jobManagerAddress = '0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0'
 
 
+      // Create profile contract instance
+      const profileManagerContract = new ethers.Contract(
+        userProfileManagerAddress,
+        UserProfileManagerABI,
+        signer
+      )
+
+      const jobManagerContract = new ethers.Contract(
+        jobManagerAddress,
+        JobManagerABI,
+        signer
+      )
+
+
+      // Fetch the user profile
+      const profileExists = await profileManagerContract.profileExists(account)
+      if (profileExists) {
+        const profileData = await profileManagerContract.connect(signer).getUserProfile()
+        setProfileData(profileData)
+        console.log("Profile Data:", profileData)
+      } else {
+        console.log("No profile exists for this account")
+        setProfileData(null)
+      }
 
 
       // Get all Jobs
-      // const jobIds = await thekiToken.getAllJobIds()
-      // setJobIds(jobIds)
+      const jobIds = await jobManagerContract.getAllJobIds()
+      setJobIds(jobIds)
 
-      // console.log("Got All Job Ids")
+      console.log("Got All Job Ids")
 
-      // const jobPromises = jobIds.map(async (id) => {
-      //   const job = await thekiToken.getJob(id)
-      //   return job
-      // })
+      const jobPromises = jobIds.map(async (id) => {
+        const job = await jobManagerContract.getJob(id)
+        return job
+      })
 
-      // const jobs = await Promise.all(jobPromises)
-      // setJobs(jobs)
+      const jobs = await Promise.all(jobPromises)
+      setJobs(jobs)
 
-      // console.log("Jobs array:", jobs)
+      console.log("Jobs array:", jobs)
 
-      // console.log("Got All Jobs")
+      console.log("Got All Jobs")
 
-      // if (jobs.length > 0) {
-      //   console.log("Jobs exist")
-      // }
-
-
-      // The above code ignore until we put jobs and profiles onto the blockchain
+      if (jobs.length > 0) {
+        console.log("Jobs exist")
+      }
 
 
+  
 
 
     } catch (error) {
@@ -290,7 +317,7 @@ function App() {
     <Router>
 
 
-      <Navigation account={account} connectWallet={connectWallet} disconnectWallet={disconnectWallet}/>
+      <Navigation account={account} connectWallet={connectWallet} disconnectWallet={disconnectWallet} profileData={profileData}/>
 
       <Routes>
 

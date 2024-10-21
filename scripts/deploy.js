@@ -4,7 +4,52 @@
 // You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
+
+
+
 const hre = require("hardhat")
+
+
+const profile1 = {
+    name: 'Hadi',
+    technicalSkills: [
+        { skillName: 'JavaScript', experience: 2, verified: false }, // Changed from NLP to JavaScript
+        { skillName: 'React', experience: 1, verified: true } // Changed from Machine Learning to React
+    ],
+    softSkills: [
+        { skillName: 'Leadership', experience: 5, verified: true },
+        { skillName: 'Communication', experience: 3, verified: false }
+    ],
+    experiences: [
+        { industry: 'Web Development', jobTitle: 'Frontend Developer', experience: 2, verified: true }, // Changed from AI Research to Web Development
+        { industry: 'Software Development', jobTitle: 'Junior Developer', experience: 1, verified: false } // Changed job title and experience
+    ],
+    projects: [
+        {
+            name: 'E-commerce Website',
+            link: 'http://project-link.com',
+            skillsApplied: ['JavaScript', 'React'], // Changed skills to JavaScript and React
+            toolsUsed: ['Node.js', 'Express'], // Changed tools to Node.js and Express
+            role: 'Frontend Developer',
+            description: 'Developed the frontend for an e-commerce platform.',
+            verified: true
+        }
+    ],
+    achievements: [
+        { content: 'Top Frontend Developer Award', industry: 'Web Development', skill: 'React', verified: true } // Changed award and skill to Frontend development
+    ],
+    endorsements: [
+        {
+            content: 'Expert in JavaScript',
+            endorser: 'Jane Doe',
+            skillsRelated: ['JavaScript', 'React'],
+            verified: true
+        }
+    ],
+    claims: [
+        { content: 'Contributed to a major e-commerce project', verified: true } // Changed to reflect the new project experience
+    ]
+};
 
 
 
@@ -20,111 +65,90 @@ async function main() {
     console.log(`ThekiToken contract deployed ${thekitoken.address}\n`)
 
 
+    // Deploy UserProfile contract
+    const UserProfileManager = await hre.ethers.getContractFactory("UserProfileManager", deployer)
+    userprofilemanager = await UserProfileManager.deploy({gasLimit: 30000000})
+    await userprofilemanager.deployed()
 
-    // Create a job after deployment for testing purposes
-    // Define the job information
-    const basicInfo = {
-        jobTitle: "NLP Engineer",
-        companyName: "Theki Corp",
-        seniority: "Mid-Level",
-        department: "Engineering",
-        location: "Remote",
-        workSchedule: "Full-time",
-    };
+    console.log(`UserProfileManager contract deployed ${userprofilemanager.address}\n`)
 
-    const qualifications = {
+    // Deploy UserProfile contract
+    const JobManager = await hre.ethers.getContractFactory("JobManager", deployer)
+    jobmanager = await JobManager.deploy({gasLimit: 30000000})
+    await jobmanager.deployed()
 
-        technicalSkills: [
-            {skillName:"Python", experience: 3}, 
-            {skillName:"TensorFlow", experience: 2}, 
-            {skillName:"NLP", experience: 2},
+    console.log(`JobManager contract deployed ${jobmanager.address}\n`)
+
+
+    const abiCoder = new ethers.utils.AbiCoder()
+    
+    // Encode the components of the struct
+    const encodedTechnicalSkills = profile1.technicalSkills.map(skill => abiCoder.encode(
+        ['string', 'uint256', 'bool'],
+        [skill.skillName, skill.experience, skill.verified]
+    ));
+
+    const encodedSoftSkills = profile1.softSkills.map(skill => abiCoder.encode(
+        ['string', 'uint256', 'bool'],
+        [skill.skillName, skill.experience, skill.verified]
+    ));
+
+    const encodedExperiences = profile1.experiences.map(exp => abiCoder.encode(
+        ['string', 'string', 'uint256', 'bool'],
+        [exp.industry, exp.jobTitle, exp.experience, exp.verified]
+    ));
+
+    const encodedProjects = profile1.projects.map(project => abiCoder.encode(
+        ['string', 'string', 'string[]', 'string[]', 'string', 'string', 'bool'],
+        [project.name, project.link, project.skillsApplied, project.toolsUsed, project.role, project.description, project.verified]
+    ));
+
+    const encodedAchievements = profile1.achievements.map(achievement => abiCoder.encode(
+        ['string', 'string', 'string', 'bool'],
+        [achievement.content, achievement.industry, achievement.skill, achievement.verified]
+    ));
+
+    const encodedEndorsements = profile1.endorsements.map(endorsement => abiCoder.encode(
+        ['string', 'string', 'string[]', 'bool'],
+        [endorsement.content, endorsement.endorser, endorsement.skillsRelated, endorsement.verified]
+    ));
+
+    const encodedClaims = profile1.claims.map(claim => abiCoder.encode(
+        ['string', 'bool'],
+        [claim.content, claim.verified]
+    ));
+
+    // Encode the whole user profile data
+    const encodedProfileData = abiCoder.encode(
+        [
+            'string', 
+            'bytes[]', 
+            'bytes[]', 
+            'bytes[]', 
+            'bytes[]', 
+            'bytes[]', 
+            'bytes[]', 
+            'bytes[]'
         ],
-        softSkills: [
-            { skillName: "Teamwork", experience: 2 },
-            { skillName: "Communication", experience: 1 },
-        ],
-        experiences: [
-            {
-                industry: "AI",
-                jobTitle: "Machine Learning Engineer",
-                experience: 3,
-            },
-            {
-                industry: "Software Development",
-                jobTitle: "Data Scientist",
-                experience: 4,
-            },
-        ],
-        projects: [
-            {
-                name: "Chatbot Project",
-                skillsApplied: ["NLP", "Machine Learning"],
-                toolsUsed: ["TensorFlow", "Python"],
-            },
-            {
-                name: "Sentiment Analysis",
-                skillsApplied: ["Text Mining", "NLP"],
-                toolsUsed: ["PyTorch", "Jupyter Notebook"],
-            },
-        ],
-        achievements: [
-            {
-                content: "Best Employee 2023",
-                industry: "AI",
-                skill: "Teamwork",
-            },
-            {
-                content: "Certified TensorFlow Developer",
-                industry: "Software Development",
-                skill: "TensorFlow",
-            },
-            {
-                content: "Patent on NLP Algorithm",
-                industry: "AI",
-                skill: "NLP",
-            },
-            {
-                content: "Paper on NLP Techniques",
-                industry: "AI",
-                skill: "NLP",
-            },
-            {
-                content: "Confidential",
-                industry: "Security",
-                skill: "Security Clearance",
-            },
-        ],
-        endorsements: 5,
+        [
+            profile1.name,
+            encodedTechnicalSkills,
+            encodedSoftSkills,
+            encodedExperiences,
+            encodedProjects,
+            encodedAchievements,
+            encodedEndorsements,
+            encodedClaims
+        ]
+    );
 
-    };
+    
+    transaction = await userprofilemanager.connect(user).createUserProfile(encodedProfileData)
+    await transaction.wait()
 
-    const duties = {
-        primaryDuties: "Develop NLP models and algorithms to enhance chatbot capabilities.",
-        secondaryDuties: "Collaborate with data scientists and software engineers.",
-        deliverables: "Monthly performance reports, NLP-based chatbot improvements.",
-        toolsTech: "Python, TensorFlow, PyTorch, Jupyter Notebook",
-    };
+    console.log("User created")
 
-    const compensation = {
-        salary: "$100k - $120k",
-        bonus: "10% annual bonus",
-        benefits: "Health insurance, Paid time off, Remote work options",
-    };
-
-    const companyCulture = {
-        jobIntroHook: "Join our innovative team to create state-of-the-art NLP solutions.",
-        companyProfile: "Theki Corp is a leader in AI development, specializing in NLP technologies for the next generation of applications.",
-    };
-
-    const jobData = {
-        basicInfo,
-        qualifications,
-        duties,
-        compensation,
-        companyCulture,
-        thekiScore: 0, // Theki score for testing purposes initially set to 0
-    }
-
+    
 
 
     // const transaction = await thekitoken.connect(deployer).createJob(
@@ -143,59 +167,10 @@ async function main() {
 
 
 
-    const profile = {
-        technicalSkills: [
-            { skillName: 'Natural Language Processing', experience: 3, verified: true },
-            { skillName: 'Machine Learning', experience: 2, verified: false }
-        ],
-        softSkills: [
-            { skillName: 'Leadership', experience: 5, verified: true },
-            { skillName: 'Communication', experience: 3, verified: false }
-        ],
-        experiences: [
-            { industry: 'AI Research', jobTitle: 'Research Scientist', experience: 4, verified: true },
-            { industry: 'Software Development', jobTitle: 'Software Engineer', experience: 3, verified: false }
-        ],
-        projects: [
-            {
-                name: 'AI Chatbot',
-                link: 'http://project-link.com',
-                skillsApplied: ['Python', 'NLP'],
-                toolsUsed: ['TensorFlow', 'Jupyter Notebook'],
-                role: 'Lead Developer',
-                description: 'Developed an AI-powered chatbot for customer support.',
-                verified: true
-            }
-        ],
-        achievements: [
-            { content: 'Best AI Research Award', industry: 'AI', skill: 'Research', verified: true }
-        ],
-        endorsements: [
-            {
-                content: 'Expert in Deep Learning',
-                endorser: 'John Doe',
-                skillsRelated: ['Deep Learning', 'Python'],
-                verified: false
-            }
-        ],
-        claims: [
-            { content: 'Contributed to a high-profile AI project', verified: true }
-        ]
-    };
+    
+ 
 
-    // transaction = await thekitoken.connect(user).createUserProfile(
-    //     profile.technicalSkills, 
-    //     profile.softSkills, 
-    //     profile.experiences, 
-    //     profile.projects, 
-    //     profile.achievements, 
-    //     profile.endorsements, 
-    //     profile.claims
-    // )
-
-    // await transaction.wait()
-
-    // console.log("User created")
+   
 
 
 }

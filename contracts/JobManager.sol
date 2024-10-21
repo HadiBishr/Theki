@@ -5,7 +5,7 @@ import "./UserProfileManager.sol";
 
 
 
-contract JobManager is UserProfileManager {
+contract JobManager {
 
     uint256 public jobCounter; 
     uint256[] public jobIds;
