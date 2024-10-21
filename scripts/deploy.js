@@ -80,73 +80,116 @@ async function main() {
     console.log(`JobManager contract deployed ${jobmanager.address}\n`)
 
 
-    const abiCoder = new ethers.utils.AbiCoder()
-    
-    // Encode the components of the struct
-    const encodedTechnicalSkills = profile1.technicalSkills.map(skill => abiCoder.encode(
-        ['string', 'uint256', 'bool'],
-        [skill.skillName, skill.experience, skill.verified]
-    ));
+    // Use fallback for each profile property to make sure they're all arrays
+    const technicalSkills = profile1.technical_skills || [];
+    const softSkills = profile1.soft_skills || [];
+    const experiences = profile1.experiences || [];
+    const projects = profile1.projects || [];
+    const achievements = profile1.achievements || [];
+    const endorsements = profile1.endorsements || [];
+    const claims = profile1.claims || [];
 
-    const encodedSoftSkills = profile1.softSkills.map(skill => abiCoder.encode(
-        ['string', 'uint256', 'bool'],
-        [skill.skillName, skill.experience, skill.verified]
-    ));
+    // Encode technical skills
+    const encodedTechnicalSkills = technicalSkills.map((skill) => {
+        return ethers.utils.defaultAbiCoder.encode(
+            ["string", "uint256", "bool"],
+            [skill.skillName, skill.experience, skill.verified]
+        );
+    });
 
-    const encodedExperiences = profile1.experiences.map(exp => abiCoder.encode(
-        ['string', 'string', 'uint256', 'bool'],
-        [exp.industry, exp.jobTitle, exp.experience, exp.verified]
-    ));
+    // Encode soft skills
+    const encodedSoftSkills = softSkills.map((skill) => {
+        return ethers.utils.defaultAbiCoder.encode(
+            ["string", "uint256", "bool"],
+            [skill.skillName, skill.experience, skill.verified]
+        );
+    });
 
-    const encodedProjects = profile1.projects.map(project => abiCoder.encode(
-        ['string', 'string', 'string[]', 'string[]', 'string', 'string', 'bool'],
-        [project.name, project.link, project.skillsApplied, project.toolsUsed, project.role, project.description, project.verified]
-    ));
+    // Encode experiences
+    const encodedExperiences = experiences.map((experience) => {
+        return ethers.utils.defaultAbiCoder.encode(
+            ["string", "string", "uint256", "bool"],
+            [experience.industry, experience.jobTitle, experience.experience, experience.verified]
+        );
+    });
 
-    const encodedAchievements = profile1.achievements.map(achievement => abiCoder.encode(
-        ['string', 'string', 'string', 'bool'],
-        [achievement.content, achievement.industry, achievement.skill, achievement.verified]
-    ));
+    // Encode projects
+    const encodedProjects = projects.map((project) => {
+        return ethers.utils.defaultAbiCoder.encode(
+            ["string", "string", "string[]", "string[]", "string", "string", "bool"],
+            [
+                project.name,
+                project.link,
+                project.skillsApplied,
+                project.toolsUsed,
+                project.role,
+                project.description,
+                project.verified
+            ]
+        );
+    });
 
-    const encodedEndorsements = profile1.endorsements.map(endorsement => abiCoder.encode(
-        ['string', 'string', 'string[]', 'bool'],
-        [endorsement.content, endorsement.endorser, endorsement.skillsRelated, endorsement.verified]
-    ));
+    // Encode achievements
+    const encodedAchievements = achievements.map((achievement) => {
+        return ethers.utils.defaultAbiCoder.encode(
+            ["string", "string", "string", "bool"],
+            [
+                achievement.content,
+                achievement.industry,
+                achievement.skill,
+                achievement.verified
+            ]
+        );
+    });
 
-    const encodedClaims = profile1.claims.map(claim => abiCoder.encode(
-        ['string', 'bool'],
-        [claim.content, claim.verified]
-    ));
+    // Encode endorsements
+    const encodedEndorsements = endorsements.map((endorsement) => {
+        return ethers.utils.defaultAbiCoder.encode(
+            ["string", "string", "string[]", "bool"],
+            [
+                endorsement.content,
+                endorsement.endorser,
+                endorsement.skillsRelated,
+                endorsement.verified
+            ]
+        );
+    });
 
-    // Encode the whole user profile data
-    const encodedProfileData = abiCoder.encode(
-        [
-            'string', 
-            'bytes[]', 
-            'bytes[]', 
-            'bytes[]', 
-            'bytes[]', 
-            'bytes[]', 
-            'bytes[]', 
-            'bytes[]'
-        ],
-        [
-            profile1.name,
-            encodedTechnicalSkills,
-            encodedSoftSkills,
-            encodedExperiences,
-            encodedProjects,
-            encodedAchievements,
-            encodedEndorsements,
-            encodedClaims
-        ]
-    );
+    // Encode claims
+    const encodedClaims = claims.map((claim) => {
+        return ethers.utils.defaultAbiCoder.encode(
+            ["string", "bool"],
+            [
+                claim.content,
+                claim.verified
+            ]
+        );
+    });
 
-    
-    transaction = await userprofilemanager.connect(user).createUserProfile(encodedProfileData)
-    await transaction.wait()
+    // Deploy the user profile with encoded data
+    async function createProfile() {
+        try {
+            const transaction = await userprofilemanager.connect(user).createUserProfile(
+                profile1.name,
+                encodedTechnicalSkills,
+                encodedSoftSkills,
+                encodedExperiences,
+                encodedProjects,
+                encodedAchievements,
+                encodedEndorsements,
+                encodedClaims
+            );
+
+            await transaction.wait();
+            console.log("User profile created");
+        } catch (error) {
+            console.error("Error creating user profile:", error);
+        }
+    }
 
     console.log("User created")
+
+    createProfile()
 
     
 

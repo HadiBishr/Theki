@@ -68,85 +68,102 @@ contract UserProfileManager {
     mapping(address => bool) public profileExists;
 
 
-    function createUserProfile(bytes memory data) public {
+    // function createUserProfile(
+    //     string memory _name,
+    //     bytes[] memory _technicalSkills,
+    //     bytes[] memory _softSkills,
+    //     bytes[] memory _experiences,
+    //     bytes[] memory _projects,
+    //     bytes[] memory _achievements,
+    //     bytes[] memory _endorsements,
+    //     bytes[] memory _claims
+    // ) public {
+    //     require(!profileExists[msg.sender], "Profile already exists");
+    //     userCounter++;
+
+    //     UserProfile storage profile = userProfiles[msg.sender];
+    //     profile.name = _name;
+    //     profile.id = userCounter;
+    //     profileExists[msg.sender] = true;
+
+       
+
+    //     // Assign the values to the profile
+        
+
+
+        
+
+    //     // Loop over each soft skill and push onto profile
+    //     for (uint256 i = 0; i < _softSkills.length; i++) {
+    //         Skill memory skill = abi.decode(_softSkills[i], (Skill));
+    //         profile.softSkills.push(skill);
+    //     }
+
+    //     // Loop over each experience and push onto profile
+    //     for (uint256 i = 0; i < _experiences.length; i++) {
+    //         Experience memory experience = abi.decode(_experiences[i], (Experience));
+    //         profile.experiences.push(experience);
+    //     }
+
+
+    //     // Loop over each project and push onto profile
+    //     for (uint256 i = 0; i < _projects.length; i++) {
+    //         Project memory project = abi.decode(_projects[i], (Project));
+    //         profile.projects.push(project);
+    //     }
+
+
+    //     // Loop over each achievement and push onto profile
+    //     for (uint256 i = 0; i < _achievements.length; i++) {
+    //         Achievement memory achievement = abi.decode(_achievements[i], (Achievement));
+    //         profile.achievements.push(achievement);
+    //     }
+
+    //     // Loop over each endorsement and push onto profile
+    //     for (uint256 i = 0; i < _endorsements.length; i++) {
+    //         Endorsement memory endorsement = abi.decode(_endorsements[i], (Endorsement));
+    //         profile.endorsements.push(endorsement);
+    //     }
+
+
+    //     // Loop over each claim and push onto profile
+    //     for (uint256 i = 0; i < _claims.length; i++) {
+    //         Claim memory claim = abi.decode(_claims[i], (Claim));
+    //         profile.claims.push(claim);
+    //     }
+
+    // }
+
+
+
+
+
+    function createBaseProfile(string memory _name) public {
         require(!profileExists[msg.sender], "Profile already exists");
         userCounter++;
 
         UserProfile storage profile = userProfiles[msg.sender];
-        profileExists[msg.sender] = true;
-
-        // Decode the bytes back into the appropiate struct
-        (
-            string memory _name,
-            Skill[] memory _technicalSkills,
-            Skill[] memory _softSkills,
-            Experience[] memory _experiences,
-            Project[] memory _projects,
-            Achievement[] memory _achievements,
-            Endorsement[] memory _endorsements,
-            Claim[] memory _claims
-        ) = abi.decode(data, (
-            string,
-            Skill[],
-            Skill[],
-            Experience[],
-            Project[],
-            Achievement[],
-            Endorsement[],
-            Claim[]
-        ));
-
-        // Assign the decoded values to the profile
         profile.name = _name;
+        profile.id = userCounter;
+        profileExists[msg.sender] = true;
+    }
 
+    function addTechnicalSkills(bytes[] memory _technicalSkills) public {
+        require(profileExists[msg.sender], "Profile does not exist");
+        UserProfile storage profile = userProfiles[msg.sender];
 
         // Loop over each technical skill and push onto profile
         for (uint256 i = 0; i < _technicalSkills.length; i++) {
-            profile.technicalSkills.push(_technicalSkills[i]);
+            Skill memory skill = abi.decode(_technicalSkills[i], (Skill));
+            profile.technicalSkills.push(skill);
         }
-
-        // Loop over each soft skill and push onto profile
-        for (uint256 i = 0; i < _softSkills.length; i++) {
-            profile.softSkills.push(_softSkills[i]);
-        }
-
-        // Loop over each experience and push onto profile
-        for (uint256 i = 0; i < _experiences.length; i++) {
-            profile.experiences.push(_experiences[i]);
-        }
-
-
-        // Loop over each project and push onto profile
-        for (uint256 i = 0; i < _projects.length; i++) {
-            profile.projects.push(_projects[i]);
-        }
-
-
-        // Loop over each achievement and push onto profile
-        for (uint256 i = 0; i < _achievements.length; i++) {
-            profile.achievements.push(_achievements[i]);
-        }
-
-        // Loop over each endorsement and push onto profile
-        for (uint256 i = 0; i < _endorsements.length; i++) {
-            profile.endorsements.push(_endorsements[i]);
-        }
-
-
-        // Loop over each claim and push onto profile
-        for (uint256 i = 0; i < _claims.length; i++) {
-            profile.claims.push(_claims[i]);
-        }
-
     }
-
-
-
 
     
 
-    function getUserProfile() public view returns (UserProfile memory) {
-        return userProfiles[msg.sender];
+    function getUserProfile(address _address) public view returns (UserProfile memory) {
+        return userProfiles[_address];
     }
 
 
