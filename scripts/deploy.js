@@ -53,6 +53,94 @@ const profile1 = {
 
 
 
+// Use fallback for each profile property to make sure they're all arrays\
+const technicalSkills = profile1.technicalSkills || []; // This grabs the technicalSkills from the profile variable for easier use. 
+const softSkills = profile1.softSkills || [];
+const experiences = profile1.experiences || [];
+const projects = profile1.projects || [];
+const achievements = profile1.achievements || [];
+const endorsements = profile1.endorsements || [];
+const claims = profile1.claims || [];
+
+// Encode technical skills
+const encodedTechnicalSkills = technicalSkills.map((skill) => {  // Loops through each technical skill
+    return ethers.utils.defaultAbiCoder.encode(
+        ["string", "uint256", "bool"],
+        [skill.skillName, skill.experience, skill.verified]
+    );
+});
+
+// Encode soft skills
+const encodedSoftSkills = softSkills.map((skill) => { // Loops through each soft skill
+    return ethers.utils.defaultAbiCoder.encode(
+        ["string", "uint256", "bool"],
+        [skill.skillName, skill.experience, skill.verified]
+    );
+});
+
+// Encode experiences
+const encodedExperiences = experiences.map((experience) => {
+    return ethers.utils.defaultAbiCoder.encode(
+        ["string", "string", "uint256", "bool"],
+        [experience.industry, experience.jobTitle, experience.experience, experience.verified]
+    );
+});
+
+// Encode projects
+const encodedProjects = projects.map((project) => {
+    return ethers.utils.defaultAbiCoder.encode(
+        ["string", "string", "string[]", "string[]", "string", "string", "bool"],
+        [
+            project.name,
+            project.link,
+            project.skillsApplied,
+            project.toolsUsed,
+            project.role,
+            project.description,
+            project.verified
+        ]
+    );
+});
+
+// Encode achievements
+const encodedAchievements = achievements.map((achievement) => {
+    return ethers.utils.defaultAbiCoder.encode(
+        ["string", "string", "string", "bool"],
+        [
+            achievement.content,
+            achievement.industry,
+            achievement.skill,
+            achievement.verified
+        ]
+    );
+});
+
+// Encode endorsements
+const encodedEndorsements = endorsements.map((endorsement) => {
+    return ethers.utils.defaultAbiCoder.encode(
+        ["string", "string", "string[]", "bool"],
+        [
+            endorsement.content,
+            endorsement.endorser,
+            endorsement.skillsRelated,
+            endorsement.verified
+        ]
+    );
+});
+
+// Encode claims
+const encodedClaims = claims.map((claim) => {
+    return ethers.utils.defaultAbiCoder.encode(
+        ["string", "bool"],
+        [
+            claim.content,
+            claim.verified
+        ]
+    );
+});
+
+
+
 async function main() {
     // Setup accounts
     const [deployer, user] = await ethers.getSigners()
@@ -80,107 +168,36 @@ async function main() {
     console.log(`JobManager contract deployed ${jobmanager.address}\n`)
 
 
-    // Use fallback for each profile property to make sure they're all arrays
-    const technicalSkills = profile1.technical_skills || [];
-    const softSkills = profile1.soft_skills || [];
-    const experiences = profile1.experiences || [];
-    const projects = profile1.projects || [];
-    const achievements = profile1.achievements || [];
-    const endorsements = profile1.endorsements || [];
-    const claims = profile1.claims || [];
-
-    // Encode technical skills
-    const encodedTechnicalSkills = technicalSkills.map((skill) => {
-        return ethers.utils.defaultAbiCoder.encode(
-            ["string", "uint256", "bool"],
-            [skill.skillName, skill.experience, skill.verified]
-        );
-    });
-
-    // Encode soft skills
-    const encodedSoftSkills = softSkills.map((skill) => {
-        return ethers.utils.defaultAbiCoder.encode(
-            ["string", "uint256", "bool"],
-            [skill.skillName, skill.experience, skill.verified]
-        );
-    });
-
-    // Encode experiences
-    const encodedExperiences = experiences.map((experience) => {
-        return ethers.utils.defaultAbiCoder.encode(
-            ["string", "string", "uint256", "bool"],
-            [experience.industry, experience.jobTitle, experience.experience, experience.verified]
-        );
-    });
-
-    // Encode projects
-    const encodedProjects = projects.map((project) => {
-        return ethers.utils.defaultAbiCoder.encode(
-            ["string", "string", "string[]", "string[]", "string", "string", "bool"],
-            [
-                project.name,
-                project.link,
-                project.skillsApplied,
-                project.toolsUsed,
-                project.role,
-                project.description,
-                project.verified
-            ]
-        );
-    });
-
-    // Encode achievements
-    const encodedAchievements = achievements.map((achievement) => {
-        return ethers.utils.defaultAbiCoder.encode(
-            ["string", "string", "string", "bool"],
-            [
-                achievement.content,
-                achievement.industry,
-                achievement.skill,
-                achievement.verified
-            ]
-        );
-    });
-
-    // Encode endorsements
-    const encodedEndorsements = endorsements.map((endorsement) => {
-        return ethers.utils.defaultAbiCoder.encode(
-            ["string", "string", "string[]", "bool"],
-            [
-                endorsement.content,
-                endorsement.endorser,
-                endorsement.skillsRelated,
-                endorsement.verified
-            ]
-        );
-    });
-
-    // Encode claims
-    const encodedClaims = claims.map((claim) => {
-        return ethers.utils.defaultAbiCoder.encode(
-            ["string", "bool"],
-            [
-                claim.content,
-                claim.verified
-            ]
-        );
-    });
+    
 
     // Deploy the user profile with encoded data
     async function createProfile() {
         try {
-            const transaction = await userprofilemanager.connect(user).createUserProfile(
-                profile1.name,
-                encodedTechnicalSkills,
-                encodedSoftSkills,
-                encodedExperiences,
-                encodedProjects,
-                encodedAchievements,
-                encodedEndorsements,
-                encodedClaims
-            );
+            var transaction = await userprofilemanager.connect(user).createBaseProfile(profile1.name);
+            await transaction.wait()
 
-            await transaction.wait();
+
+            transaction = await userprofilemanager.connect(user).addTechnicalSkills(encodedTechnicalSkills)
+            await transaction.wait()
+
+            transaction = await userprofilemanager.connect(user).addSoftSkills(encodedSoftSkills)
+            await transaction.wait()
+
+            transaction = await userprofilemanager.connect(user).addExperiences(encodedExperiences)
+            await transaction.wait()
+
+            transaction = await userprofilemanager.connect(user).addProjects(encodedProjects)
+            await transaction.wait()
+
+            transaction = await userprofilemanager.connect(user).addAchievements(encodedAchievements)
+            await transaction.wait()
+
+            transaction = await userprofilemanager.connect(user).addEndorsements(encodedEndorsements)
+            await transaction.wait()
+
+            transaction = await userprofilemanager.connect(user).addClaims(encodedClaims)
+            await transaction.wait()
+
             console.log("User profile created");
         } catch (error) {
             console.error("Error creating user profile:", error);
@@ -192,20 +209,6 @@ async function main() {
     createProfile()
 
     
-
-
-    // const transaction = await thekitoken.connect(deployer).createJob(
-    //     jobData.basicInfo,
-    //     jobData.qualifications,
-    //     jobData.duties,
-    //     jobData.compensation,
-    //     jobData.companyCulture,
-    //     jobData.thekiScore
-    // )
-    
-    // await transaction.wait()
-
-    // console.log("Job sucessfully created for testing purposes")
 
 
 

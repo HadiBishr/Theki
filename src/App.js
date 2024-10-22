@@ -235,8 +235,9 @@ function App() {
 
       // Fetch the user profile
       const profileExists = await profileManagerContract.profileExists(account)
+      console.log("Account:", account)
       if (profileExists) {
-        const profileData = await profileManagerContract.connect(signer).getUserProfile()
+        const profileData = await profileManagerContract.connect(signer).getUserProfile(account)
         setProfileData(profileData)
         console.log("Profile Data:", profileData)
       } else {
