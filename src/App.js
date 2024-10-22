@@ -9,6 +9,7 @@ import Navigation from './components/Navigation'
 import Dashboard from './components/Dashboard'
 import VerifyClaim from './components/VerifyClaim'
 import Job from './components/Job'
+import Profile from './components/Profile'
 
 // ABIS
 import ThekiTokenABI from './abis/ThekiToken.json'
@@ -349,6 +350,13 @@ function App() {
               
             </>
           }
+        />
+        <Route 
+          path="/profile"
+          element={
+            <Profile account={account} profileData={profileData} />
+          }
+        
         />
 
         <Route 

@@ -1,4 +1,4 @@
-const ProfileCompnent = ({ profileData, createProfile }) => {
+const Profile = ({ profileData }) => {
     return (
         <div>
             {profileData ? (
@@ -7,10 +7,12 @@ const ProfileCompnent = ({ profileData, createProfile }) => {
 
                 </div>
             ) : (
-                <button onClick={createProfile}>Create New Profile</button>
+                <button>Create New Profile</button>
 
                 
             )}
         </div>
     )
 }
+
+export default Profile;

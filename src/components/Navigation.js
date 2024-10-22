@@ -1,7 +1,10 @@
+import React from 'react';
+import { Link } from 'react-router-dom'; // To link to the user profile page
 import { ethers } from 'ethers'
 import './css/Navigation.css'
 
-const Navigation = ({ account, connectWallet , disconnectWallet}) => {
+
+const Navigation = ({ account, connectWallet , disconnectWallet, profileData}) => {
     // FUntion to shorten the account address for display purposes
     const shortenAddress = (address) => {
         if (address) {
@@ -32,6 +35,10 @@ const Navigation = ({ account, connectWallet , disconnectWallet}) => {
                         {shortenAddress(account)}
 
                     </button>
+
+                    <Link to="/profile">
+                        <button className='nav__connect'>Profile</button>
+                    </Link>
 
                 </>
                 
