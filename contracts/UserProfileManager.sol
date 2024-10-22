@@ -5,6 +5,7 @@ pragma solidity ^0.8.0;
 contract UserProfileManager {
 
     uint256 public userCounter;
+    uint256 public claimCounter = 0;
 
     struct Claim {
         uint256 id;
@@ -68,73 +69,6 @@ contract UserProfileManager {
     mapping(address => bool) public profileExists;
 
 
-    // function createUserProfile(
-    //     string memory _name,
-    //     bytes[] memory _technicalSkills,
-    //     bytes[] memory _softSkills,
-    //     bytes[] memory _experiences,
-    //     bytes[] memory _projects,
-    //     bytes[] memory _achievements,
-    //     bytes[] memory _endorsements,
-    //     bytes[] memory _claims
-    // ) public {
-    //     require(!profileExists[msg.sender], "Profile already exists");
-    //     userCounter++;
-
-    //     UserProfile storage profile = userProfiles[msg.sender];
-    //     profile.name = _name;
-    //     profile.id = userCounter;
-    //     profileExists[msg.sender] = true;
-
-       
-
-    //     // Assign the values to the profile
-        
-
-
-        
-
-    //     // Loop over each soft skill and push onto profile
-    //     for (uint256 i = 0; i < _softSkills.length; i++) {
-    //         Skill memory skill = abi.decode(_softSkills[i], (Skill));
-    //         profile.softSkills.push(skill);
-    //     }
-
-    //     // Loop over each experience and push onto profile
-    //     for (uint256 i = 0; i < _experiences.length; i++) {
-    //         Experience memory experience = abi.decode(_experiences[i], (Experience));
-    //         profile.experiences.push(experience);
-    //     }
-
-
-    //     // Loop over each project and push onto profile
-    //     for (uint256 i = 0; i < _projects.length; i++) {
-    //         Project memory project = abi.decode(_projects[i], (Project));
-    //         profile.projects.push(project);
-    //     }
-
-
-    //     // Loop over each achievement and push onto profile
-    //     for (uint256 i = 0; i < _achievements.length; i++) {
-    //         Achievement memory achievement = abi.decode(_achievements[i], (Achievement));
-    //         profile.achievements.push(achievement);
-    //     }
-
-    //     // Loop over each endorsement and push onto profile
-    //     for (uint256 i = 0; i < _endorsements.length; i++) {
-    //         Endorsement memory endorsement = abi.decode(_endorsements[i], (Endorsement));
-    //         profile.endorsements.push(endorsement);
-    //     }
-
-
-    //     // Loop over each claim and push onto profile
-    //     for (uint256 i = 0; i < _claims.length; i++) {
-    //         Claim memory claim = abi.decode(_claims[i], (Claim));
-    //         profile.claims.push(claim);
-    //     }
-
-    // }
-
 
 
 
@@ -149,16 +83,153 @@ contract UserProfileManager {
         profileExists[msg.sender] = true;
     }
 
-    function addTechnicalSkills(bytes[] memory _technicalSkills) public {
+
+    /*
+
+    Here is the general structure for each of the below functions to add to the user profile:
+
+        1. You have a singular function to add whatever (For example a function to add Technical Skills). Understand that multiple of that information can be inputted into the function in the form of encoded data (For example multiple technical skills)
+        2. The loop loops through each encoded data and pushes it onto where it should be. (For example loops through each technical skill and executes whatever is in it.)
+        3. In the loop, it first decodes it and sets seperate variables to whatever information it is. 
+        4. Then we add that decoded information into a struct where the contract can understand. 
+        5. Lastly it pushes that struct into where it is supposed to go. 
+
+    */
+
+
+
+    // Function to add Technical Skills
+    function addTechnicalSkills(bytes[] memory _encodedTechnicalSkills) public {
         require(profileExists[msg.sender], "Profile does not exist");
         UserProfile storage profile = userProfiles[msg.sender];
 
         // Loop over each technical skill and push onto profile
-        for (uint256 i = 0; i < _technicalSkills.length; i++) {
-            Skill memory skill = abi.decode(_technicalSkills[i], (Skill));
-            profile.technicalSkills.push(skill);
+        for (uint256 i = 0; i < _encodedTechnicalSkills.length; i++) {
+            (string memory _skillName, uint256 _experience, bool _verified) = abi.decode( 
+                _encodedTechnicalSkills[i],
+                (string, uint256, bool)
+            );
+
+
+            Skill memory skill = Skill(_skillName, _experience, _verified);  
+            profile.technicalSkills.push(skill);  
         }
     }
+
+
+
+
+    // Function to add Soft Skills
+    function addSoftSkills(bytes[] memory _encodedSoftSkills) public {
+        require(profileExists[msg.sender], "Profile does not exist");
+        UserProfile storage profile = userProfiles[msg.sender];
+
+        // Loop over each technical skill and push into blochchain.
+        for (uint256 i = 0; i < _encodedSoftSkills.length; i++) {
+            (string memory _skillName, uint256 _experience, bool _verified) = abi.decode(
+                _encodedSoftSkills[i],
+                (string, uint256, bool)
+            );
+
+
+            Skill memory skill = Skill(_skillName, _experience, _verified);
+            profile.softSkills.push(skill);
+        }
+    }
+
+
+
+    // Function to add Experiences
+    function addExperiences(bytes[] memory _encodedExperiences) public {
+        require(profileExists[msg.sender], "Profile does not exist");
+        UserProfile storage profile = userProfiles[msg.sender];
+
+
+        // Loop over each experience user has and push into blochchain.
+        for (uint256 i = 0; i < _encodedExperiences.length; i++) {
+            (string memory _industry, string memory _jobTitle, uint256 _experience, bool _verified) = abi.decode(
+                _encodedExperiences[i],
+                (string, string, uint256, bool)
+            );
+
+            Experience memory experience = Experience(_industry, _jobTitle, _experience, _verified);
+            profile.experiences.push(experience);
+        }
+    }
+
+
+    // Function to add Projects
+    function addProjects(bytes[] memory _encodedProjects) public {
+        require(profileExists[msg.sender], "Profile does not exist");
+        UserProfile storage profile = userProfiles[msg.sender];
+ 
+
+        // Loop over each project user has and push into blochchain.
+        for (uint256 i = 0; i < _encodedProjects.length; i++) {
+            (string memory _name, string memory _link, string[] memory _skillsApplied, string[] memory _toolsUsed, string memory _role, string memory _description, bool _verified) = abi.decode(
+                _encodedProjects[i],
+                (string, string, string[], string[], string, string, bool)
+            );
+
+            Project memory project = Project(_name, _link, _skillsApplied, _toolsUsed, _role, _description, _verified);
+            profile.projects.push(project);
+        }
+    }
+
+
+    function addAchievements(bytes[] memory _encodedAchievements) public {
+        require(profileExists[msg.sender], "Profile does not exist");
+        UserProfile storage profile = userProfiles[msg.sender];
+
+        // Loop over each achievements user has and push into blockchain
+        for (uint256 i = 0; i < _encodedAchievements.length; i++) {
+            (string memory _content, string memory _industry, string memory _skillsRelated, bool _verified) = abi.decode(
+                _encodedAchievements[i],
+                (string, string, string, bool)
+            );
+
+            Achievement memory achievement = Achievement(_content, _industry, _skillsRelated, _verified);
+            profile.achievements.push(achievement);
+        }
+    }
+
+
+    function addEndorsements(bytes[] memory _encodedEndorsements) public {
+        require(profileExists[msg.sender], "Profile does not exist");
+        UserProfile storage profile = userProfiles[msg.sender];
+
+        // Loop over each endorsements user has and push into blockchain
+        for (uint256 i = 0; i < _encodedEndorsements.length; i++) {
+            (string memory _content, string memory _endorser, string[] memory _skillsRelated, bool _verified) = abi.decode(
+                _encodedEndorsements[i],
+                (string, string, string[], bool)
+            );
+
+            Endorsement memory endorsement = Endorsement(_content, _endorser, _skillsRelated, _verified);
+            profile.endorsements.push(endorsement);
+        }
+    }
+
+
+    function addClaims(bytes[] memory _encodedClaims) public {
+        require(profileExists[msg.sender], "Profile does not exist");
+        UserProfile storage profile = userProfiles[msg.sender];
+        claimCounter++;
+
+        // Loop over each endorsements user has and push into blockchain
+        for (uint256 i = 0; i < _encodedClaims.length; i++) {
+            (string memory _content, bool _verified) = abi.decode(
+                _encodedClaims[i],
+                (string, bool)
+            );
+
+            Claim memory claim = Claim(claimCounter, msg.sender, _content, _verified);
+            profile.claims.push(claim);
+        }
+    }
+
+
+
 
     
 

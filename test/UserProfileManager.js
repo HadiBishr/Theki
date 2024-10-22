@@ -44,7 +44,7 @@ const profile1 = {
 
 
 // Use fallback for each profile property to make sure they're all arrays
-const technicalSkills = profile1.technicalSkills || [];
+const technicalSkills = profile1.technicalSkills || []; // This grabs the technicalSkills from the profile variable for easier use. 
 const softSkills = profile1.softSkills || [];
 const experiences = profile1.experiences || [];
 const projects = profile1.projects || [];
@@ -53,7 +53,7 @@ const endorsements = profile1.endorsements || [];
 const claims = profile1.claims || [];
 
 // Encode technical skills
-const encodedTechnicalSkills = technicalSkills.map((skill) => {
+const encodedTechnicalSkills = technicalSkills.map((skill) => {  // Loops through each technical skill
     return ethers.utils.defaultAbiCoder.encode(
         ["string", "uint256", "bool"],
         [skill.skillName, skill.experience, skill.verified]
@@ -61,7 +61,7 @@ const encodedTechnicalSkills = technicalSkills.map((skill) => {
 });
 
 // Encode soft skills
-const encodedSoftSkills = softSkills.map((skill) => {
+const encodedSoftSkills = softSkills.map((skill) => { // Loops through each soft skill
     return ethers.utils.defaultAbiCoder.encode(
         ["string", "uint256", "bool"],
         [skill.skillName, skill.experience, skill.verified]
@@ -134,6 +134,7 @@ const encodedClaims = claims.map((claim) => {
 describe("UserProfileManager", function () {
     let deployer
     let userprofilemanager
+    let userprofile
 
 
     beforeEach(async () => {
@@ -149,29 +150,106 @@ describe("UserProfileManager", function () {
         var transaction = await userprofilemanager.connect(user).createBaseProfile(profile1.name);
         await transaction.wait()
 
+
         console.log("User created")
 
 
         transaction = await userprofilemanager.connect(user).addTechnicalSkills(encodedTechnicalSkills)
-        await transaction.wait
+        await transaction.wait()
+
+        transaction = await userprofilemanager.connect(user).addSoftSkills(encodedSoftSkills)
+        await transaction.wait()
+
+        transaction = await userprofilemanager.connect(user).addExperiences(encodedExperiences)
+        await transaction.wait()
+
+        transaction = await userprofilemanager.connect(user).addProjects(encodedProjects)
+        await transaction.wait()
+
+        transaction = await userprofilemanager.connect(user).addAchievements(encodedAchievements)
+        await transaction.wait()
+
+        transaction = await userprofilemanager.connect(user).addEndorsements(encodedEndorsements)
+        await transaction.wait()
+
+        transaction = await userprofilemanager.connect(user).addClaims(encodedClaims)
+        await transaction.wait()
     })
 
     describe("Check Profile Details", function () {
+
+        beforeEach(async () => {
+            userprofile = await userprofilemanager.getUserProfile(user.address)
+        })
+
+
         it("Check If Profile Exists", async () => {
            const result = await userprofilemanager.profileExists(user.address)
            expect(result).to.equal(true)
         })
 
         it("Check Id", async () => {
-            const result = await userprofilemanager.getUserProfile(user.address)
-            expect(result.id).to.equal(1)
+            expect(userprofile.id).to.equal(1)
         })
 
-        it("Check skill", async () => {
-            const result = await userprofilemanager.getUserProfile(user.address)
-            technical_skills = await result.technicalSkills()
-            expect(technicalSkills.length).to.be.greaterThan(0)
+        it("Check Name", async () => {
+            expect(userprofile.name).to.equal('Hadi')
+        })
 
+        it("Check Technical Skill", async () => {
+            const all_technical_skills = await userprofile.technicalSkills
+            const technical_skill = await userprofile.technicalSkills[0]
+
+            expect(technical_skill.skillName).to.equal('JavaScript')
+            expect(all_technical_skills.length).to.equal(2) // This is equal to 2 becuse we have two technical skills as shown in the profile variable
+
+        })
+
+        it("Check Soft Skill", async () => {
+            const all_soft_skills = await userprofile.softSkills
+            const soft_skill = await userprofile.softSkills[0]
+
+            
+            expect(soft_skill.skillName).to.equal('Leadership') // We could do many more tests. This is just one. 
+            expect(all_soft_skills.length).to.equal(2)
+
+        })
+
+        it("Check Experience", async () => {
+            const experiences = await userprofile.experiences
+            expect(experiences.length).to.equal(2)
+        })
+
+        it("Check Projects", async () => {
+            const projects = await userprofile.projects
+            expect(projects.length).to.equal(1)
+        })
+
+        it("Check Achievements", async () => {
+            const all_achievements = await userprofile.achievements
+            const achievement = await userprofile.achievements[0]
+
+            expect(achievement.content).to.equal('Top Frontend Developer Award')
+            expect(all_achievements.length).to.equal(1)
+        })
+
+
+
+        it("Check Endorsements", async () => {
+            const all_endorsements = await userprofile.endorsements
+            const endorsement = await userprofile.endorsements[0]
+
+            expect(endorsement.content).to.equal('Expert in JavaScript')
+            expect(all_endorsements.length).to.equal(1)
+        })
+ 
+
+        it("Check Claims", async () => {
+            const all_claims = await userprofile.claims
+            const claim = await userprofile.claims[0]
+
+            expect(claim.content).to.equal('Contributed to a major e-commerce project')
+            expect(all_claims.length).to.equal(1)
         })
 
 
