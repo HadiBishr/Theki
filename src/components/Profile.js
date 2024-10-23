@@ -75,6 +75,32 @@ const Profile = ({ profileData }) => {
         })
     }
 
+
+
+    const handleInputChange = (section, index, field, value) => {
+        setProfile((prevProfile) => {
+            // Make a copy of the entire section
+            const updatedSection = [...prevProfile[section]]
+
+            // Update the specific field of the specific item
+            updatedSection[index] = {
+                ...updatedSection[index],
+                [field]: value              // This could be for example skillName: "Javascript"" 
+            }
+
+            return {
+                ...prevProfile,             // prevProfile and updatedSection does not hae to be in cornological order. updatedSection could be any section and it will change it. 
+                [section]: updatedSection,
+            };
+
+        })
+    }
+
+
+    const handleSubmit = () => {
+        console.log(profile)
+    }
+
     return (
         <div className="container">
             {profileData ? (
@@ -239,9 +265,39 @@ const Profile = ({ profileData }) => {
 
                     <h1 className='create-profile-header'>Create a new profile</h1>   
 
+                    {/*  When you loop over technical skills of profile, it is basically just looping over the empty   */}
+
                     
                     <h3>Add Technical Skills</h3>
+                    {profile.technicalSkills.map((skill, index) => (
+                        <div key={index}>
+
+                            <input 
+                            type="text"
+                            placeholder="Skill Name"
+                            value={skill.skillName}
+                            onChange={(e) => handleInputChange('technicalSkills', index, "skillName", e.target.value) }
+                            />
+
+
+                            <input 
+                            type="number"
+                            placeholder="Experience (years)"
+                            value={skill.experience}
+                            onChange={(e) => handleInputChange('technicalSkills', index, "experience", e.target.value) }
+                            />
+
+
+                            <h4>Autoamtically set to false</h4>
+
+
+                        </div>
+
+                    ))}
+
                     
+                    <button onClick={() => handleAddItem('technicalSkills')}>Add Technical Skill</button>
+                    <button onClick={handleSubmit}>Submit and Log Profile</button>
                     
                     
 
