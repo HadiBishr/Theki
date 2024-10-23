@@ -1,5 +1,5 @@
 // Dashboard.js
-import React from 'react';
+import { React, useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
@@ -10,26 +10,101 @@ import '../App.css';
 
 
 const Dashboard = ({
-    claims, 
-    setClaims, 
     account, 
     shortenAddress, 
-    claimContent, 
-    setClaimContent, 
-    thekiToken, 
-    searchAddress, 
-    setSearchAddress, 
-    searchProfessionalClaims, 
-    createClaims, 
-    searchedClaims, 
-    verifyClaims
+    thekiToken,
+    signer,
+    searchProfessionalClaims,
+    loadBlockchainData,
+    searchAddress,
+    setSearchAddress,
+    searchedClaims,
+    setSearchedClaims
 }) => {
+
     const navigate = useNavigate();
   
     // Handle verify button click to navigate to the verification page
     const handleVerifyClick = (claimId) => {
       navigate(`/verify/${claimId}`);
     };
+
+    const [claims, setClaims] = useState([]) // Array of claims fetched from the contract
+    const [claimContent, setClaimContent] = useState('')
+    const [claimIds, setClaimIds] = useState([]) // An array of claim ids of the professional. 
+
+
+    // Function to handle the creation of a new claim
+    const createClaims = async () => {
+        if (thekiToken && claimContent) {
+            try {
+                console.log('Creating claim with content:', claimContent);
+
+                // Send a transaction to create a new claim
+                const transaction = await thekiToken.connect(signer).createClaim(claimContent)
+
+                console.log('Transaction sent:', transaction.hash);
+                await transaction.wait();
+                console.log('Transaction confirmed');
+
+                
+
+
+                setClaimContent('') // This just clears the input field because once you click enter, we want the input field to be clear.
+                await loadClaims()
+
+            } catch (error) {
+                console.error('Error creating claim:', error);
+
+                // Extract error details
+                if (error.reason) {
+                console.error('Revert reason:', error.reason);
+                }
+                if (error.code) {
+                console.error('Error code:', error.code);
+                }
+                if (error.data && error.data.message) {
+                console.error('Error data message:', error.data.message);
+                }
+                alert(`Error creating claim: ${error.message}`);
+            }
+        }
+    }
+
+
+
+
+    const loadClaims = async () => {
+        // Fetch Claim Ids associated with the professional. This would be an array 
+        const claimIds = await thekiToken.getClaimsByProfessional(account) // Note that this is not the claims themselves, but the claim Ids. So each thing is an an Id for a claim they made.
+        setClaimIds(claimIds)
+        console.log('Claim IDs:', claimIds)
+
+
+        // Fetch details of claim by using each claim id
+        const claimPromises = claimIds.map(async (id)  => { // Iterates over each id in the claimIds array
+            const claim = await thekiToken.claims(id)
+            return claim
+        })
+
+        // claimPromises is now an array of promises where each promise corresponds to the asynchronous operation of fetching a claim by its ID. This means that every promise will run the above, which gets the claim Struct.
+
+
+        // Fulfills all promises and creates an array of the claim data for each promise in claimPromises
+        const claims = await Promise.all(claimPromises) 
+        console.log('Claims Data:', claims); 
+
+        setClaims(claims) 
+    }
+
+    useEffect(() => {
+        if (account) {
+            loadBlockchainData()  // You have to run this first to get the contract. 
+            loadClaims()
+
+        }
+        
+    }, [account])
 
 
     return (

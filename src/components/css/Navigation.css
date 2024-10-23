@@ -11,9 +11,16 @@ nav {
 .nav__brand h1 {
   color: #ecf0f1; /* Light gray text color */
   margin: 0; /* Remove default margin  */
+  margin-right: auto;
 }
 
 
+.nav__buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
 
 /* Styles the search input in the navigation bar */
 .nav__search {
@@ -35,4 +42,50 @@ nav {
 
 .nav__connect:hover {
   background-color: #c0392b; /* Darker red on hover */
+}
+
+
+/* Styles the disconnect button */
+.nav__disconnect {
+  background-color: #f39c12; /* Orange background */
+  color: #fff; /* White text */
+  border: none; /* Remove default border */
+  padding: 0.7rem 1.2rem; /* Padding inside the button */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  font-weight: bold; /* Bold text */
+}
+
+.nav__disconnect:hover {
+  background-color: #e67e22; /* Darker orange on hover */
+}
+
+/* Styles the profile button (showing user's address) */
+.nav__profile {
+  background-color: #3498db; /* Blue background */
+  color: #fff; /* White text */
+  border: none; /* Remove default border */
+  padding: 0.7rem 1.2rem; /* Padding inside the button */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  font-weight: bold; /* Bold text */
+}
+
+.nav__profile:hover {
+  background-color: #2980b9; /* Darker blue on hover */
+}
+
+/* Styles the profile link button (redirect to profile page) */
+.nav__profile-link {
+  background-color: #9b59b6; /* Purple background */
+  color: #fff; /* White text */
+  border: none; /* Remove default border */
+  padding: 0.7rem 1.2rem; /* Padding inside the button */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  font-weight: bold; /* Bold text */
+}
+
+.nav__profile-link:hover {
+  background-color: #8e44ad; /* Darker purple on hover */
 }

@@ -1,0 +1,62 @@
+/* Styling for profile header */
+.profile-header {
+    background-color: #3498db; /* Blue background to make the header stand out */
+    color: #fff; /* White text */
+    padding: 1rem; /* Padding around header */
+    border-radius: 8px; /* Rounded corners matching the container */
+    text-align: center; /* Center-align text in header */
+    margin-bottom: 2rem; /* Space between header and the rest of the content */
+}
+
+/* Styling for section headers inside the profile */
+.profile-section-header {
+    margin-top: 1.5rem;
+    color: #34495e;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+
+/* Styling for links in projects */
+.project-link {
+    color: #0000EE;
+    text-decoration: none;
+}
+
+.project-link:hover {
+    text-decoration: underline; /* Underline when hovering over link */
+}
+
+
+.verified-status {
+    font-weight: bold;
+    color: #27ae60;
+}
+
+.not-verified-status {
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.profile-list {
+    margin-bottom: 2rem;
+}
+
+/* Add a slight border and padding to each list item for better visual separation */
+li {
+    border: 1px solid #bdc3c7; /* Light border around list items */
+}
+
+
+
+
+
+
+
+
+
+
+
+.create-profile-header {
+    text-align: center;
+}
