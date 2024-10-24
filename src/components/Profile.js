@@ -2,7 +2,11 @@ import './css/Profile.css'
 import {useState} from 'react';
 
 
-const Profile = ({ profileData }) => {
+const Profile = ({ profileData, account }) => {
+    
+
+    const [addingTechnicalSkill, setAddingTechnicalSkill] = useState(null)
+    const [addingSoftSkill, setAddingSoftSkill] = useState(null)
 
 
     const [profile, setProfile] = useState({
@@ -34,6 +38,8 @@ const Profile = ({ profileData }) => {
     });
 
 
+
+    // This function adds a new item to the specified section. It does not populate it, but just gets it ready if a user wants to add another skill. When the profile variable gets set, technicalSkills only has one entry. What this does is just add another entry so that it sets a user up for when they want to add another technical skill
     const handleAddItem = (section) => {
         setProfile((prevProfile) => {
             // Create a new item 
@@ -70,13 +76,13 @@ const Profile = ({ profileData }) => {
             // Add the new item to the corresponding section in the profile
             return {
                 ...prevProfile,  // This copies the existing profile
-                [section]: [...prevProfile[section], newItem]
+                [section]: [...prevProfile[section], newItem]    
             }
         })
     }
 
 
-
+    // This function edits the empty entry of the section specified of the profile vaeriable. For example we can see that when profile is initialized, it onyl has one skill entry. What this does it just edit that entry with the specified user input. 
     const handleInputChange = (section, index, field, value) => {
         setProfile((prevProfile) => {
             // Make a copy of the entire section
@@ -97,12 +103,36 @@ const Profile = ({ profileData }) => {
     }
 
 
+    const handleRemoveItem = (section, index) => {
+        setProfile((prevProfile) => {
+            const updatedSection = [...prevProfile[section]]    
+            updatedSection.splice(index, 1)     // Remove the item at the specified index
+
+            return {
+                ...prevProfile,
+                [section]: updatedSection
+            }
+        })  
+    }
+
+
+    // This deals with debugging. Logging how the profile looks as we go.
     const handleSubmit = () => {
         console.log(profile)
     }
 
+
+    const renderProfileSection = (title, data, fields) => {
+        
+    }
+
+
+
     return (
         <div className="container">
+
+
+
             {profileData ? (
                 <div>
                     <h2 className="profile-header">Profile Data for {profileData.name}</h2>
@@ -265,9 +295,9 @@ const Profile = ({ profileData }) => {
 
                     <h1 className='create-profile-header'>Create a new profile</h1>   
 
-                    {/*  When you loop over technical skills of profile, it is basically just looping over the empty   */}
 
-                    
+                    {/* Add Technical Skills */}
+
                     <h3>Add Technical Skills</h3>
                     {profile.technicalSkills.map((skill, index) => (
                         <div key={index}>
@@ -290,17 +320,104 @@ const Profile = ({ profileData }) => {
 
                             <h4>Autoamtically set to false</h4>
 
+                            <button onClick={() => handleRemoveItem('technicalSkills', index)} className='button-remove'>Remove Skill</button>
+
 
                         </div>
 
                     ))}
-
-                    
                     <button onClick={() => handleAddItem('technicalSkills')}>Add Technical Skill</button>
-                    <button onClick={handleSubmit}>Submit and Log Profile</button>
+
+                        
+                    
+                    {/* Add Soft Skills */}
+
+                    <h3>Add Soft Skills</h3>
+                    {profile.softSkills.map((skill, index) => (
+                        <div key={index}>
+
+                            <input 
+                            type="text"
+                            placeholder="Skill Name"
+                            value={skill.skillName}
+                            onChange={(e) => handleInputChange('softSkills', index, "skillName", e.target.value) }
+                            />
+
+
+                            <input 
+                            type="number"
+                            placeholder="Experience (years)"
+                            value={skill.experience}
+                            onChange={(e) => handleInputChange('softSkills', index, "experience", e.target.value) }
+                            />
+
+
+                            <h4>Autoamtically set to false</h4>
+
+                            <button onClick={() => handleRemoveItem('softSkills', index)} className='button-remove'>Remove Skill</button>
+
+
+                        </div>
+
+                    ))}
+                    <button onClick={() => handleAddItem('softSkills')}>Add Soft Skill</button>
                     
                     
 
+
+
+                    {/* Add Experiences */}
+
+                    <h3>Add Experiences</h3>
+                    {profile.experiences.map((experience, index) => (
+                        <div key={index}>
+
+                            <input 
+                            type="text"
+                            placeholder="Experience Name"
+                            value={experience.industry}
+                            onChange={(e) => handleInputChange('experiences', index, "industry", e.target.value) }
+                            />
+
+
+                            <input 
+                            type="text"
+                            placeholder="Job Title"
+                            value={experience.jobTitle}
+                            onChange={(e) => handleInputChange('experiences', index, "jobTitle", e.target.value) }
+                            />
+
+                             <input 
+                            type="number"
+                            placeholder="Experience (years)"
+                            value={experience.experience}
+                            onChange={(e) => handleInputChange('experiences', index, "experience", e.target.value) }
+                            />
+
+
+                            <h4>Autoamtically set to false</h4>
+
+                            <button onClick={() => handleRemoveItem('experiences', index)} className='button-remove'>Remove Experience</button>
+
+
+                        </div>
+
+                    ))}
+                    <button onClick={() => handleAddItem('experiences')}>Add Soft Skill</button>
+
+
+
+
+                    {/* Add Experiences */}
+
+
+
+
+
+
+
+                    {/* <button onClick={handleSubmit}>Submit and Log Profile</button> */}
+                
 
 
                 </div>
