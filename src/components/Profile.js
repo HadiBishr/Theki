@@ -122,8 +122,50 @@ const Profile = ({ profileData, account }) => {
     }
 
 
+    // data is the data itself from the blockchain.
+    // fields is the fields that will be filled since the fields are dynamic. Meaning that when we list the profile, not all the sections will have the same fields. 
+
     const renderProfileSection = (title, data, fields) => {
-        
+        return (
+            <div>
+
+                <h3 className="profile-section-header">{title}</h3>
+                {data.length > 0 ? (
+                    <ul className='profile-list'>
+                        {data.map((item, index) => (
+
+                            <li key={index}>
+
+                                {fields.map((field, fieldIndex) => (
+                                    <div key={fieldIndex}>
+                                        <strong>{field.label}</strong> {field.isBoolean ? (                                 // All the conditions here is to deal with the different types of objects that this data might have. Could be arrays, or ints which have to be converted to a string. Also displaying something verified.  
+                                            <span className={item[field.key] ? 'verified-status' : 'not-verified-status'}> 
+                                                {item[field.key] ? ('Yes') : ('No')} 
+                                            </span>
+                                        ) : (
+                                            Array.isArray(item[field.key])  // This checks if the specific field is an array since we have many arrays. 
+                                                ? item[field.key].join(', ') // This exeutes if array is true 
+                                                : typeof item[field.key] === 'object' && item[field.key]._isBigNumber  // If false execute another if statement
+                                                    ? item[field.key].toString()
+                                                    : item[field.key]
+                                        )}
+                                        <br />
+                                    </div>
+                                ))} 
+
+                            </li>
+
+                        ))}
+                        
+                        
+                    </ul>
+                ) : (
+                    <p>No {title.toLowerCase()} available</p>
+                )}
+
+
+            </div>
+        )
     }
 
 
@@ -132,72 +174,48 @@ const Profile = ({ profileData, account }) => {
         <div className="container">
 
 
+            
+            
+
+
 
             {profileData ? (
+
+
                 <div>
+
+
                     <h2 className="profile-header">Profile Data for {profileData.name}</h2>
 
-
                     {/* Show all Technical Skills */}
-                    <h3 className="profile-section-header">Technical Skills</h3>
-                    {profileData.technicalSkills.length > 0 ? (
-                        <ul className='profile-list'>
-                            {profileData.technicalSkills.map((skill, index) => (
-                                <li key={index}>
-                                    <strong>Skill:</strong> {skill.skillName} <br />
-                                    <strong>Experience:</strong> {skill.experience.toString()} <br />
-                                    <strong>Verified:</strong> <span className={skill.verified ? 'verified-status' : 'not-verified-status'}>
-                                        {skill.verified ? ('Yes') : ('No')} 
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No technical skills available</p>
-                    )}
+                    {renderProfileSection('Technical Skills', profileData.technicalSkills, [
+                        { key: 'skillName', label: 'Skill Name' },
+                        { key: 'experience', label: 'Experience' },
+                        { key: 'verified', label: 'Verified', isBoolean: true },
+                    ])}
 
 
 
                     {/* Show all Soft Skills */}
-                    <h3 className="profile-section-header">Soft Skills</h3>
-                    {profileData.softSkills.length > 0 ? (
-                        <ul className='profile-list'>
-                            {profileData.softSkills.map((skill, index) => (
-                                <li key={index}>
-                                    <strong>Skill:</strong> {skill.skillName} <br />
-                                    <strong>Experience:</strong> {skill.experience.toString()} <br />
-                                    <strong>Verified:</strong> <span className={skill.verified ? 'verified-status' : 'not-verified-status'}> 
-                                        
-                                        {skill.verified ? ('Yes') : ('No')} 
-
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No soft skills available</p>
-                    )}
-
+                    {renderProfileSection('Soft Skills', profileData.softSkills, [
+                        { key: 'skillName', label: 'Skill Name' },
+                        { key: 'experience', label: 'Experience' },
+                        { key: 'verified', label: 'Verified', isBoolean: true },
+                    ])}
 
 
                     {/* Show all Experiences */}
-                    <h3 className="profile-section-header">Experiences</h3>
-                    {profileData.experiences.length > 0 ? (
-                        <ul className='profile-list'>
-                            {profileData.experiences.map((experience, index) => (
-                                <li key={index}>
-                                    <strong>Industry:</strong> {experience.industry} <br />
-                                    <strong>Job Title:</strong> {experience.jobTitle} <br />
-                                    <strong>Experience:</strong> {experience.experience.toString()} <br />
-                                    <strong>Verified:</strong> <span className={experience.verified ? 'verified-status' : 'not-verified-status'}>
-                                        {experience.verified ? ('Yes') : ('No')} 
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No experiences available</p>
-                    )}
+                    {renderProfileSection('Experiences', profileData.experiences, [
+                        { key: 'industry', label: 'Industry' },
+                        { key: 'jobTitle', label: 'Job Title' },
+                        { key: 'experience', label: 'Experience' },
+                        { key: 'verified', label: 'Verified', isBoolean: true },
+                    ])}
+
+                    
+                    
+
+
 
 
 
