@@ -147,7 +147,9 @@ const Profile = ({ profileData, account }) => {
                                                 ? item[field.key].join(', ') // This exeutes if array is true 
                                                 : typeof item[field.key] === 'object' && item[field.key]._isBigNumber  // If false execute another if statement
                                                     ? item[field.key].toString()
-                                                    : item[field.key]
+                                                    : field.isLink 
+                                                        ? <a href={item[field.key]} target="_blank" rel="noopener noreferrer" className='project-link'>{item[field.key]}</a> 
+                                                        : item[field.key]
                                         )}
                                         <br />
                                     </div>
@@ -167,6 +169,37 @@ const Profile = ({ profileData, account }) => {
             </div>
         )
     }
+
+
+
+    const renderProfileCreation = (section, title, data, fields) => {
+        return (
+            <div>
+                <h3>Add {title}</h3>
+
+                {data.map((item, index) => (
+                    <div key={index}>
+                        {fields.map((field, fieldIndex) => (
+                            <input 
+                                type={field.type}
+                                placeholder={field.label}
+                                value={item[field.key]}
+                                onChange={(e) => handleInputChange(section, index, field.key, e.target.value)}
+                            />
+                        ))}
+                        
+                        <h4>Autoamtically set to false</h4>
+                        <button onClick={() => handleRemoveItem(section, index)} className='button-remove'>Remove {title.substring(0, title.length - 1)}</button>
+
+                    </div>
+                ))}
+
+                <button onClick={() => handleAddItem(section)}>Add {title.substring(0, title.length - 1)}</button>
+
+            </div>
+        )
+    }
+
 
 
 
@@ -212,97 +245,45 @@ const Profile = ({ profileData, account }) => {
                         { key: 'verified', label: 'Verified', isBoolean: true },
                     ])}
 
-                    
-                    
-
-
-
-
-
 
                     {/* Show all Projects */}
-                    <h3 className="profile-section-header">Projects</h3>
-                    {profileData.projects.length > 0 ? (
-                        <ul className='profile-list'>
-                            {profileData.projects.map((project, index) => (
-                                <li key={index}>
-                                    <strong>Name:</strong> {project.name} <br />
-                                    <strong>Link:</strong> <a href={project.link} target="_blank" rel="noopener noreferrer" className='project-link'>{project.link}</a> <br />
-                                    <strong>Skills Applied:</strong> {project.skillsApplied.join(', ')} <br />
-                                    <strong>Tools Used:</strong> {project.toolsUsed.join(', ')} <br />
-                                    <strong>Role:</strong> {project.role} <br />
-                                    <strong>Description:</strong> {project.description} <br />
-                                    <strong>Verified:</strong> <span className={project.verified ? 'verified-status' : 'not-verified-status'}>
-                                        {project.verified ? ('Yes') : ('No')} 
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No projects available</p>
-                    )}
+                    {renderProfileSection('Projects', profileData.projects, [
+                        { key: 'name', label: 'Name' },
+                        { key: 'link', label: 'Link', isLink: true },
+                        { key: 'skillsApplied', label: 'Skills Applied' },
+                        { key: 'toolsUsed', label: 'Tools Used' },
+                        { key: 'role', label: 'Role' },
+                        { key: 'description', label: 'Description' },
+                        { key: 'verified', label: 'Verified', isBoolean: true },
+                    ])} 
 
-
-
+                    
                     {/* Show all Achievements */}
-                    <h3 className="profile-section-header">Achievements</h3>
-                    {profileData.achievements.length > 0 ? (
-                        <ul className='profile-list'>
-                            {profileData.achievements.map((achievement, index) => (
-                                <li key={index}>
-                                    <strong>Content:</strong> {achievement.content} <br />
-                                    <strong>Industry:</strong> {achievement.industry} <br />
-                                    <strong>Skill:</strong> {achievement.skill} <br />
-                                    <strong>Verified:</strong> <span className={achievement.verified ? 'verified-status' : 'not-verified-status'}>
-                                        {achievement.verified ? ('Yes') : ('No')} 
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No achievements available</p>
-                    )}
+                    {renderProfileSection('Achievements', profileData.achievements, [
+                        { key: 'content', label: 'Content' },
+                        { key: 'industry', label: 'Industry' },
+                        { key: 'skill', label: 'Skill' },
+                        { key: 'verified', label: 'Verified', isBoolean: true },
+                    ])}
 
 
 
                     {/* Show all Endorsements */}
-                    <h3 className="profile-section-header">Endorsements</h3>
-                    {profileData.endorsements.length > 0 ? (
-                        <ul className='profile-list'>
-                            {profileData.endorsements.map((endorsement, index) => (
-                                <li key={index}>
-                                    <strong>Content:</strong> {endorsement.content} <br />
-                                    <strong>Endorser:</strong> {endorsement.endorser} <br />
-                                    <strong>Skills Related:</strong> {endorsement.skillsRelated.join(', ')} <br />
-                                    <strong>Verified:</strong> <span className={endorsement.verified ? 'verified-status' : 'not-verified-status'}>
-                                        {endorsement.verified ? ('Yes') : ('No')}
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No endorsements available</p>
-                    )}
+                    {renderProfileSection('Endorsements', profileData.endorsements, [
+                        { key: 'content', label: 'Content' },
+                        { key: 'endorser', label: 'Endorser' },
+                        { key: 'skillsRelated', label: 'Skills Related' },
+                        { key: 'verified', label: 'Verified', isBoolean: true },
+                    ])}
 
 
                     {/* Show all Claims */}
-                    <h3 className="profile-section-header">Claims</h3>
-                    {profileData.claims.length > 0 ? (
-                        <ul className='profile-list'>
-                            {profileData.claims.map((claim, index) => (
-                                <li key={index}>
-                                    <strong>Content:</strong> {claim.content} <br />
-                                    <strong>Verified:</strong> <span className={claim.verified ? 'verified-status' : 'not-verified-status'}>
-                                        {claim.verified ? ('Yes') : ('No')} 
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No claims available</p>
-                    )}
+                    {renderProfileSection('Claims', profileData.claims, [
+                        { key: 'content', label: 'Content' },
+                        { key: 'verified', label: 'Verified', isBoolean: true },
+                    ])}
 
-
+                
                     
 
                 </div>
@@ -313,120 +294,43 @@ const Profile = ({ profileData, account }) => {
 
                     <h1 className='create-profile-header'>Create a new profile</h1>   
 
-
                     {/* Add Technical Skills */}
-
-                    <h3>Add Technical Skills</h3>
-                    {profile.technicalSkills.map((skill, index) => (
-                        <div key={index}>
-
-                            <input 
-                            type="text"
-                            placeholder="Skill Name"
-                            value={skill.skillName}
-                            onChange={(e) => handleInputChange('technicalSkills', index, "skillName", e.target.value) }
-                            />
+                    {renderProfileCreation('technicalSkills', 'Technical Skills', profile.technicalSkills, [
+                        { key: 'skillName', label: 'Skill Name', type: "text" },
+                        { key: 'experience', label: 'Experience', type: "number" },
+                    ])}
 
 
-                            <input 
-                            type="number"
-                            placeholder="Experience (years)"
-                            value={skill.experience}
-                            onChange={(e) => handleInputChange('technicalSkills', index, "experience", e.target.value) }
-                            />
+                    {/* Add Soft Skills */}
+                    {renderProfileCreation('softSkills', 'Soft Skills', profile.softSkills, [
+                        { key: 'skillName', label: 'Skill Name', type: "text" },
+                        { key: 'experience', label: 'Experience', type: "number" },
+                    ])}
 
 
-                            <h4>Autoamtically set to false</h4>
-
-                            <button onClick={() => handleRemoveItem('technicalSkills', index)} className='button-remove'>Remove Skill</button>
-
-
-                        </div>
-
-                    ))}
-                    <button onClick={() => handleAddItem('technicalSkills')}>Add Technical Skill</button>
 
                         
                     
-                    {/* Add Soft Skills */}
-
-                    <h3>Add Soft Skills</h3>
-                    {profile.softSkills.map((skill, index) => (
-                        <div key={index}>
-
-                            <input 
-                            type="text"
-                            placeholder="Skill Name"
-                            value={skill.skillName}
-                            onChange={(e) => handleInputChange('softSkills', index, "skillName", e.target.value) }
-                            />
-
-
-                            <input 
-                            type="number"
-                            placeholder="Experience (years)"
-                            value={skill.experience}
-                            onChange={(e) => handleInputChange('softSkills', index, "experience", e.target.value) }
-                            />
-
-
-                            <h4>Autoamtically set to false</h4>
-
-                            <button onClick={() => handleRemoveItem('softSkills', index)} className='button-remove'>Remove Skill</button>
-
-
-                        </div>
-
-                    ))}
-                    <button onClick={() => handleAddItem('softSkills')}>Add Soft Skill</button>
-                    
+                   {/* Add Experiences */}
+                   {renderProfileCreation('experiences', 'Experiences', profile.experiences, [
+                        { key: 'industry', label: 'Industry', type: "text"},
+                        { key: 'jobTitle', label: 'Job Title', type: "text" },
+                        { key: 'experience', label: 'Experience', type: "number" }
+                    ])}
                     
 
 
 
-                    {/* Add Experiences */}
-
-                    <h3>Add Experiences</h3>
-                    {profile.experiences.map((experience, index) => (
-                        <div key={index}>
-
-                            <input 
-                            type="text"
-                            placeholder="Experience Name"
-                            value={experience.industry}
-                            onChange={(e) => handleInputChange('experiences', index, "industry", e.target.value) }
-                            />
-
-
-                            <input 
-                            type="text"
-                            placeholder="Job Title"
-                            value={experience.jobTitle}
-                            onChange={(e) => handleInputChange('experiences', index, "jobTitle", e.target.value) }
-                            />
-
-                             <input 
-                            type="number"
-                            placeholder="Experience (years)"
-                            value={experience.experience}
-                            onChange={(e) => handleInputChange('experiences', index, "experience", e.target.value) }
-                            />
-
-
-                            <h4>Autoamtically set to false</h4>
-
-                            <button onClick={() => handleRemoveItem('experiences', index)} className='button-remove'>Remove Experience</button>
-
-
-                        </div>
-
-                    ))}
-                    <button onClick={() => handleAddItem('experiences')}>Add Soft Skill</button>
-
-
-
-
-                    {/* Add Experiences */}
+                    {/* Add Projects */}
+                    {renderProfileCreation('projects', 'Projects', profile.projects, [
+                        { key: 'name', label: 'Name', type: "text" },
+                        { key: 'link', label: 'Link', isLink: true, type: "text" },
+                        { key: 'skillsApplied', label: 'Skills Applied' },
+                        { key: 'toolsUsed', label: 'Tools Used' },
+                        { key: 'role', label: 'Role', type: "text" },
+                        { key: 'description', label: 'Description', type: "text" },
+                    ])}
+                    
 
 
 
