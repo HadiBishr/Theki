@@ -179,14 +179,39 @@ const Profile = ({ profileData, account }) => {
 
                 {data.map((item, index) => (
                     <div key={index}>
-                        {fields.map((field, fieldIndex) => (
+                        {fields.map((field, fieldIndex) => {
+
+                            if (field.isArray) {
+                                return (
+                                    
+
+                                    <div key={fieldIndex}>
+                                        <p>{field.label}</p>
+                                        {item[field.key].length === 0 ? (
+                                            <p>No {field.label} available</p>
+                                        ) : (
+                                            item[field.key].join(', ')
+                                        )}
+                                    
+
+                                    <input 
+                                    type={field.type}
+                                    placeholder={`Add ${field.label}`}
+                                    value={item[field.key]}
+                                    onChange={(e) => handleInputChange(section, index, field.key, e.target.value)}
+                                    />
+
+                                    </div>
+
+                                )
+                            }
                             <input 
                                 type={field.type}
                                 placeholder={field.label}
                                 value={item[field.key]}
                                 onChange={(e) => handleInputChange(section, index, field.key, e.target.value)}
                             />
-                        ))}
+    })}
                         
                         <h4>Autoamtically set to false</h4>
                         <button onClick={() => handleRemoveItem(section, index)} className='button-remove'>Remove {title.substring(0, title.length - 1)}</button>
@@ -325,7 +350,7 @@ const Profile = ({ profileData, account }) => {
                     {renderProfileCreation('projects', 'Projects', profile.projects, [
                         { key: 'name', label: 'Name', type: "text" },
                         { key: 'link', label: 'Link', isLink: true, type: "text" },
-                        { key: 'skillsApplied', label: 'Skills Applied' },
+                        { key: 'skillsApplied', label: 'Skills Applied', isArray: true },
                         { key: 'toolsUsed', label: 'Tools Used' },
                         { key: 'role', label: 'Role', type: "text" },
                         { key: 'description', label: 'Description', type: "text" },
