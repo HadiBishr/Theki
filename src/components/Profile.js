@@ -242,7 +242,7 @@ const Profile = ({ profileData, account }) => {
                                             <p>No {field.label} added yet. </p>
                                         )}
 
-                                        <button onClick={() => handleAddItem(section, field.key, index)}>
+                                        <button onClick={() => handleAddItem(section, field.key, index)} className='button-add'>
                                             Add {field.label}
                                         </button>
                 
@@ -253,6 +253,7 @@ const Profile = ({ profileData, account }) => {
                             } else {
                                 return (
                                     <input 
+                                        key={fieldIndex}
                                         type={field.type}
                                         placeholder={field.label}
                                         value={item[field.key]}
@@ -271,7 +272,7 @@ const Profile = ({ profileData, account }) => {
                     </div>
                 ))}
 
-                <button onClick={() => handleAddItem(section)}>Add {title.substring(0, title.length - 1)}</button>
+                <button onClick={() => handleAddItem(section)} className='button-add'>Add {title.substring(0, title.length - 1)}</button>
 
             </div>
         )
