@@ -1,7 +1,6 @@
 import './css/Profile.css'
 import {useState} from 'react';
 
-
 const Profile = ({ profileData, account }) => {
     
 
@@ -209,22 +208,23 @@ const Profile = ({ profileData, account }) => {
 
     const renderProfileCreation = (section, title, data, fields) => {
         return (
-            <div>
-                <h3>Add {title}</h3>
+            <div className='profile-section-container'>
+                <h3 className='profile-section-header '>Add {title}</h3>
 
-                {data.map((item, index) => (
+                {data.map((item, index) => ( 
                     <div key={index}>
-                        {fields.map((field, fieldIndex) => {
+                        {fields.map((field, fieldIndex) => { 
                             if (field.isArray) {            // custom logic if we are inputting values into an array
                                 return (
                                     <div key={fieldIndex}>
-                                        <p>{field.label}</p>
+                                        <label className="profile-input-label">{field.label}</label>
                                         {item[field.key].length > 0 ? (
                                             <ul key={field.key}>
                                                 {item[field.key].map((value, valueIndex) => ( // Loop over each item in the array
                                                     <li key={valueIndex}>           
                                                         <input 
                                                             type={field.type}
+                                                            className="profile-input"
                                                             value={value}
                                                             onChange={(e) => handleInputChange(section, index, field.key, valueIndex, e.target.value)}
                                                         />
@@ -252,13 +252,18 @@ const Profile = ({ profileData, account }) => {
                                 )
                             } else {
                                 return (
-                                    <input 
-                                        key={fieldIndex}
-                                        type={field.type}
-                                        placeholder={field.label}
-                                        value={item[field.key]}
-                                        onChange={(e) => handleInputChange(section, index, field.key, e.target.value)}
-                                    />
+                                    <div key={fieldIndex}>
+                                        <label className="profile-input-label">{field.label}</label>
+                                        <input
+                                            key={fieldIndex}
+                                            className="profile-input"
+                                            type={field.type}
+                                            placeholder={field.label}
+                                            value={item[field.key]}
+                                            onChange={(e) => handleInputChange(section, index, field.key, e.target.value)}
+                                        />
+                                    </div>
+                                    
                                 )
                                 
                             }
