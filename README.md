@@ -48,13 +48,5 @@ npx hardhat ignition deploy ./ignition/modules/Lock.js
 We have a couple of functions and each will be explained below:
 
 
-## handleAddItem 
-
-{explain it here}
-
-
-## {the other functions and so on}
-
-
 
 
