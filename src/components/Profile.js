@@ -40,59 +40,85 @@ const Profile = ({ profileData, account }) => {
 
 
     // This function adds a new item to the specified section. It does not populate it, but just gets it ready if a user wants to add another skill. When the profile variable gets set, technicalSkills only has one entry. What this does is just add another entry so that it sets a user up for when they want to add another technical skill
-    const handleAddItem = (section) => {
+    const handleAddItem = (section, field = null, index = null) => {
         setProfile((prevProfile) => {
-            // Create a new item 
-            let newItem;
-            switch (section) {
-                case 'technicalSkills':
-                    newItem = { skillName: '', experience: 0, verified: false };
-                    break;
-                case 'softSkills':
-                    newItem = { skillName: '', experience: 0, verified: false };
-                    break;
-                case 'experiences':
-                    newItem = { industry: '', jobTitle: '', experience: 0, verified: false};
-                    break;
-                case 'projects':
-                    newItem = {
-                        name: '', link: '', skillsApplied: [], toolsUsed: [],
-                        role: '', description: '', verified: false
-                    };
-                    break;
-                case 'achievements':
-                    newItem = { content: '', industry: '', skill: '', verified: false };
-                    break;
-                case 'endorsements':
-                    newItem = { content: '', endorser: '', skillsRelated: [], verified: false };
-                    break;
-                case 'claims':
-                    newItem = { content: '', verified: false };
-                    break;
-                default:
-                    throw new Error('Unkown Section')
+            let updatedSection
+
+        
+
+            // if (field && index !== null) {
+            //     // Add to an existing array within an object (like skillsApplied)
+            //     updatedSection[index][field] = [...updatedSection[index][field], '']
+            // }
+
+            updatedSection = [...prevProfile[section]]
+
+            if (field) {
+                const updatedItem = {
+                    ...prevProfile[section][index],
+                    [field]: [...prevProfile[section][index][field], ''] // Add one new item to the array
+                }
+
+                updatedSection = [...prevProfile[section]]
+                updatedSection[index] = updatedItem;
+            } else {
+                // Create a new item 
+                let newItem;
+                switch (section) {
+                    case 'technicalSkills':
+                        newItem = { skillName: '', experience: 0, verified: false };
+                        break;
+                    case 'softSkills':
+                        newItem = { skillName: '', experience: 0, verified: false };
+                        break;
+                    case 'experiences':
+                        newItem = { industry: '', jobTitle: '', experience: 0, verified: false};
+                        break;
+                    case 'projects':
+                        newItem = {
+                            name: '', link: '', skillsApplied: [], toolsUsed: [],
+                            role: '', description: '', verified: false
+                        };
+                        break;
+                    case 'achievements':
+                        newItem = { content: '', industry: '', skill: '', verified: false };
+                        break;
+                    case 'endorsements':
+                        newItem = { content: '', endorser: '', skillsRelated: [], verified: false };
+                        break;
+                    case 'claims':
+                        newItem = { content: '', verified: false };
+                        break;
+                    default:
+                        throw new Error('Unkown Section')
+                }
+                updatedSection.push(newItem)
             }
+            
 
             // Add the new item to the corresponding section in the profile
             return {
                 ...prevProfile,  // This copies the existing profile
-                [section]: [...prevProfile[section], newItem]    
+                [section]: updatedSection
             }
         })
     }
 
 
-    // This function edits the empty entry of the section specified of the profile vaeriable. For example we can see that when profile is initialized, it onyl has one skill entry. What this does it just edit that entry with the specified user input. 
-    const handleInputChange = (section, index, field, value) => {
+    // This function edits the empty entry of the section specified of the profile vaeriable. For example we can see that when profile is initialized, it only has one skill entry. What this does it just edit that entry with the specified user input. 
+    const handleInputChange = (section, index, field, fieldIndex = null, value) => {
         setProfile((prevProfile) => {
             // Make a copy of the entire section
             const updatedSection = [...prevProfile[section]]
 
-            // Update the specific field of the specific item
-            updatedSection[index] = {
-                ...updatedSection[index],
-                [field]: value              // This could be for example skillName: "Javascript"" 
+            if (Array.isArray(updatedSection[index][field])) {
+                // Update specific value in the array
+                updatedSection[index][field][fieldIndex] = value
+            } else {
+                // Update the specific field of the specific item
+                updatedSection[index][field] = value
             }
+            
 
             return {
                 ...prevProfile,             // prevProfile and updatedSection does not hae to be in cornological order. updatedSection could be any section and it will change it. 
@@ -103,10 +129,17 @@ const Profile = ({ profileData, account }) => {
     }
 
 
-    const handleRemoveItem = (section, index) => {
+    const handleRemoveItem = (section, field, fieldIndex, index) => {
         setProfile((prevProfile) => {
-            const updatedSection = [...prevProfile[section]]    
-            updatedSection.splice(index, 1)     // Remove the item at the specified index
+
+            const updatedSection = [...prevProfile[section]] 
+
+            if (field) {
+                updatedSection[index][field].splice(fieldIndex, 1)
+            } else {
+                updatedSection.splice(index, 1)     // Remove the item at the specified index
+            }
+            
 
             return {
                 ...prevProfile,
@@ -114,6 +147,8 @@ const Profile = ({ profileData, account }) => {
             }
         })  
     }
+
+
 
 
     // This deals with debugging. Logging how the profile looks as we go.
@@ -180,41 +215,58 @@ const Profile = ({ profileData, account }) => {
                 {data.map((item, index) => (
                     <div key={index}>
                         {fields.map((field, fieldIndex) => {
-
-                            if (field.isArray) {
+                            if (field.isArray) {            // custom logic if we are inputting values into an array
                                 return (
-                                    
-
                                     <div key={fieldIndex}>
                                         <p>{field.label}</p>
-                                        {item[field.key].length === 0 ? (
-                                            <p>No {field.label} available</p>
+                                        {item[field.key].length > 0 ? (
+                                            <ul key={field.key}>
+                                                {item[field.key].map((value, valueIndex) => ( // Loop over each item in the array
+                                                    <li key={valueIndex}>           
+                                                        <input 
+                                                            type={field.type}
+                                                            value={value}
+                                                            onChange={(e) => handleInputChange(section, index, field.key, valueIndex, e.target.value)}
+                                                        />
+
+
+                                                        <button onClick={() => handleRemoveItem(section, field.key, valueIndex, index)} className='button-remove'>
+                                                            Remove Entry
+                                                        </button>
+
+                                                    
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         ) : (
-                                            item[field.key].join(', ')
+                                            <p>No {field.label} added yet. </p>
                                         )}
-                                    
 
-                                    <input 
-                                    type={field.type}
-                                    placeholder={`Add ${field.label}`}
-                                    value={item[field.key]}
-                                    onChange={(e) => handleInputChange(section, index, field.key, e.target.value)}
-                                    />
-
+                                        <button onClick={() => handleAddItem(section, field.key, index)}>
+                                            Add {field.label}
+                                        </button>
+                
+                                        
                                     </div>
 
                                 )
+                            } else {
+                                return (
+                                    <input 
+                                        type={field.type}
+                                        placeholder={field.label}
+                                        value={item[field.key]}
+                                        onChange={(e) => handleInputChange(section, index, field.key, e.target.value)}
+                                    />
+                                )
+                                
                             }
-                            <input 
-                                type={field.type}
-                                placeholder={field.label}
-                                value={item[field.key]}
-                                onChange={(e) => handleInputChange(section, index, field.key, e.target.value)}
-                            />
-    })}
+                           
+                        })}
                         
-                        <h4>Autoamtically set to false</h4>
-                        <button onClick={() => handleRemoveItem(section, index)} className='button-remove'>Remove {title.substring(0, title.length - 1)}</button>
+                        <button onClick={() => handleRemoveItem(section, null, null, index)} className='button-remove'>
+                            Remove {title.substring(0, title.length - 1)}
+                        </button>
 
                     </div>
                 ))}
@@ -350,20 +402,36 @@ const Profile = ({ profileData, account }) => {
                     {renderProfileCreation('projects', 'Projects', profile.projects, [
                         { key: 'name', label: 'Name', type: "text" },
                         { key: 'link', label: 'Link', isLink: true, type: "text" },
-                        { key: 'skillsApplied', label: 'Skills Applied', isArray: true },
-                        { key: 'toolsUsed', label: 'Tools Used' },
+                        { key: 'skillsApplied', label: 'Skills Applied', isArray: true, type: "text" },
+                        { key: 'toolsUsed', label: 'Tools Used', type: "text", isArray: true },
                         { key: 'role', label: 'Role', type: "text" },
                         { key: 'description', label: 'Description', type: "text" },
                     ])}
+
                     
+                    {/* Add Achievements */}
+                    {renderProfileCreation('achievements', 'Achievements', profile.achievements, [
+                        { key: 'content', label: 'Content' , type: "text"},
+                        { key: 'industry', label: 'Industry', type: "text"},
+                        { key: 'skillName', label: 'Skill Name', type: "text" },
+                    ])}
 
 
+                    {/* Add Endorsements */}
+                    {renderProfileCreation('endorsements', 'Endorsements', profile.endorsements, [
+                        { key: 'content', label: 'Content' , type: "text"},
+                        { key: 'endorser', label: 'Endorser', type: "text"},
+                        { key: 'skillsRelated', label: 'Skills Related', isArray: true, type: "text" },                    
+                    ])} 
 
 
+                    {/* Add Claims */}
+                    {renderProfileCreation('claims', 'Claims', profile.claims, [
+                        { key: 'content', label: 'Content' , type: "text"}           
+                    ])} 
 
 
-
-                    {/* <button onClick={handleSubmit}>Submit and Log Profile</button> */}
+                    <button onClick={handleSubmit}>Submit and Log Profile</button>
                 
 
 
