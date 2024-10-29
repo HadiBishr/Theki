@@ -1,6 +1,8 @@
 import './css/Profile.css'
 import {useState} from 'react';
 
+import '../index.css'
+
 const Profile = ({ profileData, account }) => {
     
 
@@ -208,8 +210,8 @@ const Profile = ({ profileData, account }) => {
 
     const renderProfileCreation = (section, title, data, fields) => {
         return (
-            <div className='profile-section-container'>
-                <h3 className='profile-section-header '>Add {title}</h3>
+            <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl mx-auto mt-6">
+                <h3 className="text-2xl font-semibold text-gray-800 mb-4">Add {title}</h3>
 
                 {data.map((item, index) => ( 
                     <div key={index}>
