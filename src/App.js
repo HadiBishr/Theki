@@ -178,7 +178,8 @@ function App() {
       }
 
 
-      // Get all Jobs
+
+      // Fetch all Jobs
       const jobIds = await jobManagerContract.getAllJobIds()
       setJobIds(jobIds)
 

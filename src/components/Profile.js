@@ -39,6 +39,12 @@ const Profile = ({ profileData, account }) => {
     });
 
 
+    const technicalSkillsSchema = ["string", "uint256", "bool"]
+    const softSkillsSchema = ["string", "uint256", "bool"]
+    const experiencesSchema = ["string", "string", "uint256", "bool"]
+    const projectsSchema = ["string", "string", "string[]", "string[]", "string", "string", "bool"]
+
+
 
     // This function adds a new item to the specified section. It does not populate it, but just gets it ready if a user wants to add another skill. When the profile variable gets set, technicalSkills only has one entry. What this does is just add another entry so that it sets a user up for when they want to add another technical skill
     const handleAddItem = (section, field = null, index = null) => {
@@ -166,6 +172,8 @@ const Profile = ({ profileData, account }) => {
     // This deals with debugging. Logging how the profile looks as we go.
     const handleSubmit = () => {
         console.log(profile)
+
+
     }
 
 
