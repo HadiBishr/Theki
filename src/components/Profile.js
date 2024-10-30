@@ -109,15 +109,26 @@ const Profile = ({ profileData, account }) => {
     // This function edits the empty entry of the section specified of the profile vaeriable. For example we can see that when profile is initialized, it only has one skill entry. What this does it just edit that entry with the specified user input. 
     const handleInputChange = (section, index, field, fieldIndex = null, value) => {
         setProfile((prevProfile) => {
-            // Make a copy of the entire section
-            const updatedSection = [...prevProfile[section]]
 
-            if (Array.isArray(updatedSection[index][field])) {
-                // Update specific value in the array
-                updatedSection[index][field][fieldIndex] = value
+            console.log("Section:", section, "Index:", index, "Field:", field, "FieldIndex:", fieldIndex, "Value:", value);
+
+            // Make a copy of the entire section
+            const updatedSection = [...prevProfile[section]] // This is a single section. For example "Technical Skills"
+
+            if (fieldIndex !== null && Array.isArray(updatedSection[index][field])) {
+                // Create a copy of the array within the specific object updating it
+                const updatedArray = [...updatedSection[index][field]]
+                updatedArray[fieldIndex] = value;                   // This taps into the specific index of that array and appens it to this new value
+                updatedSection[index] = { 
+                    ...updatedSection[index],
+                    [field]: updatedArray,                           // This sets the field to that newly edited array. This field could be something like skillsApplied. 
+                }
             } else {
                 // Update the specific field of the specific item
-                updatedSection[index][field] = value
+                updatedSection[index] = {
+                    ...updatedSection[index],
+                    [field]: value,
+                }
             }
             
 
@@ -257,12 +268,11 @@ const Profile = ({ profileData, account }) => {
                                     <div key={fieldIndex}>
                                         <label className="profile-input-label">{field.label}</label>
                                         <input
-                                            key={fieldIndex}
                                             className="profile-input"
                                             type={field.type}
                                             placeholder={field.label}
                                             value={item[field.key]}
-                                            onChange={(e) => handleInputChange(section, index, field.key, e.target.value)}
+                                            onChange={(e) => handleInputChange(section, index, field.key, null, e.target.value)}
                                         />
                                     </div>
                                     
@@ -421,7 +431,7 @@ const Profile = ({ profileData, account }) => {
                     {renderProfileCreation('achievements', 'Achievements', profile.achievements, [
                         { key: 'content', label: 'Content' , type: "text"},
                         { key: 'industry', label: 'Industry', type: "text"},
-                        { key: 'skillName', label: 'Skill Name', type: "text" },
+                        { key: 'skill', label: 'Skill Name', type: "text" },
                     ])}
 
 
