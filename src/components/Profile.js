@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 
 import '../index.css'
 
-const Profile = ({ profileData, account, signer, profileManagerContract, network}) => {
+const Profile = ({ profileData, account, signer, profileManagerContract, network }) => {
 
 
     const [addingTechnicalSkill, setAddingTechnicalSkill] = useState(null)
@@ -230,6 +230,9 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
         const profileContract = profileManagerContract.connect(signer)
 
 
+        
+
+
         var transaction = await profileContract.createBaseProfile(profile.name)
         await transaction.wait()
 
@@ -256,6 +259,7 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
 
 
         // Refresh the page to show updated profile data
+        window.localStorage.clear();
         window.location.reload();
         
     }

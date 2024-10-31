@@ -7,6 +7,7 @@
 
 
 
+const { mul } = require("@tensorflow/tfjs");
 const hre = require("hardhat")
 
 
@@ -145,6 +146,8 @@ async function main() {
     // Setup accounts
     const [deployer, user] = await ethers.getSigners()
 
+    let thekitoken, userprofilemanager, jobmanager, multicall
+
     // Deploy ThekiToken contract
     const ThekiToken = await hre.ethers.getContractFactory("ThekiToken", deployer)
     thekitoken = await ThekiToken.deploy({gasLimit: 30000000})
@@ -167,36 +170,113 @@ async function main() {
 
     console.log(`JobManager contract deployed ${jobmanager.address}\n`)
 
+    // Deploy MultiCall contract
+    const MultiCall = await hre.ethers.getContractFactory("MultiCall", deployer)
+    multicall = await MultiCall.deploy({gasLimit: 30000000})
+    await multicall.deployed()
+
+    console.log(`MultiCall contract deployed ${multicall.address}\n` )
+
 
     
 
     // Deploy the user profile with encoded data
     async function createProfile() {
         try {
-            var transaction = await userprofilemanager.connect(user).createBaseProfile(profile1.name);
+
+            profileManagerWithSigner = userprofilemanager.connect(user)
+
+            const target = []
+            const data = []
+
+            // Add createBaseProfile function call
+            target.push(userprofilemanager.address)
+            data.push(profileManagerWithSigner.interface.encodeFunctionData(
+                "createBaseProfile",
+                [profile1.name]
+            ))
+
+
+            // Add addTechnicalSkills function call
+            target.push(userprofilemanager.address)
+            data.push(profileManagerWithSigner.interface.encodeFunctionData(
+                "addTechnicalSkills",
+                [encodedTechnicalSkills]
+            ))
+
+            // Add addSoftSkills function call
+            target.push(userprofilemanager.address)
+            data.push(profileManagerWithSigner.interface.encodeFunctionData(
+                "addSoftSkills",
+                [encodedSoftSkills]
+            ))
+
+            // Add addExperiences function call
+            target.push(userprofilemanager.address)
+            data.push(profileManagerWithSigner.interface.encodeFunctionData(
+                "addExperiences",
+                [encodedExperiences]
+            ))
+
+            // Add addProjects function call
+            target.push(userprofilemanager.address)
+            data.push(profileManagerWithSigner.interface.encodeFunctionData(
+                "addProjects",
+                [encodedProjects]
+            ))
+
+            // Add addAchievements function call
+            target.push(userprofilemanager.address)
+            data.push(profileManagerWithSigner.interface.encodeFunctionData(
+                "addAchievements",
+                [encodedAchievements]
+            ))
+
+            // Add addEndorsements function call
+            target.push(userprofilemanager.address)
+            data.push(profileManagerWithSigner.interface.encodeFunctionData(
+                "addEndorsements",
+                [encodedEndorsements]
+            ))
+
+            // Add addClaims function call
+            target.push(userprofilemanager.address)
+            data.push(profileManagerWithSigner.interface.encodeFunctionData(
+                "addClaims",
+                [encodedClaims]
+            ))
+
+
+            const multiCallContractWithSigner = multicall.connect(user)
+            let transaction = await multiCallContractWithSigner.multiCall(target, data)
             await transaction.wait()
 
 
-            transaction = await userprofilemanager.connect(user).addTechnicalSkills(encodedTechnicalSkills)
-            await transaction.wait()
 
-            transaction = await userprofilemanager.connect(user).addSoftSkills(encodedSoftSkills)
-            await transaction.wait()
+            // var transaction = await userprofilemanager.connect(user).createBaseProfile(profile1.name);
+            // await transaction.wait()
 
-            transaction = await userprofilemanager.connect(user).addExperiences(encodedExperiences)
-            await transaction.wait()
 
-            transaction = await userprofilemanager.connect(user).addProjects(encodedProjects)
-            await transaction.wait()
+            // transaction = await userprofilemanager.connect(user).addTechnicalSkills(encodedTechnicalSkills)
+            // await transaction.wait()
 
-            transaction = await userprofilemanager.connect(user).addAchievements(encodedAchievements)
-            await transaction.wait()
+            // transaction = await userprofilemanager.connect(user).addSoftSkills(encodedSoftSkills)
+            // await transaction.wait()
 
-            transaction = await userprofilemanager.connect(user).addEndorsements(encodedEndorsements)
-            await transaction.wait()
+            // transaction = await userprofilemanager.connect(user).addExperiences(encodedExperiences)
+            // await transaction.wait()
 
-            transaction = await userprofilemanager.connect(user).addClaims(encodedClaims)
-            await transaction.wait()
+            // transaction = await userprofilemanager.connect(user).addProjects(encodedProjects)
+            // await transaction.wait()
+
+            // transaction = await userprofilemanager.connect(user).addAchievements(encodedAchievements)
+            // await transaction.wait()
+
+            // transaction = await userprofilemanager.connect(user).addEndorsements(encodedEndorsements)
+            // await transaction.wait()
+
+            // transaction = await userprofilemanager.connect(user).addClaims(encodedClaims)
+            // await transaction.wait()
 
             console.log("User profile created");
         } catch (error) {
