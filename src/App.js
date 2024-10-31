@@ -28,7 +28,9 @@ function App() {
   const [account, setAccount] = useState(null) // Current MetaMask account connected to the web page
   const [provider, setProvider] = useState(null) // Ethers.js provider. This object allows us to only read data from the blockchain. You would usually use provider to only read things from the blockchain or contract.
   const [signer, setSigner] = useState(null)
+  const [network, setNetwork] = useState(null)
   const [thekiToken, setThekiToken] = useState(null) // ThekiToken contract
+  const [profileManagerContract, setProfileManagerContract] = useState(null) // Profile Manager contract
 
   const [idToVerify, setidToVerify] = useState(null)
   const [claimIds, setClaimIds] = useState([]) // An array of claim ids of the professional. 
@@ -54,6 +56,7 @@ function App() {
         console.log(`Provider: ${provider}`)
 
         const network = await provider.getNetwork()
+        setNetwork(network)
         console.log('Connected network:', network);
 
 
@@ -157,6 +160,8 @@ function App() {
         UserProfileManagerABI,
         signer
       )
+      setProfileManagerContract(profileManagerContract)
+
 
       const jobManagerContract = new ethers.Contract(
         jobManagerAddress,
@@ -283,7 +288,7 @@ function App() {
         <Route 
           path="/profile"
           element={
-            <Profile account={account} profileData={profileData} />
+            <Profile account={account} profileData={profileData} profileManagerContract={profileManagerContract} signer={signer} network={network}/>
           }
         
         />

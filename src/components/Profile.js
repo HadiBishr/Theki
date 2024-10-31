@@ -1,17 +1,18 @@
 import './css/Profile.css'
 import {useState} from 'react';
+import { ethers } from 'ethers';
 
 import '../index.css'
 
-const Profile = ({ profileData, account }) => {
-    
+const Profile = ({ profileData, account, signer, profileManagerContract, network}) => {
+
 
     const [addingTechnicalSkill, setAddingTechnicalSkill] = useState(null)
     const [addingSoftSkill, setAddingSoftSkill] = useState(null)
 
 
     const [profile, setProfile] = useState({
-        name: '',
+        name: 'Hadi',
         technicalSkills: [
             { skillName: '', experience: 0, verified: false }
         ],
@@ -38,12 +39,61 @@ const Profile = ({ profileData, account }) => {
         ]
     });
 
+    const profileSections = {
+        technicalSkills: ["string", "uint256", "bool"],
+        softSkills: ["string", "uint256", "bool"],
+        experiences: ["string", "string", "uint256", "bool"],
+        projects: ["string", "string", "string[]", "string[]", "string", "string", "bool"],
+        achievements: ["string", "string", "string", "bool"],
+        endorsements: ["string", "string", "string[]", "bool"],
+        claims: ["string", "bool"]
+    }
 
-    const technicalSkillsSchema = ["string", "uint256", "bool"]
-    const softSkillsSchema = ["string", "uint256", "bool"]
-    const experiencesSchema = ["string", "string", "uint256", "bool"]
-    const projectsSchema = ["string", "string", "string[]", "string[]", "string", "string", "bool"]
 
+
+    // Encode achievements
+    const encodedAchievements = profile.achievements.map((achievement) => {
+        return ethers.utils.defaultAbiCoder.encode(
+            ["string", "string", "string", "bool"],
+            [
+                achievement.content,
+                achievement.industry,
+                achievement.skill,
+                achievement.verified
+            ]
+        );
+    });
+
+    // const encodedSection = (schema, data, schemaOrder) => {
+    //     return data.map((item) => 
+    //         ethers.utils.defaultAbiCoder.encode(schema, Object.values(item))
+    //     )
+    // }
+
+    
+    // Generalized encoding function for any section of the profile
+    const encodedSection = (schema, data) => {
+        return data.map((item) => 
+            ethers.utils.defaultAbiCoder.encode(schema, Object.values(item))
+        );
+    };
+
+
+
+    const encodeAllProfileSections = (profile) => {
+
+        let encodedData = {}
+
+        for (const section in profileSections) {
+            const schema = profileSections[section]
+            const data = profile[section]
+
+
+            encodedData[section] = encodedSection(schema, data)
+        }
+
+        return encodedData
+    }
 
 
     // This function adds a new item to the specified section. It does not populate it, but just gets it ready if a user wants to add another skill. When the profile variable gets set, technicalSkills only has one entry. What this does is just add another entry so that it sets a user up for when they want to add another technical skill
@@ -170,11 +220,50 @@ const Profile = ({ profileData, account }) => {
 
 
     // This deals with debugging. Logging how the profile looks as we go.
-    const handleSubmit = () => {
+    async function handleSubmit() {
+        console.log(signer)
+        console.log("Here is the contract AGAIN:", profileManagerContract)
         console.log(profile)
 
+        const encodedProfile = encodeAllProfileSections(profile)
 
+        const profileContract = profileManagerContract.connect(signer)
+
+
+        var transaction = await profileContract.createBaseProfile(profile.name)
+        await transaction.wait()
+
+        transaction = await profileContract.addTechnicalSkills(encodedProfile.technicalSkills)
+        await transaction.wait()
+
+        transaction = await profileContract.addSoftSkills(encodedProfile.softSkills)
+        await transaction.wait()
+
+        transaction = await profileContract.addExperiences(encodedProfile.experiences)
+        await transaction.wait()
+
+        transaction = await profileContract.addProjects(encodedProfile.projects)
+        await transaction.wait()
+
+        transaction = await profileContract.addAchievements(encodedProfile.achievements)
+        await transaction.wait()
+
+        transaction = await profileContract.addEndorsements(encodedProfile.endorsements)
+        await transaction.wait()
+
+        transaction = await profileContract.addClaims(encodedProfile.claims)
+        await transaction.wait()
+
+
+        // Refresh the page to show updated profile data
+        window.location.reload();
+        
     }
+
+    // async function resetBlockchain() {
+    //     console.log("Does this exist", network.provider)
+    //     await network.provider.send("hardhat_reset");
+    // }
 
 
     // data is the data itself from the blockchain.
@@ -387,7 +476,7 @@ const Profile = ({ profileData, account }) => {
                     ])}
 
                 
-                    
+                    {/* <button onClick={resetBlockchain}>Reset Blockchain</button> */}
 
                 </div>
             ) : (
@@ -458,6 +547,8 @@ const Profile = ({ profileData, account }) => {
 
 
                     <button onClick={handleSubmit}>Submit and Log Profile</button>
+
+                    {/* <button onClick={resetBlockchain}>Reset Blockchain</button> */}
                 
 
 
