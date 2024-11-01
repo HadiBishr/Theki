@@ -133,7 +133,7 @@ const encodedClaims = claims.map((claim) => {
 
 describe("UserProfileManager", function () {
     let deployer
-    let userprofilemanager
+    let userprofilemanager, multicall
     let userprofile
 
 
@@ -144,36 +144,78 @@ describe("UserProfileManager", function () {
         userprofilemanager = await UserProfileManager.deploy()
         await userprofilemanager.deployed()
 
+        const MultiCall = await ethers.getContractFactory("MultiCall", deployer)
+        multicall = await MultiCall.deploy()
+        await multicall.deployed()
+
+
+        target = []
+        data = []
+
+
+        // Loop through different sections and push encoded function calls to target
+        sections = [
+            {functionName: "createBaseProfile", args: [profile1.name]},
+            {functionName: "addTechnicalSkills", args: [encodedTechnicalSkills]},
+            {functionName: "addSoftSkills", args: [encodedSoftSkills]},
+            {functionName: "addExperiences", args: [encodedExperiences]},
+            {functionName: "addProjects", args: [encodedProjects]},
+            {functionName: "addAchievements", args: [encodedAchievements]},
+            {functionName: "addEndorsements", args: [encodedEndorsements]},
+            {functionName: "addClaims", args: [encodedClaims]}
+        ]
+
+        sections.forEach((section) => {
+            try {
+                target.push(userprofilemanager.address)
+                data.push(userprofilemanager.interface.encodeFunctionData(section.functionName, section.args))
+            } catch (error) {
+                console.error(`Encoding failed for ${section.functionName}: `, error)
+            }
+            
+        })
+        
+
+        try {
+            let transaction = await multicall.connect(user).multiCall(target, data)
+            await transaction.wait()
+
+            console.log('transaction successfull')
+        } catch (error) {
+            console.error("transaction failed:", error)
+        }
+        
+
         // Create a user.
         // Deploy the user profile with encoded data
 
-        var transaction = await userprofilemanager.connect(user).createBaseProfile(profile1.name);
-        await transaction.wait()
+        // var transaction = await userprofilemanager.connect(user).createBaseProfile(profile1.name);
+        // await transaction.wait()
 
 
-        console.log("User created")
+        // console.log("User created")
 
 
-        transaction = await userprofilemanager.connect(user).addTechnicalSkills(encodedTechnicalSkills)
-        await transaction.wait()
+        // transaction = await userprofilemanager.connect(user).addTechnicalSkills(encodedTechnicalSkills)
+        // await transaction.wait()
 
-        transaction = await userprofilemanager.connect(user).addSoftSkills(encodedSoftSkills)
-        await transaction.wait()
+        // transaction = await userprofilemanager.connect(user).addSoftSkills(encodedSoftSkills)
+        // await transaction.wait()
 
-        transaction = await userprofilemanager.connect(user).addExperiences(encodedExperiences)
-        await transaction.wait()
+        // transaction = await userprofilemanager.connect(user).addExperiences(encodedExperiences)
+        // await transaction.wait()
 
-        transaction = await userprofilemanager.connect(user).addProjects(encodedProjects)
-        await transaction.wait()
+        // transaction = await userprofilemanager.connect(user).addProjects(encodedProjects)
+        // await transaction.wait()
 
-        transaction = await userprofilemanager.connect(user).addAchievements(encodedAchievements)
-        await transaction.wait()
+        // transaction = await userprofilemanager.connect(user).addAchievements(encodedAchievements)
+        // await transaction.wait()
 
-        transaction = await userprofilemanager.connect(user).addEndorsements(encodedEndorsements)
-        await transaction.wait()
+        // transaction = await userprofilemanager.connect(user).addEndorsements(encodedEndorsements)
+        // await transaction.wait()
 
-        transaction = await userprofilemanager.connect(user).addClaims(encodedClaims)
-        await transaction.wait()
+        // transaction = await userprofilemanager.connect(user).addClaims(encodedClaims)
+        // await transaction.wait()
     })
 
     describe("Check Profile Details", function () {
