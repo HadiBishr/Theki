@@ -14,7 +14,7 @@ const hre = require("hardhat")
 const profile1 = {
     name: 'Hadi',
     technicalSkills: [
-        { skillName: 'JavaScript', experience: 2, verified: false }, // Changed from NLP to JavaScript
+        { skillName: 'Javascript', experience: 2, verified: false }, // Changed from NLP to JavaScript
         { skillName: 'React', experience: 1, verified: true } // Changed from Machine Learning to React
     ],
     softSkills: [
@@ -186,69 +186,26 @@ async function main() {
 
             profileManagerWithSigner = userprofilemanager.connect(user)
 
-            const target = []
             const data = []
 
-            // Add createBaseProfile function call
-            target.push(userprofilemanager.address)
-            data.push(profileManagerWithSigner.interface.encodeFunctionData(
-                "createBaseProfile",
-                [profile1.name]
-            ))
+            const sections = [
+                {functionName: "createBaseProfile", args: [profile1.name]},
+                {functionName: "addTechnicalSkills", args: [encodedTechnicalSkills]},
+                {functionName: "addSoftSkills", args: [encodedSoftSkills]},
+                {functionName: "addExperiences", args: [encodedExperiences]},
+                {functionName: "addProjects", args: [encodedProjects]},
+                {functionName: "addAchievements", args: [encodedAchievements]},
+                {functionName: "addEndorsements", args: [encodedEndorsements]},
+                {functionName: "addClaims", args: [encodedClaims]}
+            ]
 
+            sections.forEach((section) => {
+                data.push(userprofilemanager.interface.encodeFunctionData(section.functionName, section.args))
+            })
 
-            // Add addTechnicalSkills function call
-            target.push(userprofilemanager.address)
-            data.push(profileManagerWithSigner.interface.encodeFunctionData(
-                "addTechnicalSkills",
-                [encodedTechnicalSkills]
-            ))
+    
 
-            // Add addSoftSkills function call
-            target.push(userprofilemanager.address)
-            data.push(profileManagerWithSigner.interface.encodeFunctionData(
-                "addSoftSkills",
-                [encodedSoftSkills]
-            ))
-
-            // Add addExperiences function call
-            target.push(userprofilemanager.address)
-            data.push(profileManagerWithSigner.interface.encodeFunctionData(
-                "addExperiences",
-                [encodedExperiences]
-            ))
-
-            // Add addProjects function call
-            target.push(userprofilemanager.address)
-            data.push(profileManagerWithSigner.interface.encodeFunctionData(
-                "addProjects",
-                [encodedProjects]
-            ))
-
-            // Add addAchievements function call
-            target.push(userprofilemanager.address)
-            data.push(profileManagerWithSigner.interface.encodeFunctionData(
-                "addAchievements",
-                [encodedAchievements]
-            ))
-
-            // Add addEndorsements function call
-            target.push(userprofilemanager.address)
-            data.push(profileManagerWithSigner.interface.encodeFunctionData(
-                "addEndorsements",
-                [encodedEndorsements]
-            ))
-
-            // Add addClaims function call
-            target.push(userprofilemanager.address)
-            data.push(profileManagerWithSigner.interface.encodeFunctionData(
-                "addClaims",
-                [encodedClaims]
-            ))
-
-
-            const multiCallContractWithSigner = multicall.connect(user)
-            let transaction = await multiCallContractWithSigner.multiCall(target, data)
+            let transaction = await userprofilemanager.connect(user).multiCall(data)
             await transaction.wait()
 
 

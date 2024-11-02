@@ -71,7 +71,7 @@ function App() {
         setAccount(account) 
         console.log(`Account: ${account}`)
         
-
+        // localStorage.setItem("isWalletConnected", "true")
 
 
       } catch (error) {
@@ -93,6 +93,8 @@ function App() {
     setAccount(null);
     setProvider(null);
     setSigner(null);
+
+    // localStorage.removeItem("isWalletConnected")
   };
 
 
@@ -224,6 +226,26 @@ function App() {
     if (!provider || !signer) {
       console.error('Provider or signer is not initialized yet');
     }
+
+    // const isWalletConnected = localStorage.getItem("isWalletConnected")
+    // if (isWalletConnected === 'true') {
+    //   connectWallet()
+    // }
+
+    // if (window.ethereum) {
+    //   window.ethereum.on("accountsChanged", (accounts) => {
+    //     if (accounts.length === 0) {
+    //       // User disconnected their  wallet
+    //       disconnectWallet()
+    //     } else {
+    //       setAccount(accounts[0])
+    //     }
+    //   })
+    // }
+
+    // window.ethereum.on("disconnect", () => {
+    //   disconnectWallet();
+    // });
 
     if (account && signer) {
       loadBlockchainData()

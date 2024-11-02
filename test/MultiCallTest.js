@@ -1,11 +1,11 @@
-const { expect } = require("chai")
+const { expect } = require("chai");
+const { ethers } = require("hardhat");
 
 
 describe("MultiCallTest", function () {
 
     let multicall, multicalltest    
     let deployer, user
-    let transaction
 
     beforeEach(async () => {
 
@@ -21,21 +21,23 @@ describe("MultiCallTest", function () {
         await multicalltest.deployed()
 
 
-        target = []
-        data = []
-
-
-        target.push(multicalltest.address)
-        data.push(multicalltest.interface.encodeFunctionData("test", [1]))
-
-        transaction = await multicall.connect(user).multiCall(target, data)
-        await transaction.wait()
 
     })
 
-    it("Check if it worked", async () => {
-        const result = await multicalltest.getNumber(1)     // Await the promise to get the actual value
-        expect(result.toNumber()).to.equal(1)  
+    it("should call multiple functions and return results", async () => {
+
+
+        const setValueData = multicalltest.interface.encodeFunctionData("setValue", [100])
+        
+        const data = [setValueData]
+
+
+        // Perfrom the multi-call using the deployer
+        await multicalltest.connect(user).multiCall(data)
+        // await transaction.wait()
+
+        const result = await multicalltest.mappingValue(user.address)     // Await the promise to get the actual value
+        expect(result.toNumber()).to.equal(100)  
     })
 
 })

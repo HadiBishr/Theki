@@ -56,6 +56,7 @@ contract UserProfileManager {
     struct UserProfile {
         uint256 id;                     // A unique id for a user
         string name;                    // Name of user
+        address user;                   // Address of User
         Skill[] technicalSkills;        // A list of all technical skills a user has
         Skill[] softSkills;             // A list of all soft skills a user has
         Experience[] experiences;       // A list of all experiences a user has
@@ -80,6 +81,7 @@ contract UserProfileManager {
         UserProfile storage profile = userProfiles[msg.sender];
         profile.name = _name;
         profile.id = userCounter;
+        profile.user = msg.sender;
         profileExists[msg.sender] = true;
     }
 
@@ -229,12 +231,39 @@ contract UserProfileManager {
     }
 
 
-
+    
 
     
 
     function getUserProfile(address _address) public view returns (UserProfile memory) {
         return userProfiles[_address];
+    }
+
+
+    function verify() public {
+        null;
+    }
+
+
+
+    // Function to execture multiple calls in a single transaction
+    function multiCall(bytes[] calldata data) external returns (bytes[] memory returnData) {
+
+
+        returnData = new bytes[](data.length);
+
+        // address originalCaller = msg.sender;
+
+        for (uint256 i = 0; i < data.length; i++) {
+
+            // bytes memory updatedCallData = abi.encodePacked(originalCaller, calls[i].callData);
+
+            // Using .call() to make eternal calls to other calls
+            (bool success, bytes memory result) = address(this).delegatecall(data[i]);
+            require(success, "call failed"); // Revert the transaction if any call fails
+            returnData[i] = result;
+        }
+
     }
 
 

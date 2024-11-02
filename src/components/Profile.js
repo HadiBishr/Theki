@@ -229,33 +229,49 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
 
         const profileContract = profileManagerContract.connect(signer)
 
-
+        const data = []
         
+        const sections = [
+            {functionName: "createBaseProfile", args: [profile.name]},
+            {functionName: "addTechnicalSkills", args: [encodedProfile.technicalSkills]},
+            {functionName: "addSoftSkills", args: [encodedProfile.softSkills]},
+            {functionName: "addExperiences", args: [encodedProfile.experiences]},
+            {functionName: "addProjects", args: [encodedProfile.projects]},
+            {functionName: "addAchievements", args: [encodedProfile.achievements]},
+            {functionName: "addEndorsements", args: [encodedProfile.endorsements]},
+            {functionName: "addClaims", args: [encodedProfile.claims]}
+        ]
 
+        sections.forEach((section) => {
+            data.push(profileManagerContract.interface.encodeFunctionData(section.functionName, section.args))
+        })
 
-        var transaction = await profileContract.createBaseProfile(profile.name)
+        var transaction = await profileManagerContract.connect(signer).multiCall(data)
         await transaction.wait()
 
-        transaction = await profileContract.addTechnicalSkills(encodedProfile.technicalSkills)
-        await transaction.wait()
+        // var transaction = await profileContract.createBaseProfile(profile.name)
+        // await transaction.wait()
 
-        transaction = await profileContract.addSoftSkills(encodedProfile.softSkills)
-        await transaction.wait()
+        // transaction = await profileContract.addTechnicalSkills(encodedProfile.technicalSkills)
+        // await transaction.wait()
 
-        transaction = await profileContract.addExperiences(encodedProfile.experiences)
-        await transaction.wait()
+        // transaction = await profileContract.addSoftSkills(encodedProfile.softSkills)
+        // await transaction.wait()
 
-        transaction = await profileContract.addProjects(encodedProfile.projects)
-        await transaction.wait()
+        // transaction = await profileContract.addExperiences(encodedProfile.experiences)
+        // await transaction.wait()
 
-        transaction = await profileContract.addAchievements(encodedProfile.achievements)
-        await transaction.wait()
+        // transaction = await profileContract.addProjects(encodedProfile.projects)
+        // await transaction.wait()
 
-        transaction = await profileContract.addEndorsements(encodedProfile.endorsements)
-        await transaction.wait()
+        // transaction = await profileContract.addAchievements(encodedProfile.achievements)
+        // await transaction.wait()
 
-        transaction = await profileContract.addClaims(encodedProfile.claims)
-        await transaction.wait()
+        // transaction = await profileContract.addEndorsements(encodedProfile.endorsements)
+        // await transaction.wait()
+
+        // transaction = await profileContract.addClaims(encodedProfile.claims)
+        // await transaction.wait()
 
 
         // Refresh the page to show updated profile data

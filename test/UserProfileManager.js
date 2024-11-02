@@ -3,7 +3,7 @@ const { expect } = require("chai")
 const profile1 = {
     name: 'Hadi',
     technicalSkills: [
-        { skillName: 'JavaScript', experience: 2, verified: false }, // Changed from NLP to JavaScript
+        { skillName: 'Python', experience: 2, verified: false }, // Changed from NLP to JavaScript
         { skillName: 'React', experience: 1, verified: true } // Changed from Machine Learning to React
     ],
     softSkills: [
@@ -149,7 +149,6 @@ describe("UserProfileManager", function () {
         await multicall.deployed()
 
 
-        target = []
         data = []
 
 
@@ -167,7 +166,6 @@ describe("UserProfileManager", function () {
 
         sections.forEach((section) => {
             try {
-                target.push(userprofilemanager.address)
                 data.push(userprofilemanager.interface.encodeFunctionData(section.functionName, section.args))
             } catch (error) {
                 console.error(`Encoding failed for ${section.functionName}: `, error)
@@ -177,7 +175,7 @@ describe("UserProfileManager", function () {
         
 
         try {
-            let transaction = await multicall.connect(user).multiCall(target, data)
+            let transaction = await userprofilemanager.connect(user).multiCall(data)
             await transaction.wait()
 
             console.log('transaction successfull')
@@ -242,7 +240,7 @@ describe("UserProfileManager", function () {
             const all_technical_skills = await userprofile.technicalSkills
             const technical_skill = await userprofile.technicalSkills[0]
 
-            expect(technical_skill.skillName).to.equal('JavaScript')
+            expect(technical_skill.skillName).to.equal('Python')
             expect(all_technical_skills.length).to.equal(2) // This is equal to 2 becuse we have two technical skills as shown in the profile variable
 
         })
