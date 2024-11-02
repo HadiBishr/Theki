@@ -240,9 +240,9 @@ contract UserProfileManager {
     }
 
 
-    function verify() public {
-        null;
-    }
+    // function verify() public {
+    //     null;
+    // }
 
 
 

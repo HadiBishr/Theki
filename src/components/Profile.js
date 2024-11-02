@@ -51,18 +51,18 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
 
 
 
-    // Encode achievements
-    const encodedAchievements = profile.achievements.map((achievement) => {
-        return ethers.utils.defaultAbiCoder.encode(
-            ["string", "string", "string", "bool"],
-            [
-                achievement.content,
-                achievement.industry,
-                achievement.skill,
-                achievement.verified
-            ]
-        );
-    });
+    // // Encode achievements
+    // const encodedAchievements = profile.achievements.map((achievement) => {
+    //     return ethers.utils.defaultAbiCoder.encode(
+    //         ["string", "string", "string", "bool"],
+    //         [
+    //             achievement.content,
+    //             achievement.industry,
+    //             achievement.skill,
+    //             achievement.verified
+    //         ]
+    //     );
+    // });
 
     // const encodedSection = (schema, data, schemaOrder) => {
     //     return data.map((item) => 
@@ -249,41 +249,13 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
         var transaction = await profileManagerContract.connect(signer).multiCall(data)
         await transaction.wait()
 
-        // var transaction = await profileContract.createBaseProfile(profile.name)
-        // await transaction.wait()
-
-        // transaction = await profileContract.addTechnicalSkills(encodedProfile.technicalSkills)
-        // await transaction.wait()
-
-        // transaction = await profileContract.addSoftSkills(encodedProfile.softSkills)
-        // await transaction.wait()
-
-        // transaction = await profileContract.addExperiences(encodedProfile.experiences)
-        // await transaction.wait()
-
-        // transaction = await profileContract.addProjects(encodedProfile.projects)
-        // await transaction.wait()
-
-        // transaction = await profileContract.addAchievements(encodedProfile.achievements)
-        // await transaction.wait()
-
-        // transaction = await profileContract.addEndorsements(encodedProfile.endorsements)
-        // await transaction.wait()
-
-        // transaction = await profileContract.addClaims(encodedProfile.claims)
-        // await transaction.wait()
-
-
         // Refresh the page to show updated profile data
         window.localStorage.clear();
         window.location.reload();
         
     }
 
-    // async function resetBlockchain() {
-    //     console.log("Does this exist", network.provider)
-    //     await network.provider.send("hardhat_reset");
-    // }
+ 
 
 
     // data is the data itself from the blockchain.
@@ -315,6 +287,9 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
                                                         ? <a href={item[field.key]} target="_blank" rel="noopener noreferrer" className='project-link'>{item[field.key]}</a> 
                                                         : item[field.key]
                                         )}
+
+                                        <button>Verify</button>
+
                                         <br />
                                     </div>
                                 ))} 
