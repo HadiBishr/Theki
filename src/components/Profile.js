@@ -1,6 +1,8 @@
 import './css/Profile.css'
 import {useState} from 'react';
 import { ethers } from 'ethers';
+import { Link, useLocation } from 'react-router-dom'; // To link to the user profile page
+
 
 import '../index.css'
 
@@ -276,8 +278,26 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
                                     <div key={fieldIndex}>
                                         <strong>{field.label}</strong> {field.isBoolean ? (                                 // All the conditions here is to deal with the different types of objects that this data might have. Could be arrays, or ints which have to be converted to a string. Also displaying something verified.  
                                             <span className={item[field.key] ? 'verified-status' : 'not-verified-status'}> 
-                                                {item[field.key] ? ('Yes') : ('No')} 
+                                                {item[field.key] ? ('Yes') : (
+                                                    <>
+                                                        No
+                                                        < Link 
+                                                            to="/emailform"
+                                                            state={{ title: title }}    
+                                                        >
+                                                            <button >Verify</button>
+                                                        </Link>
+                                                    </>
+                                                   
+                                                    
+                                                )} 
+
+                                                
                                             </span>
+
+                                            
+
+
                                         ) : (
                                             Array.isArray(item[field.key])  // This checks if the specific field is an array since we have many arrays. 
                                                 ? item[field.key].join(', ') // This exeutes if array is true 
@@ -288,7 +308,9 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
                                                         : item[field.key]
                                         )}
 
-                                        <button>Verify</button>
+
+                                        
+                                        
 
                                         <br />
                                     </div>

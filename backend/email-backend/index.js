@@ -15,6 +15,14 @@ app.use(express.json())
 app.use(cors())                                     // Allow frontend requests
 
 
+const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+    },
+})
+
 
 app.post('/send-email', async (req, res) => {
     const { to, subject, text } = req.body
@@ -23,20 +31,18 @@ app.post('/send-email', async (req, res) => {
         return res.status(400).send("Missing required fields")
     }
 
-    let transporter = nodemailer.createTransport({
-        service: "Gmail",
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    })
+    const confirmationLink = `http://127.0.0.1:5000/api/confirm-email?email=${encodeURIComponent(to)}`
 
     // Define email options
     let mailOptions = {
         from: process.env.EMAIL_USER, // Sender address
         to: to, // Recipient address
         subject: subject, // Subject line
-        text: text, // Plain text body
+        html: `
+        
+            <p>Please click the link below to confirm claim</p>
+            <a href="${confirmationLink}">Confirm Email</a>
+        `
     };
 
     // Send the email
@@ -50,7 +56,7 @@ app.post('/send-email', async (req, res) => {
 })
 
 // Start the server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

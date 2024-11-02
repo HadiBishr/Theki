@@ -139,6 +139,11 @@
             "type": "string"
           },
           {
+            "internalType": "address",
+            "name": "user",
+            "type": "address"
+          },
+          {
             "components": [
               {
                 "internalType": "string",
@@ -411,6 +416,11 @@
         "internalType": "string",
         "name": "name",
         "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
