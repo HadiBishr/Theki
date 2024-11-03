@@ -6,6 +6,7 @@ import { useNavigate, useLocation} from 'react-router-dom'; // To link to the us
 const EmailForm =  () => {
     const location = useLocation()
     const title = location.state?.title
+    const account = location.state?.account
 
     const [email, setEmail] = useState('')
     const [message, setMessage] = useState('')
@@ -13,7 +14,7 @@ const EmailForm =  () => {
     const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
-        e.preventDefault()          // Prevent the default submission
+        e.preventDefault()          // Prevent the default submission if the event does not get handled properly. 
 
         try {
             const response = await fetch('http://localhost:5001/send-email', {
@@ -21,6 +22,7 @@ const EmailForm =  () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     to: email,
+                    from: account,
                     subject: "Verifying Profile",
                     text: message
                 })
@@ -28,13 +30,10 @@ const EmailForm =  () => {
 
             if (response.ok) {
                 setStatusMessage('Email sent successfully')
-                alert(statusMessage)
             } else {
                 setStatusMessage('Failed to send email. Please try again')
             }
-            
-
-            navigate('/profile')
+        
         } catch (error) {
             console.error('Error:', error)
             setStatusMessage('An error occured. Please check the console for details')
@@ -70,7 +69,7 @@ const EmailForm =  () => {
 
 
          
-                    <button type="submit">Send Verification</button>
+                <button type="submit">Send Verification</button>
                 
 
                 

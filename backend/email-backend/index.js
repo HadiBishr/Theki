@@ -25,23 +25,24 @@ const transporter = nodemailer.createTransport({
 
 
 app.post('/send-email', async (req, res) => {
-    const { to, subject, text } = req.body
+    const { to, subject, text, from } = req.body
 
     if (!to || !subject || !text) {
         return res.status(400).send("Missing required fields")
     }
 
-    const confirmationLink = `http://127.0.0.1:5000/api/confirm-email?email=${encodeURIComponent(to)}`
+    // Set up the confirmation link (for now it is just a localhost link)
+    const confirmationLink = `http://127.0.0.1:5001/confirm-email?email_verifier=${encodeURIComponent(to)}&from=${encodeURIComponent(from)}`  // We encode it so that there are no issues because some issues may arise when you use @. Anything after ? in the url are query parameters, or in other words like variables. 
 
     // Define email options
     let mailOptions = {
-        from: process.env.EMAIL_USER, // Sender address
+        from: process.env.EMAIL_USER, // Sender address. This will stay constant between users because 
         to: to, // Recipient address
         subject: subject, // Subject line
         html: `
-        
+            <p>You have a verification request from wallet address: <strong>${from}</strong></p>
             <p>Please click the link below to confirm claim</p>
-            <a href="${confirmationLink}">Confirm Email</a>
+            <a href="${confirmationLink}">Confirm Profile</a>
         `
     };
 
@@ -53,6 +54,17 @@ app.post('/send-email', async (req, res) => {
         console.error('Error sending email:', error);
         res.status(500).send('Failed to send email');
     }
+})
+
+// This is basically once the user lands on the /confirm-email, it runs the following. 
+app.get('/confirm-email', (req, res) => {
+    const { email_verifiern, from } = req.query             // req.query grabs any query parameters that are part of the URL. Specifically the ones that come after the ? symbol. 
+
+    // Log confirmationto the console
+    console.log(`Email confirmed for: ${email_verifier}`)
+
+    // Respond with a simple message
+    res.json({ success: true, message: `Claim Confirmed` })
 })
 
 // Start the server

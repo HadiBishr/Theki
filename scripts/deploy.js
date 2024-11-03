@@ -210,30 +210,6 @@ async function main() {
 
 
 
-            // var transaction = await userprofilemanager.connect(user).createBaseProfile(profile1.name);
-            // await transaction.wait()
-
-
-            // transaction = await userprofilemanager.connect(user).addTechnicalSkills(encodedTechnicalSkills)
-            // await transaction.wait()
-
-            // transaction = await userprofilemanager.connect(user).addSoftSkills(encodedSoftSkills)
-            // await transaction.wait()
-
-            // transaction = await userprofilemanager.connect(user).addExperiences(encodedExperiences)
-            // await transaction.wait()
-
-            // transaction = await userprofilemanager.connect(user).addProjects(encodedProjects)
-            // await transaction.wait()
-
-            // transaction = await userprofilemanager.connect(user).addAchievements(encodedAchievements)
-            // await transaction.wait()
-
-            // transaction = await userprofilemanager.connect(user).addEndorsements(encodedEndorsements)
-            // await transaction.wait()
-
-            // transaction = await userprofilemanager.connect(user).addClaims(encodedClaims)
-            // await transaction.wait()
 
             console.log("User profile created");
         } catch (error) {
