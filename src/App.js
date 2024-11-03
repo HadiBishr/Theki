@@ -307,7 +307,7 @@ function App() {
         />
 
         <Route 
-          path="/emailform"
+          path="/email-form"
           element={
             <EmailForm/>
           }

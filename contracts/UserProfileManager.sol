@@ -240,9 +240,14 @@ contract UserProfileManager {
     }
 
 
-    // function verify() public {
-    //     null;
-    // }
+    function verify(address _user, string memory _key, uint256 _index) public {
+        require(msg.sender != _user, "User can not be the same");
+        require(profileExists[_user], "This Profile Does Not Exist");
+
+        UserProfile storage profile = userProfiles[_user];
+
+        profile[_key][_index].verified = true;
+    }
 
 
 

@@ -170,12 +170,12 @@ async function main() {
 
     console.log(`JobManager contract deployed ${jobmanager.address}\n`)
 
-    // Deploy MultiCall contract
-    const MultiCall = await hre.ethers.getContractFactory("MultiCall", deployer)
-    multicall = await MultiCall.deploy({gasLimit: 30000000})
-    await multicall.deployed()
+    // // Deploy MultiCall contract
+    // const MultiCall = await hre.ethers.getContractFactory("MultiCall", deployer)
+    // multicall = await MultiCall.deploy({gasLimit: 30000000})
+    // await multicall.deployed()
 
-    console.log(`MultiCall contract deployed ${multicall.address}\n` )
+    // console.log(`MultiCall contract deployed ${multicall.address}\n` )
 
 
     

@@ -1,7 +1,11 @@
 const express = require('express')                  // A lightweight framework to create a web server and handle HTTP requests.
 const nodemailer = require('nodemailer')            // A library that simplifies sending emails through various SMTP providers.
 const dotenv = require('dotenv')                    // A module to load environment variables from a .env file. This helps keep sensitive information, like email credentials, outside the codebase.
-const cors = require('cors')                        // A middleware that allows Cross-Origin Resource Sharing, enabling the backend to handle requests from a different domain or port (useful for API endpoints accessed from a frontend on another server).
+const cors = require('cors')                        // A middleware that allows Cross-Origin Resource Sharing, enabling the backend to handle requests from a different domain or port (useful for API endpoints accessed from a frontend on another server).\
+const { ethers } = require('ethers')
+
+import UserProfileManagerABI from '../../src/abis/UserProfileManager.json'
+
 
 
 
@@ -23,16 +27,25 @@ const transporter = nodemailer.createTransport({
     },
 })
 
+const provider = new ethers.providers.JsonRpcProvider(process.env.BLOCKCHAIN_RPC_UR)
+const privateKey = process.env.PRIVATE_KEY
+
+const wallet = new ethers.Wallet(privateKey, provider)
+
+// Contract Details
+const contractAddress = process.env.CONTRACT_ADDRESS    
+const contract = new ethers.Contract(contractAddress, UserProfileManagerABI, wallet)
+
 
 app.post('/send-email', async (req, res) => {
-    const { to, subject, text, from } = req.body
+    const { to, subject, text, from } = req.body            // to will be in the format of an email, and from will be the address of the user. 
 
     if (!to || !subject || !text) {
         return res.status(400).send("Missing required fields")
     }
 
     // Set up the confirmation link (for now it is just a localhost link)
-    const confirmationLink = `http://127.0.0.1:5001/confirm-email?email_verifier=${encodeURIComponent(to)}&from=${encodeURIComponent(from)}`  // We encode it so that there are no issues because some issues may arise when you use @. Anything after ? in the url are query parameters, or in other words like variables. 
+    const confirmationLink = `http://127.0.0.1:3000/confirm-email?email_verifier=${encodeURIComponent(to)}&from=${from}`  // We encode it so that there are no issues because some issues may arise when you use @. Anything after ? in the url are query parameters, or in other words like variables. 
 
     // Define email options
     let mailOptions = {
@@ -57,11 +70,15 @@ app.post('/send-email', async (req, res) => {
 })
 
 // This is basically once the user lands on the /confirm-email, it runs the following. 
-app.get('/confirm-email', (req, res) => {
-    const { email_verifiern, from } = req.query             // req.query grabs any query parameters that are part of the URL. Specifically the ones that come after the ? symbol. 
+app.get('/confirm-email', (req, res) => {                   // res (response) manages the response back to the client
+    const { email_verifier, from } = req.query             // req.query grabs any query parameters that are part of the URL. Specifically the ones that come after the ? symbol. 
+
+    try {
+        const transaction = await contract.
+    }
 
     // Log confirmationto the console
-    console.log(`Email confirmed for: ${email_verifier}`)
+    console.log(`Verifying user profile for  ${from}`)
 
     // Respond with a simple message
     res.json({ success: true, message: `Claim Confirmed` })
