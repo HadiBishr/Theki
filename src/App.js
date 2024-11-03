@@ -10,6 +10,7 @@ import Dashboard from './components/Dashboard'
 import VerifyClaim from './components/VerifyClaim'
 import Job from './components/Job'
 import Profile from './components/Profile'
+import EmailForm from './components/EmailForm'
 
 // ABIS
 import ThekiTokenABI from './abis/ThekiToken.json'
@@ -227,26 +228,6 @@ function App() {
       console.error('Provider or signer is not initialized yet');
     }
 
-    // const isWalletConnected = localStorage.getItem("isWalletConnected")
-    // if (isWalletConnected === 'true') {
-    //   connectWallet()
-    // }
-
-    // if (window.ethereum) {
-    //   window.ethereum.on("accountsChanged", (accounts) => {
-    //     if (accounts.length === 0) {
-    //       // User disconnected their  wallet
-    //       disconnectWallet()
-    //     } else {
-    //       setAccount(accounts[0])
-    //     }
-    //   })
-    // }
-
-    // window.ethereum.on("disconnect", () => {
-    //   disconnectWallet();
-    // });
-
     if (account && signer) {
       loadBlockchainData()
     }
@@ -323,6 +304,13 @@ function App() {
 
           
         
+        />
+
+        <Route 
+          path="/email-form"
+          element={
+            <EmailForm/>
+          }
         />
 
 

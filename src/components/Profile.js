@@ -1,6 +1,8 @@
 import './css/Profile.css'
 import {useState} from 'react';
 import { ethers } from 'ethers';
+import { Link, useLocation } from 'react-router-dom'; // To link to the user profile page
+
 
 import '../index.css'
 
@@ -274,21 +276,57 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
 
                                 {fields.map((field, fieldIndex) => (
                                     <div key={fieldIndex}>
-                                        <strong>{field.label}</strong> {field.isBoolean ? (                                 // All the conditions here is to deal with the different types of objects that this data might have. Could be arrays, or ints which have to be converted to a string. Also displaying something verified.  
-                                            <span className={item[field.key] ? 'verified-status' : 'not-verified-status'}> 
-                                                {item[field.key] ? ('Yes') : ('No')} 
-                                            </span>
-                                        ) : (
-                                            Array.isArray(item[field.key])  // This checks if the specific field is an array since we have many arrays. 
-                                                ? item[field.key].join(', ') // This exeutes if array is true 
-                                                : typeof item[field.key] === 'object' && item[field.key]._isBigNumber  // If false execute another if statement
-                                                    ? item[field.key].toString()
-                                                    : field.isLink 
-                                                        ? <a href={item[field.key]} target="_blank" rel="noopener noreferrer" className='project-link'>{item[field.key]}</a> 
-                                                        : item[field.key]
-                                        )}
+                                        <strong>{field.label}</strong> 
+                                        
+                                        {/* The below code deals with how to show different types of data */}
+                                        {(() => {
+                                            if (field.isBoolean) {
+                                                return (
+                                                    <span className={item[field.key] ? 'verified-status' : 'not-verified-status'}> 
+                                                        {item[field.key] ? ('Yes') : (
+                                                        <>
+                                                            No
+                                                            <Link 
+                                                                to="/email-form"
+                                                                state={{ title: title, account: account }}    
+                                                            >
+                                                                <button >Verify</button>
+                                                            </Link>
+                                                        </>
+                                                   
+                                                    
+                                                        )} 
 
-                                        <button>Verify</button>
+                                                
+                                                    </span>
+                                                )
+                                            }
+
+                                            // Check if the field is an array
+                                            else if (Array.isArray(item[field.key])) {
+                                                return item[field.key].join(', ')
+                                            }
+
+                                            // Check if the field is a BigNumber Object
+                                            else if (typeof item[field.key] === 'object' && item[field.key]._isBigNumber) {
+                                                return item[field.key].toString()
+                                            }
+
+                                            // Check if the field should be displayed as a link
+                                            else if (field.isLink) {
+                                                return <a href={item[field.key]} target="_blank" rel="noopener noreferrer" className='project-link'>{item[field.key]}</a> 
+                                            }
+
+                                            // Default case: display the value as is
+                                            else {
+                                                return item[field.key]  
+                                            }
+                                        })()}
+
+                                        
+                                
+                                        
+                                        
 
                                         <br />
                                     </div>

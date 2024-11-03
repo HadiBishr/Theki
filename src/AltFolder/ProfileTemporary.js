@@ -287,3 +287,41 @@
 
 
 
+  {/* {field.isBoolean ? (                                 // All the conditions here is to deal with the different types of objects that this data might have. Could be arrays, or ints which have to be converted to a string. Also displaying something verified.  
+                                            <span className={item[field.key] ? 'verified-status' : 'not-verified-status'}> 
+                                                {item[field.key] ? ('Yes') : (
+                                                    <>
+                                                        No
+                                                        < Link 
+                                                            to="/emailform"
+                                                            state={{ title: title }}    
+                                                        >
+                                                            <button >Verify</button>
+                                                        </Link>
+                                                    </>
+                                                   
+                                                    
+                                                )} 
+
+                                                
+                                            </span>
+
+                                            
+
+
+                                        ) : (
+
+                                            
+                                            
+                                            
+                                            // } 
+                                            // }
+
+                                            Array.isArray(item[field.key])  // This checks if the specific field is an array since we have many arrays. 
+                                                ? item[field.key].join(', ') // This exeutes if array is true 
+                                                : typeof item[field.key] === 'object' && item[field.key]._isBigNumber  // If false execute another if statement
+                                                    ? item[field.key].toString()
+                                                    : field.isLink 
+                                                        ? <a href={item[field.key]} target="_blank" rel="noopener noreferrer" className='project-link'>{item[field.key]}</a> 
+                                                        : item[field.key]
+                                        )} */}
