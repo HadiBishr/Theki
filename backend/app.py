@@ -1,9 +1,3 @@
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
-
-warnings.filterwarnings("ignore", message=".*beta.*")
-warnings.filterwarnings("ignore", message=".*gamma.*")
-
 # Import Necessary Libraries
 import torch
 import logging
@@ -28,28 +22,43 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Helper functions for calculating embeddings and similarity
 def get_bert_embedding(text):
+    # Check if the embedding is already cached, if so, return it to save computation
     if text in embedding_cache:
         return embedding_cache[text]
     else:
+        # Tokenize input text and pass through BERT model to get embeddings
         inputs = tokenizer(text, return_tensors='pt', truncation=True, max_length=512)
         outputs = bert_model(**inputs)
-        embedding = outputs.pooler_output
-        embedding_cache[text] = embedding
+        embedding = outputs.pooler_output  # Extract the pooled output from BERT
+        embedding_cache[text] = embedding  # Cache the embedding for future use
         return embedding
 
 def calculate_similarity(text1, text2):
+    # Get embeddings for both text inputs
     embedding1 = get_bert_embedding(text1)
     embedding2 = get_bert_embedding(text2)
+    # Calculate cosine similarity between the two embeddings
     similarity = torch.nn.functional.cosine_similarity(embedding1, embedding2)
-    return max(0, similarity.item()) if similarity.item() > 0.5 else 0  # Set threshold
+    similarity_value = similarity.item()  # Convert the tensor to a scalar value
+
+    # Apply soft threshold using a sigmoid function to smooth similarity values
+    def sigmoid(x, alpha=10):
+        return 1 / (1 + np.exp(-alpha * (x)))
+    
+    # Return the sigmoid value to smoothly scale the similarity
+    return sigmoid(similarity_value)
 
 def experience_similarity(prof_exp, job_exp):
+    # If professional's experience is greater than or equal to job requirement, calculate a boosted score
     if prof_exp >= job_exp:
-        return 1.0  # Full score
+        # Reward additional experience with a diminishing return factor to avoid runaway scoring
+        return 1.0 + np.log1p(prof_exp - job_exp) / np.log1p(job_exp + 1)
     else:
+        # Otherwise, return a partial score proportional to experience
         return prof_exp / job_exp  # Partial score
 
 def apply_verification_weight(score, verified, verification_boost=0.2):
+    # Increase the score if the information has been verified
     return score * (1 + verification_boost) if verified else score
 
 # Theki Score Calculation Function
@@ -65,22 +74,24 @@ def calculate_theki_score(profile, job, category_weights):
     skill_score = 0
     max_skill_score = len(job['qualifications']['technical_skills']) + len(job['qualifications']['soft_skills'])
     
-    # Technical Skills
+    # Technical Skills Matching
     for job_skill in job['qualifications']['technical_skills']:
         best_match = 0
         for prof_skill in profile['technical_skills']:
+            # Calculate similarity and apply verification weight if applicable
             similarity = calculate_similarity(prof_skill['skill'], job_skill['skill'])
             similarity = apply_verification_weight(similarity, prof_skill['verified'])
             exp_similarity = experience_similarity(prof_skill['experience'], job_skill['experience'])
-            total_similarity = similarity * exp_similarity
+            total_similarity = similarity * exp_similarity  # Combine similarity with experience match
             if total_similarity > best_match:
-                best_match = total_similarity
+                best_match = total_similarity  # Update best match if current match is better
         skill_score += best_match
 
-    # Soft Skills
+    # Soft Skills Matching
     for job_skill in job['qualifications']['soft_skills']:
         best_match = 0
         for prof_skill in profile['soft_skills']:
+            # Calculate similarity for soft skills
             similarity = calculate_similarity(prof_skill['skill'], job_skill['skill'])
             similarity = apply_verification_weight(similarity, prof_skill['verified'])
             exp_similarity = experience_similarity(prof_skill['experience'], job_skill['experience'])
@@ -100,6 +111,7 @@ def calculate_theki_score(profile, job, category_weights):
     for job_exp in job['qualifications']['experiences']:
         best_match = 0
         for prof_exp in profile['experiences']:
+            # Calculate industry similarity and apply verification weight
             industry_similarity = calculate_similarity(prof_exp['industry'], job_exp['industry'])
             industry_similarity = apply_verification_weight(industry_similarity, prof_exp['verified'])
             duration_similarity = experience_similarity(prof_exp['experience'], job_exp['experience'])
@@ -119,6 +131,7 @@ def calculate_theki_score(profile, job, category_weights):
     for job_proj in job['qualifications']['projects']:
         best_match = 0
         for prof_proj in profile['projects']:
+            # Calculate average similarity for skills and tools used in projects
             skills_similarity = np.mean([calculate_similarity(skill, job_skill)
                                          for skill in prof_proj['skills_applied']
                                          for job_skill in job_proj['skills_applied']])
@@ -142,6 +155,7 @@ def calculate_theki_score(profile, job, category_weights):
     for job_ach in job['qualifications']['achievements']:
         best_match = 0
         for prof_ach in profile['achievements']:
+            # Check for type match and calculate industry and skill similarity
             type_match = 1.0 if prof_ach['content'] == job_ach['content'] else 0.0
             industry_similarity = calculate_similarity(prof_ach['industry'], job_ach['industry'])
             skill_similarity = calculate_similarity(prof_ach['skill'], job_ach['skill'])
@@ -162,6 +176,7 @@ def calculate_theki_score(profile, job, category_weights):
     for job_end in job['qualifications']['endorsements']:
         best_match = 0
         for prof_end in profile['endorsements']:
+            # Calculate similarity for related skills in endorsements
             skills_similarity = np.mean([calculate_similarity(skill, job_skill)
                                          for skill in prof_end['skills_related']
                                          for job_skill in job_end['skills_related']])
@@ -178,15 +193,40 @@ def calculate_theki_score(profile, job, category_weights):
 
     # Claims Matching
     claim_score = 0
-    max_claim_score = len(job['qualifications'].get('claims', []))
-    for job_claim in job['qualifications'].get('claims', []):
-        best_match = 0
-        for prof_claim in profile['claims']:
-            similarity = calculate_similarity(prof_claim['content'], job_claim['content'])
-            similarity = apply_verification_weight(similarity, prof_claim['verified'])
-            if similarity > best_match:
-                best_match = similarity
-        claim_score += best_match
+    max_claim_score = len(profile['claims'])  # Maximum score is based on the number of claims made by the professional
+
+    for prof_claim in profile['claims']:
+        # Vectorize the claim
+        claim_embedding = get_bert_embedding(prof_claim['content'])
+
+        # Store similarity scores for different sections
+        section_scores = {}
+
+        # Compare claim with technical skills in the job description
+        tech_skills_embedding = get_bert_embedding(' '.join([skill['skill'] for skill in job['qualifications']['technical_skills']]))
+        section_scores['technical_skills'] = torch.nn.functional.cosine_similarity(claim_embedding, tech_skills_embedding).item()
+
+        # Compare claim with soft skills in the job description
+        soft_skills_embedding = get_bert_embedding(' '.join([skill['skill'] for skill in job['qualifications']['soft_skills']]))
+        section_scores['soft_skills'] = torch.nn.functional.cosine_similarity(claim_embedding, soft_skills_embedding).item()
+
+        # Compare claim with experiences in the job description
+        experience_embedding = get_bert_embedding(' '.join([exp['industry'] + ' ' + exp['job'] for exp in job['qualifications']['experiences']]))
+        section_scores['experiences'] = torch.nn.functional.cosine_similarity(claim_embedding, experience_embedding).item()
+
+        # Compare claim with duties
+        duties_embedding = get_bert_embedding(' '.join(job['duties']['primary_duties'] + job['duties']['secondary_duties']))
+        section_scores['duties'] = torch.nn.functional.cosine_similarity(claim_embedding, duties_embedding).item()
+
+        # Find the section that is most relevant to the claim
+        best_match_section = max(section_scores, key=section_scores.get)
+        best_match_score = section_scores[best_match_section]
+
+        # Apply verification weight to the best match score
+        best_match_score = apply_verification_weight(best_match_score, prof_claim['verified'])
+
+        # Add the best match score to the claim score
+        claim_score += best_match_score
 
     # Normalize and weight claim score
     if max_claim_score > 0:
