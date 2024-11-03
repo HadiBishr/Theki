@@ -7,6 +7,8 @@ const EmailForm =  () => {
     const location = useLocation()
     const title = location.state?.title
     const account = location.state?.account
+    const index = location.state?.index
+    const name = location.state?.name
 
     const [email, setEmail] = useState('')
     const [message, setMessage] = useState('')
@@ -24,7 +26,10 @@ const EmailForm =  () => {
                     to: email,
                     from: account,
                     subject: "Verifying Profile",
-                    text: message
+                    text: message,
+                    title: title,
+                    index: index,
+                    name: name
                 })
             })
 
