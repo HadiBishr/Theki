@@ -61,16 +61,16 @@ def apply_verification_weight(score, verified, verification_boost=0.2):
     # Increase the score if the information has been verified
     return score * (1 + verification_boost) if verified else score
 
-# Theki Score Calculation Function
+# Theki Score Calculation
 def calculate_theki_score(profile, job, category_weights):
     # Normalize category weights to ensure they sum to 1
     total_weight = sum(category_weights.values())
     category_weights = {k: v / total_weight for k, v in category_weights.items()}
     
     total_score = 0
-    max_score = 0  # To keep track of normalization
-
-    # Skills Matching
+    max_score = 0 # to keep track of normalization
+    
+    # skills matching
     skill_score = 0
     max_skill_score = len(job['qualifications']['technical_skills']) + len(job['qualifications']['soft_skills'])
     
@@ -82,11 +82,11 @@ def calculate_theki_score(profile, job, category_weights):
             similarity = calculate_similarity(prof_skill['skill'], job_skill['skill'])
             similarity = apply_verification_weight(similarity, prof_skill['verified'])
             exp_similarity = experience_similarity(prof_skill['experience'], job_skill['experience'])
-            total_similarity = similarity * exp_similarity  # Combine similarity with experience match
+            total_similarity = similarity * exp_similarity
             if total_similarity > best_match:
-                best_match = total_similarity  # Update best match if current match is better
+                best_match = total_similarity # update best match if current match is better
         skill_score += best_match
-
+            
     # Soft Skills Matching
     for job_skill in job['qualifications']['soft_skills']:
         best_match = 0
@@ -99,19 +99,19 @@ def calculate_theki_score(profile, job, category_weights):
             if total_similarity > best_match:
                 best_match = total_similarity
         skill_score += best_match
-
+        
     # Normalize and weight skill score
     if max_skill_score > 0:
         total_score += (skill_score / max_skill_score) * category_weights['skills']
         max_score += category_weights['skills']
-
+        
     # Experiences Matching
     experience_score = 0
     max_experience_score = len(job['qualifications']['experiences'])
     for job_exp in job['qualifications']['experiences']:
         best_match = 0
         for prof_exp in profile['experiences']:
-            # Calculate industry similarity and apply verification weight
+            # Calculate industry similarity and apply verification
             industry_similarity = calculate_similarity(prof_exp['industry'], job_exp['industry'])
             industry_similarity = apply_verification_weight(industry_similarity, prof_exp['verified'])
             duration_similarity = experience_similarity(prof_exp['experience'], job_exp['experience'])
@@ -119,20 +119,20 @@ def calculate_theki_score(profile, job, category_weights):
             if total_similarity > best_match:
                 best_match = total_similarity
         experience_score += best_match
-
+        
     # Normalize and weight experience score
     if max_experience_score > 0:
         total_score += (experience_score / max_experience_score) * category_weights['experiences']
         max_score += category_weights['experiences']
-
-    # Projects Matching
+        
+    # Project Matching
     project_score = 0
-    max_project_score = len(job['qualifications']['projects'])
+    max_project_score = len(job['qualifications']['project'])
     for job_proj in job['qualifications']['projects']:
         best_match = 0
         for prof_proj in profile['projects']:
             # Calculate average similarity for skills and tools used in projects
-            skills_similarity = np.mean([calculate_similarity(skill, job_skill)
+            skills_similarity = np.maen([calculate_similarity(skill, job_skill) 
                                          for skill in prof_proj['skills_applied']
                                          for job_skill in job_proj['skills_applied']])
             tools_similarity = np.mean([calculate_similarity(tool, job_tool)
@@ -143,12 +143,12 @@ def calculate_theki_score(profile, job, category_weights):
             if total_similarity > best_match:
                 best_match = total_similarity
         project_score += best_match
-
+        
     # Normalize and weight project score
     if max_project_score > 0:
         total_score += (project_score / max_project_score) * category_weights['projects']
         max_score += category_weights['projects']
-
+        
     # Achievements Matching
     achievement_score = 0
     max_achievement_score = len(job['qualifications']['achievements'])
@@ -156,20 +156,21 @@ def calculate_theki_score(profile, job, category_weights):
         best_match = 0
         for prof_ach in profile['achievements']:
             # Check for type match and calculate industry and skill similarity
-            type_match = 1.0 if prof_ach['content'] == job_ach['content'] else 0.0
+            type_match = 1.0 if prof_ach['content'] == job['content'] else 0.0
             industry_similarity = calculate_similarity(prof_ach['industry'], job_ach['industry'])
-            skill_similarity = calculate_similarity(prof_ach['skill'], job_ach['skill'])
-            total_similarity = (type_match + industry_similarity + skill_similarity) / 3
+            skills_similarity = calculate_similarity(prof_ach['skill'], job_ach['skill'])
+            total_similarity = (type_match + industry_similarity + skills_similarity) / 3
             total_similarity = apply_verification_weight(total_similarity, prof_ach['verified'])
             if total_similarity > best_match:
                 best_match = total_similarity
-        achievement_score += best_match
-
+            achievement_score += best_match
+            
     # Normalize and weight achievement score
     if max_achievement_score > 0:
         total_score += (achievement_score / max_achievement_score) * category_weights['achievements']
         max_score += category_weights['achievements']
-
+        
+        
     # Endorsements Matching
     endorsement_score = 0
     max_endorsement_score = len(job['qualifications']['endorsements'])
@@ -185,16 +186,16 @@ def calculate_theki_score(profile, job, category_weights):
             if total_similarity > best_match:
                 best_match = total_similarity
         endorsement_score += best_match
-
+        
     # Normalize and weight endorsement score
     if max_endorsement_score > 0:
         total_score += (endorsement_score / max_endorsement_score) * category_weights['endorsements']
         max_score += category_weights['endorsements']
-
-    # Claims Matching
+        
+    # Claims Matching 
     claim_score = 0
-    max_claim_score = len(profile['claims'])  # Maximum score is based on the number of claims made by the professional
-
+    max_claim_score = len(profile['claims']) # max score based on # of claims made by profesional
+    
     for prof_claim in profile['claims']:
         # Vectorize the claim
         claim_embedding = get_bert_embedding(prof_claim['content'])
@@ -218,6 +219,18 @@ def calculate_theki_score(profile, job, category_weights):
         duties_embedding = get_bert_embedding(' '.join(job['duties']['primary_duties'] + job['duties']['secondary_duties']))
         section_scores['duties'] = torch.nn.functional.cosine_similarity(claim_embedding, duties_embedding).item()
 
+        # Compare claim with achievements in the job description
+        achievements_embedding = get_bert_embedding(' '.join([ach['content'] for ach in job['qualifications']['achievements']]))
+        section_scores['achievements'] = torch.nn.functional.cosine_similarity(claim_embedding, achievements_embedding).item()
+
+        # Compare claim with projects in the job description
+        projects_embedding = get_bert_embedding(' '.join([proj['skills_applied'] + ' ' + proj['tools_used'] for proj in job['qualifications']['projects']]))
+        section_scores['projects'] = torch.nn.functional.cosine_similarity(claim_embedding, projects_embedding).item()
+
+        # Compare claim with endorsements in the job description
+        endorsements_embedding = get_bert_embedding(' '.join([end['skills_related'] for end in job['qualifications']['endorsements']]))
+        section_scores['endorsements'] = torch.nn.functional.cosine_similarity(claim_embedding, endorsements_embedding).item()
+
         # Find the section that is most relevant to the claim
         best_match_section = max(section_scores, key=section_scores.get)
         best_match_score = section_scores[best_match_section]
@@ -227,17 +240,16 @@ def calculate_theki_score(profile, job, category_weights):
 
         # Add the best match score to the claim score
         claim_score += best_match_score
-
-    # Normalize and weight claim score
+        
     if max_claim_score > 0:
-        total_score += (claim_score / max_claim_score) * category_weights['claims']
+        total_score += (claim_score / max_claim_score)
         max_score += category_weights['claims']
-
-    # Final Theki Score capped at 100
-    final_score = (total_score / max_score) * 100  # Scale to 0-100
-    final_score = min(final_score, 100)  # Cap the score at 100
-
+            
+    final_score = (total_score / max_score) * 100 # Scale to 0-100
+    final_score = min(final_score, 100) # cap the score
+    
     return final_score
+
 
 # Flask API endpoint for calculating the score
 @app.route('/calculate_score', methods=['POST'])
