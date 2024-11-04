@@ -49,5 +49,22 @@ npx hardhat ignition deploy ./ignition/modules/Lock.js
 We have a couple of functions and each will be explained below:
 
 
+# Errors and Fixes:
+
+## Error 1 (react-refresh):
+
+```shell
+Compiled with problems:
+×
+ERROR in ./src/App.js 1:40-111
+Module not found: Error: You attempted to import /Users/hadibishr/Theki/node_modules/react-refresh/runtime.js which falls outside of the project src/ directory. Relative imports outside of src/ are not supported.
+You can either move it inside src/, or add a symlink to it from project's node_modules/.
+```
+
+### Fix: 
+
+To fix thix this you have to remove react-refresh from devDeps in package.json. And possibly also craco.config.js. 
+
+
 
 
