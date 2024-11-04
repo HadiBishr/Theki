@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Correct import
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'; // Correct import
 import { ethers } from 'ethers'
 
 
@@ -11,6 +11,7 @@ import VerifyClaim from './components/VerifyClaim'
 import Job from './components/Job'
 import Profile from './components/Profile'
 import EmailForm from './components/EmailForm'
+import ConfirmEmail from './components/ConfirmEmail'
 
 // ABIS
 import ThekiTokenABI from './abis/ThekiToken.json'
@@ -41,6 +42,8 @@ function App() {
   const [jobIds, setJobIds] = useState([])
   const [jobs, setJobs] = useState([])
   const [profileData, setProfileData] = useState(null)
+
+  const location = useLocation()
 
 
 
@@ -224,16 +227,18 @@ function App() {
 
   useEffect(() => {
 
+    if (location.pathname === '/confirm-email') return;
+
     if (!provider || !signer) {
       console.error('Provider or signer is not initialized yet');
     }
 
     if (account && signer) {
-      loadBlockchainData()
+      loadBlockchainData();
     }
 
    
-  }, [account, signer])
+  }, [account, signer, location.pathname])
 
 
 
@@ -257,10 +262,14 @@ function App() {
   return (
 
 
-    <Router>
+    <div>
 
 
-      <Navigation account={account} connectWallet={connectWallet} disconnectWallet={disconnectWallet} profileData={profileData}/>
+      {location.pathname !== '/confirm-email' && (
+        <Navigation account={account} connectWallet={connectWallet} disconnectWallet={disconnectWallet} profileData={profileData}/>
+      )}
+
+    
 
       <Routes>
 
@@ -313,12 +322,20 @@ function App() {
           }
         />
 
+        <Route 
+          path='/confirm-email'
+          element={
+            <ConfirmEmail />
+          }
+          
+        />
+
 
       </Routes>
 
 
 
-    </Router>
+    </div>
 
 
     

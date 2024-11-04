@@ -3,9 +3,23 @@ const nodemailer = require('nodemailer')            // A library that simplifies
 const dotenv = require('dotenv')                    // A module to load environment variables from a .env file. This helps keep sensitive information, like email credentials, outside the codebase.
 const cors = require('cors')                        // A middleware that allows Cross-Origin Resource Sharing, enabling the backend to handle requests from a different domain or port (useful for API endpoints accessed from a frontend on another server).\
 const { ethers } = require('ethers')
+const {JsonRpcProvider} = require("@ethersproject/providers");
+
 
 const UserProfileManagerABI = require('../../src/abis/UserProfileManager.json');
+const { network } = require('hardhat')
 
+
+// This is because we cant directly pass a string when it requires an enum into the verify function. 
+const VerificationType = {
+    TechnicalSkills: 0,
+    SoftSkills: 1,
+    Experiences: 2,
+    Projects: 3,
+    Achievements: 4,
+    Endorsements: 5,
+    Claims: 6
+};
 
 
 
@@ -13,6 +27,8 @@ dotenv.config()
 
 console.log("Email user:", process.env.EMAIL_USER);
 console.log("Email password:", process.env.EMAIL_PASSWORD);// Load environment variables from .env file
+console.log("Contract Address:", process.env.CONTRACT_ADDRESS)
+console.log("Network Provider:", process.env.BLOCKCHAIN_RPC_URL)
 
 const app = express()
 app.use(express.json())
@@ -27,8 +43,20 @@ const transporter = nodemailer.createTransport({
     },
 })
 
-const provider = new ethers.providers.JsonRpcProvider(process.env.BLOCKCHAIN_RPC_UR)
+const provider = new JsonRpcProvider('http://127.0.0.1:8545/')
 const privateKey = process.env.PRIVATE_KEY
+
+async function network_get() {
+    const network = await provider.detectNetwork()
+    console.log("Network:", network)
+}
+
+
+
+network_get()
+
+console.log('Provider:', provider)
+
 
 const wallet = new ethers.Wallet(privateKey, provider)
 
@@ -74,9 +102,11 @@ app.post('/send-email', async (req, res) => {
 app.get('/confirm-email', async (req, res) => {                   // res (response) manages the response back to the client
     const { email_verifier, from, title, index } = req.query             // req.query grabs any query parameters that are part of the URL. Specifically the ones that come after the ? symbol. 
 
+    const verificationTypeString = title.replace(/\s+/g, '')
+    const verificationTypeEnum = VerificationType[verificationTypeString]
     
     try {
-        const transaction = await contract.verify(from, title.replace(/\s+/g, ''), index)
+        const transaction = await contract.verify(from, verificationTypeEnum, index)
         await transaction.wait()
         res.json({ success: true, message: "Claim confirmed successfully" });
     } catch (error) {

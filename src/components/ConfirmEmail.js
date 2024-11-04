@@ -50,3 +50,5 @@ const ConfirmEmail = () => {
     )
 
 }
+
+export default ConfirmEmail;
