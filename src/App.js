@@ -24,7 +24,6 @@ import './App.css';
 
 
 
-
 function App() {
 
   const [account, setAccount] = useState(null) // Current MetaMask account connected to the web page

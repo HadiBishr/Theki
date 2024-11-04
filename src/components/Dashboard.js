@@ -158,7 +158,7 @@ const Dashboard = ({
             {account ? (
                 <>
 
-                <h2 className='titles'>Get the claims of a professional</h2>
+                <h2 className="text-red-500">Get the claims of a professional</h2>
                 <input 
                 type="text" 
                 value={searchAddress} 
