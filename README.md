@@ -44,6 +44,20 @@ npx hardhat ignition deploy ./ignition/modules/Lock.js
 ### 5. To open up a browser with CORS disabled, run the following command, and replace the file path to where you browser is stored. 
 #### a. "open -n -a /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --args --user-data-dir="/tmp/brave_dev_sess_1" --disable-web-security"
 
+
+## How to run chrome with security disabled
+
+### In terminal, make a directory in your home folder called chrome_dev_profile. Then go into that folder. Once you are in the folder run the command to open chrome with security disabled. All commands are below:
+
+```shell
+
+mkdir -p ~/chrome_dev_profile
+
+open -na "Google Chrome" --args --disable-web-security --user-data-dir="$HOME/chrome_dev_profile"
+
+
+```
+
 # How does Profile.js Work and its components? 
 
 We have a couple of functions and each will be explained below:
