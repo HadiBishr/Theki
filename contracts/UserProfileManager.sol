@@ -69,6 +69,8 @@ contract UserProfileManager {
     mapping(address => UserProfile) public userProfiles;
     mapping(address => bool) public profileExists;
 
+    enum VerificationType { TechnicalSkills, SoftSkills, Experiences, Projects,  Achievements, Endorsements, Claims }
+
 
 
 
@@ -240,13 +242,37 @@ contract UserProfileManager {
     }
 
 
-    function verify(address _user, string memory _key, uint256 _index) public {
+    function verify(address _user, VerificationType _key, uint256 _index) public {
         require(msg.sender != _user, "User can not be the same");
         require(profileExists[_user], "This Profile Does Not Exist");
 
         UserProfile storage profile = userProfiles[_user];
 
-        profile[_key][_index].verified = true;
+        if (_key == VerificationType.TechnicalSkills) {
+            require(_index < profile.technicalSkills.length, "Invalid Index");
+            profile.technicalSkills[_index].verified = true;
+        } else if (_key == VerificationType.SoftSkills) {
+            require(_index < profile.softSkills.length, "Invalid Index");
+            profile.softSkills[_index].verified = true;
+        }  else if (_key == VerificationType.Experiences) {
+            require(_index < profile.experiences.length, "Invalid index");
+            profile.experiences[_index].verified = true;
+        } else if (_key == VerificationType.Projects) {
+            require(_index < profile.projects.length, "Invalid index");
+            profile.projects[_index].verified = true;
+        } else if (_key == VerificationType.Achievements) {
+            require(_index < profile.achievements.length, "Invalid index");
+            profile.achievements[_index].verified = true;
+        } else if (_key == VerificationType.Endorsements) {
+            require(_index < profile.endorsements.length, "Invalid index");
+            profile.endorsements[_index].verified = true;
+        } else if (_key == VerificationType.Claims) {
+            require(_index < profile.claims.length, "Invalid index");
+            profile.claims[_index].verified = true;
+        } else {
+            revert("Invalid verification type");
+        }
+
     }
 
 

@@ -288,7 +288,7 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
                                                             No
                                                             <Link 
                                                                 to="/email-form"
-                                                                state={{ title: title, account: account }}    
+                                                                state={{ title: title, account: account, index: index, name: profileData.name }}    
                                                             >
                                                                 <button >Verify</button>
                                                             </Link>
