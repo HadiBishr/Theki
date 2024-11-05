@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { signUpWithmagic, magic } from '../services/magicAuth';
 import { ethers } from 'ethers'
+import { useNavigate } from 'react-router-dom'; // If you're using React Router
 const {JsonRpcProvider} = require("@ethersproject/providers");
 
 
 
 const UserProfileManagerABI = require('../abis/UserProfileManager.json');
+
+const navigate = useNavigate()
 
 
 const SignUp = ({}) => {
@@ -45,12 +48,19 @@ const SignUp = ({}) => {
 
         const success = await signUpWithmagic(email)
         setSignupStatus(success ? 'Signup successfull!' : 'Signup failed')
+
+        if (success) {
+            alert('Please check your email to complete the sign-up process')
+
+            navigate('/')
+        }
         
         const loggedIn = await magic.user.isLoggedIn()
         if (loggedIn) {
             const transaction = await contract.createBaseProfile(name)
             await transaction.wait()
             console.log('Profile created successfully on the blockchain')
+            
         }
 
     };
