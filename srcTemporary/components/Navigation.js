@@ -25,35 +25,15 @@ const Navigation = ({ account, connectWallet , disconnectWallet, profileData}) =
     return (
         <nav>
 
-            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div className='nav__brand'>
-                    <h1>Theki</h1>
-                </div>
-            </Link>
-           
+            <div className='nav__brand'>
+                <h1>Theki</h1>
+            </div>
 
         
 
             <div className='nav__buttons'>
 
-
-
-                <button 
-                type="button" 
-                className='nav__connect'
-                >
-
-                    Log In
-
-                </button>
-
-                <Link to="/sign-up">
-                    <button type="button" className='nav__connect'> Sign Up </button>
-                </Link>
-
-                
-
-                {/* { account ? (
+                { account ? (
 
                     <>
 
@@ -93,7 +73,7 @@ const Navigation = ({ account, connectWallet , disconnectWallet, profileData}) =
                     </button>
 
 
-                )} */}
+                )}
 
             </div>
             

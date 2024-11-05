@@ -1,0 +1,755 @@
+[
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "jobTitle",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "companyName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "seniority",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "department",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "location",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "workSchedule",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct JobManager.BasicInfo",
+          "name": "_basicInfo",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "skillName",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "experience",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct JobManager.SkillRequirement[]",
+              "name": "technicalSkills",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "skillName",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "experience",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct JobManager.SkillRequirement[]",
+              "name": "softSkills",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "industry",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "jobTitle",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "experience",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct JobManager.ExperienceRequirement[]",
+              "name": "experiences",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "name",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string[]",
+                  "name": "skillsApplied",
+                  "type": "string[]"
+                },
+                {
+                  "internalType": "string[]",
+                  "name": "toolsUsed",
+                  "type": "string[]"
+                }
+              ],
+              "internalType": "struct JobManager.ProjectRequirement[]",
+              "name": "projects",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "content",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "industry",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string[]",
+                  "name": "skill",
+                  "type": "string[]"
+                }
+              ],
+              "internalType": "struct JobManager.AchievementRequirement[]",
+              "name": "achievements",
+              "type": "tuple[]"
+            },
+            {
+              "internalType": "uint256",
+              "name": "endorsements",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct JobManager.JobQualifications",
+          "name": "_qualifications",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "primaryDuties",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "secondaryDuties",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "deliverables",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "toolsTech",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct JobManager.Duties",
+          "name": "_duties",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "salary",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "bonus",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "benefits",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct JobManager.Compensation",
+          "name": "_compensation",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "jobIntroHook",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "companyProfile",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct JobManager.CompanyCulture",
+          "name": "_companyCulture",
+          "type": "tuple"
+        }
+      ],
+      "name": "createJob",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllJobIds",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "jobId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getJob",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "jobTitle",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "companyName",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "seniority",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "department",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "location",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "workSchedule",
+                  "type": "string"
+                }
+              ],
+              "internalType": "struct JobManager.BasicInfo",
+              "name": "basicInfo",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "internalType": "string",
+                      "name": "skillName",
+                      "type": "string"
+                    },
+                    {
+                      "internalType": "uint256",
+                      "name": "experience",
+                      "type": "uint256"
+                    }
+                  ],
+                  "internalType": "struct JobManager.SkillRequirement[]",
+                  "name": "technicalSkills",
+                  "type": "tuple[]"
+                },
+                {
+                  "components": [
+                    {
+                      "internalType": "string",
+                      "name": "skillName",
+                      "type": "string"
+                    },
+                    {
+                      "internalType": "uint256",
+                      "name": "experience",
+                      "type": "uint256"
+                    }
+                  ],
+                  "internalType": "struct JobManager.SkillRequirement[]",
+                  "name": "softSkills",
+                  "type": "tuple[]"
+                },
+                {
+                  "components": [
+                    {
+                      "internalType": "string",
+                      "name": "industry",
+                      "type": "string"
+                    },
+                    {
+                      "internalType": "string",
+                      "name": "jobTitle",
+                      "type": "string"
+                    },
+                    {
+                      "internalType": "uint256",
+                      "name": "experience",
+                      "type": "uint256"
+                    }
+                  ],
+                  "internalType": "struct JobManager.ExperienceRequirement[]",
+                  "name": "experiences",
+                  "type": "tuple[]"
+                },
+                {
+                  "components": [
+                    {
+                      "internalType": "string",
+                      "name": "name",
+                      "type": "string"
+                    },
+                    {
+                      "internalType": "string[]",
+                      "name": "skillsApplied",
+                      "type": "string[]"
+                    },
+                    {
+                      "internalType": "string[]",
+                      "name": "toolsUsed",
+                      "type": "string[]"
+                    }
+                  ],
+                  "internalType": "struct JobManager.ProjectRequirement[]",
+                  "name": "projects",
+                  "type": "tuple[]"
+                },
+                {
+                  "components": [
+                    {
+                      "internalType": "string",
+                      "name": "content",
+                      "type": "string"
+                    },
+                    {
+                      "internalType": "string",
+                      "name": "industry",
+                      "type": "string"
+                    },
+                    {
+                      "internalType": "string[]",
+                      "name": "skill",
+                      "type": "string[]"
+                    }
+                  ],
+                  "internalType": "struct JobManager.AchievementRequirement[]",
+                  "name": "achievements",
+                  "type": "tuple[]"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "endorsements",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct JobManager.JobQualifications",
+              "name": "qualifications",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "primaryDuties",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "secondaryDuties",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "deliverables",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "toolsTech",
+                  "type": "string"
+                }
+              ],
+              "internalType": "struct JobManager.Duties",
+              "name": "duties",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "salary",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "bonus",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "benefits",
+                  "type": "string"
+                }
+              ],
+              "internalType": "struct JobManager.Compensation",
+              "name": "compensation",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "jobIntroHook",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "companyProfile",
+                  "type": "string"
+                }
+              ],
+              "internalType": "struct JobManager.CompanyCulture",
+              "name": "companyCulture",
+              "type": "tuple"
+            },
+            {
+              "internalType": "uint256",
+              "name": "thekiScore",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct JobManager.Job",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "jobCounter",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "jobIds",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "jobs",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "jobTitle",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "companyName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "seniority",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "department",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "location",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "workSchedule",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct JobManager.BasicInfo",
+          "name": "basicInfo",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "skillName",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "experience",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct JobManager.SkillRequirement[]",
+              "name": "technicalSkills",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "skillName",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "experience",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct JobManager.SkillRequirement[]",
+              "name": "softSkills",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "industry",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "jobTitle",
+                  "type": "string"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "experience",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct JobManager.ExperienceRequirement[]",
+              "name": "experiences",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "name",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string[]",
+                  "name": "skillsApplied",
+                  "type": "string[]"
+                },
+                {
+                  "internalType": "string[]",
+                  "name": "toolsUsed",
+                  "type": "string[]"
+                }
+              ],
+              "internalType": "struct JobManager.ProjectRequirement[]",
+              "name": "projects",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "content",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "industry",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string[]",
+                  "name": "skill",
+                  "type": "string[]"
+                }
+              ],
+              "internalType": "struct JobManager.AchievementRequirement[]",
+              "name": "achievements",
+              "type": "tuple[]"
+            },
+            {
+              "internalType": "uint256",
+              "name": "endorsements",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct JobManager.JobQualifications",
+          "name": "qualifications",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "primaryDuties",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "secondaryDuties",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "deliverables",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "toolsTech",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct JobManager.Duties",
+          "name": "duties",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "salary",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "bonus",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "benefits",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct JobManager.Compensation",
+          "name": "compensation",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "jobIntroHook",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "companyProfile",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct JobManager.CompanyCulture",
+          "name": "companyCulture",
+          "type": "tuple"
+        },
+        {
+          "internalType": "uint256",
+          "name": "thekiScore",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+]
