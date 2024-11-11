@@ -284,6 +284,14 @@ function App() {
             </>
           }
         />
+
+        <Route 
+          path="/dashboard"
+          element={
+            <Dashboard />
+          }
+          
+        />
         <Route 
           path="/profile"
           element={

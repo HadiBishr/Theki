@@ -1,5 +1,5 @@
 import { React, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom'; // To link to the user profile page
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // To link to the user profile page
 import { ethers } from 'ethers'
 import './css/Navigation.css'
 
@@ -15,7 +15,7 @@ const Navigation = ({ account, connectWallet , disconnectWallet, profileData}) =
     }
 
     const location = useLocation()
-
+    const navigate = useNavigate()
 
     
     
@@ -37,7 +37,7 @@ const Navigation = ({ account, connectWallet , disconnectWallet, profileData}) =
             <div className='nav__buttons'>
 
 
-
+{/* 
                 <button 
                 type="button" 
                 className='nav__connect'
@@ -45,11 +45,12 @@ const Navigation = ({ account, connectWallet , disconnectWallet, profileData}) =
 
                     Log In
 
-                </button>
+                </button> */}
 
-                <Link to="/sign-up">
-                    <button type="button" className='nav__connect'> Sign Up </button>
-                </Link>
+
+                <button type="button" className='nav__connect' onClick={navigate('/sign-up', { state: { mode: 'signup' } })}> Sign Up </button>
+                <button type="button" className='nav__connect' onClick={navigate('/sign-up', { state: { mode: 'login' } })}> Login</button>
+                
 
                 
 
