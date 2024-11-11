@@ -9,9 +9,6 @@ import '../index.css'
 const Profile = ({ profileData, account, signer, profileManagerContract, network }) => {
 
 
-    const [addingTechnicalSkill, setAddingTechnicalSkill] = useState(null)
-    const [addingSoftSkill, setAddingSoftSkill] = useState(null)
-
 
     const [profile, setProfile] = useState({
         name: 'Hadi',
@@ -52,19 +49,6 @@ const Profile = ({ profileData, account, signer, profileManagerContract, network
     }
 
 
-
-    // // Encode achievements
-    // const encodedAchievements = profile.achievements.map((achievement) => {
-    //     return ethers.utils.defaultAbiCoder.encode(
-    //         ["string", "string", "string", "bool"],
-    //         [
-    //             achievement.content,
-    //             achievement.industry,
-    //             achievement.skill,
-    //             achievement.verified
-    //         ]
-    //     );
-    // });
 
     // const encodedSection = (schema, data, schemaOrder) => {
     //     return data.map((item) => 
