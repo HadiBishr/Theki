@@ -12,6 +12,7 @@ nav {
   color: #ecf0f1; /* Light gray text color */
   margin: 0; /* Remove default margin  */
   margin-right: auto;
+  cursor: pointer;
 }
 
 

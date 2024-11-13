@@ -13,6 +13,7 @@ import Profile from './components/Profile'
 import EmailForm from './components/EmailForm'
 import ConfirmEmail from './components/ConfirmEmail'
 import FrontPage from './components/FrontPage'
+import SignUp from './components/SignUp'
 
 // ABIS
 import ThekiTokenABI from './abis/ThekiToken.json'
@@ -21,6 +22,7 @@ import UserProfileManagerABI from './abis/UserProfileManager.json'
 
 // CSS
 import './App.css';
+import { Sign } from '@tensorflow/tfjs';
 
 
 
@@ -282,6 +284,14 @@ function App() {
             </>
           }
         />
+
+        <Route 
+          path="/dashboard"
+          element={
+            <Dashboard />
+          }
+          
+        />
         <Route 
           path="/profile"
           element={
@@ -315,6 +325,12 @@ function App() {
           
         />
 
+        <Route 
+          path='/sign-up'
+          element={
+            <SignUp profileManagerContract={profileManagerContract}/>
+          }
+        />
 
       </Routes>
 

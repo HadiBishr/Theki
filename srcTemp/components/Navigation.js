@@ -1,5 +1,5 @@
 import { React, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom'; // To link to the user profile page
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // To link to the user profile page
 import { ethers } from 'ethers'
 import './css/Navigation.css'
 
@@ -15,7 +15,7 @@ const Navigation = ({ account, connectWallet , disconnectWallet, profileData}) =
     }
 
     const location = useLocation()
-
+    const navigate = useNavigate()
 
     
     
@@ -25,15 +25,36 @@ const Navigation = ({ account, connectWallet , disconnectWallet, profileData}) =
     return (
         <nav>
 
-            <div className='nav__brand'>
-                <h1>Theki</h1>
-            </div>
+            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className='nav__brand'>
+                    <h1>Theki</h1>
+                </div>
+            </Link>
+           
 
         
 
             <div className='nav__buttons'>
 
-                { account ? (
+
+{/* 
+                <button 
+                type="button" 
+                className='nav__connect'
+                >
+
+                    Log In
+
+                </button> */}
+
+
+                <button type="button" className='nav__connect' onClick={navigate('/sign-up', { state: { mode: 'signup' } })}> Sign Up </button>
+                <button type="button" className='nav__connect' onClick={navigate('/sign-up', { state: { mode: 'login' } })}> Login</button>
+                
+
+                
+
+                {/* { account ? (
 
                     <>
 
@@ -73,7 +94,7 @@ const Navigation = ({ account, connectWallet , disconnectWallet, profileData}) =
                     </button>
 
 
-                )}
+                )} */}
 
             </div>
             

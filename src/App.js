@@ -13,7 +13,6 @@ import Profile from './components/Profile'
 import EmailForm from './components/EmailForm'
 import ConfirmEmail from './components/ConfirmEmail'
 import FrontPage from './components/FrontPage'
-import SignUp from './components/SignUp'
 
 // ABIS
 import ThekiTokenABI from './abis/ThekiToken.json'
@@ -22,7 +21,6 @@ import UserProfileManagerABI from './abis/UserProfileManager.json'
 
 // CSS
 import './App.css';
-import { Sign } from '@tensorflow/tfjs';
 
 
 
@@ -231,13 +229,13 @@ function App() {
 
     if (location.pathname === '/confirm-email') return;
 
-    // if (!provider || !signer) {
-    //   console.error('Provider or signer is not initialized yet');
-    // }
+    if (!provider || !signer) {
+      console.error('Provider or signer is not initialized yet');
+    }
 
-    // if (account && signer) {
-    //   loadBlockchainData();
-    // }
+    if (account && signer) {
+      loadBlockchainData();
+    }
 
    
   }, [location.pathname])
@@ -279,18 +277,25 @@ function App() {
           path="/" 
           element={
             <>
-              <FrontPage />
+              <Dashboard 
+                account={account}
+                shortenAddress={shortenAddress}
+                thekiToken={thekiToken}
+                searchProfessionalClaims={searchProfessionalClaims}
+                signer={signer}
+                loadBlockchainData={loadBlockchainData}
+                searchAddress={searchAddress}
+                setSearchAddress={setSearchAddress}
+                searchedClaims={searchedClaims}
+                setSearchedClaims={setSearchedClaims}
+              />
+
+              {/* Add loop here to loop over jobs */}
+              <Job account={account} profileData={profileData}/>
+
               
             </>
           }
-        />
-
-        <Route 
-          path="/dashboard"
-          element={
-            <Dashboard />
-          }
-          
         />
         <Route 
           path="/profile"
@@ -325,12 +330,6 @@ function App() {
           
         />
 
-        <Route 
-          path='/sign-up'
-          element={
-            <SignUp profileManagerContract={profileManagerContract}/>
-          }
-        />
 
       </Routes>
 
